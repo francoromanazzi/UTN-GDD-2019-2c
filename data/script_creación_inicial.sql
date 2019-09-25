@@ -21,6 +21,14 @@ IF OBJECT_ID('LOS_BORBOTONES.FuncionalidadesXRoles', 'U') IS NOT NULL AND OBJECT
 ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles DROP CONSTRAINT FK_FuncionalidadesXRoles_Roles
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.Clientes', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Clientes_Usuarios', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.Clientes DROP CONSTRAINT FK_Clientes_Usuarios
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Proveedores', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Proveedores_Usuarios', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.Proveedores DROP CONSTRAINT FK_Proveedores_Usuarios
+GO
+
 ------------------------------------------------
 --            DROP TABLES
 ------------------------------------------------
@@ -43,6 +51,14 @@ GO
 
 IF OBJECT_ID('LOS_BORBOTONES.Funcionalidades', 'U') IS NOT NULL
 DROP TABLE LOS_BORBOTONES.Funcionalidades
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Clientes', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.Clientes
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Proveedores', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.Proveedores
 GO
 
 ------------------------------------------------
@@ -103,6 +119,38 @@ CREATE TABLE LOS_BORBOTONES.Funcionalidades (
 )
 GO
 
+CREATE TABLE LOS_BORBOTONES.Clientes (
+	id_cliente INT IDENTITY(1,1) NOT NULL,
+	id_usuario INT,
+	credito NUMERIC(18,2) NOT NULL,
+	nombre NVARCHAR(255) NOT NULL,
+	apellido NVARCHAR(255) NOT NULL,
+	dni NUMERIC(18,0) NOT NULL,
+	mail NVARCHAR(255) NOT NULL,
+	telefono NUMERIC(18,0) NOT NULL,
+	direccion NVARCHAR(255) NOT NULL,
+	codigo_postal NVARCHAR(15) NOT NULL,
+	fecha_nacimiento DATETIME NOT NULL
+	PRIMARY KEY (id_cliente)
+)
+GO
+
+CREATE TABLE LOS_BORBOTONES.Proveedores (
+	id_proveedor INT IDENTITY(1,1) NOT NULL,
+	id_usuario INT,
+	razon_social NVARCHAR(100) NOT NULL,
+	mail NVARCHAR(255) NOT NULL,
+	telefono NUMERIC(18,0) NOT NULL,
+	direccion NVARCHAR(255) NOT NULL,
+	codigo_postal NVARCHAR(15) NOT NULL,
+	ciudad NVARCHAR(255) NOT NULL,
+	cuit NVARCHAR(20) NOT NULL,
+	rubro NVARCHAR(100) NOT NULL,
+	nombre_contacto NVARCHAR(255) NOT NULL,
+	PRIMARY KEY (id_proveedor)
+)
+GO
+
 ------------------------------------------------
 --            INSERTS INICIALES
 ------------------------------------------------
@@ -157,4 +205,12 @@ GO
 
 ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles
 ADD CONSTRAINT FK_FuncionalidadesXRoles_Roles FOREIGN KEY (id_rol) REFERENCES LOS_BORBOTONES.Roles
+GO
+
+ALTER TABLE LOS_BORBOTONES.Clientes
+ADD CONSTRAINT FK_Clientes_Usuarios FOREIGN KEY (id_usuario) REFERENCES LOS_BORBOTONES.Usuarios
+GO
+
+ALTER TABLE LOS_BORBOTONES.Proveedores
+ADD CONSTRAINT FK_Proveedores_Usuarios FOREIGN KEY (id_usuario) REFERENCES LOS_BORBOTONES.Usuarios
 GO
