@@ -13,6 +13,14 @@ IF OBJECT_ID('LOS_BORBOTONES.RolesXUsuarios', 'U') IS NOT NULL AND OBJECT_ID('LO
 ALTER TABLE LOS_BORBOTONES.RolesXUsuarios DROP CONSTRAINT FK_RolesXUsuarios_Usuarios
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.FuncionalidadesXRoles', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_FuncionalidadesXRoles_Funcionalidades', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles DROP CONSTRAINT FK_FuncionalidadesXRoles_Funcionalidades
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.FuncionalidadesXRoles', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_FuncionalidadesXRoles_Roles', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles DROP CONSTRAINT FK_FuncionalidadesXRoles_Roles
+GO
+
 ------------------------------------------------
 --            DROP TABLES
 ------------------------------------------------
@@ -27,6 +35,14 @@ GO
 
 IF OBJECT_ID('LOS_BORBOTONES.Roles', 'U') IS NOT NULL
 DROP TABLE LOS_BORBOTONES.Roles
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.FuncionalidadesXRoles', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.FuncionalidadesXRoles
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Funcionalidades', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.Funcionalidades
 GO
 
 ------------------------------------------------
@@ -73,6 +89,20 @@ CREATE TABLE LOS_BORBOTONES.Roles (
 )
 GO
 
+CREATE TABLE LOS_BORBOTONES.FuncionalidadesXRoles (
+	id_funcionalidad INT NOT NULL,
+	id_rol INT NOT NULL,
+	PRIMARY KEY (id_funcionalidad, id_rol)
+)
+GO
+
+CREATE TABLE LOS_BORBOTONES.Funcionalidades (
+	id_funcionalidad INT IDENTITY(1,1) NOT NULL,
+	descripcion NVARCHAR(50) NOT NULL,
+	PRIMARY KEY (id_funcionalidad)
+)
+GO
+
 ------------------------------------------------
 --            INSERTS INICIALES
 ------------------------------------------------
@@ -81,6 +111,32 @@ INSERT INTO LOS_BORBOTONES.Roles (nombre) VALUES
 ('Cliente'),
 ('Proveedor'),
 ('Administrativo')
+GO
+
+INSERT INTO LOS_BORBOTONES.Funcionalidades (descripcion) VALUES
+('ABM de Rol'), -- Administrativo
+('Registro de Usuario'), -- ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+('ABM de Clientes'), -- Administrativo
+('ABM de Proveedor'), -- Administrativo
+('Carga de crédito'), -- Cliente
+('Confección y publicación de Ofertas'), -- Proveedor, Administrativo
+('Comprar oferta'), -- Cliente
+('Entrega/Consumo de Oferta'), -- Proveedor
+('Facturación a Proveedor'), -- Administrativo
+('Listado Estadístico') -- Administrativo
+GO
+
+INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_rol, id_funcionalidad) VALUES
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Carga de crédito')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Comprar oferta')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Entrega/Consumo de Oferta')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Rol')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Clientes')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Proveedor')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Facturación a Proveedor')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Listado Estadístico'))
 GO
 
 ------------------------------------------------
@@ -93,4 +149,12 @@ GO
 
 ALTER TABLE LOS_BORBOTONES.RolesXUsuarios
 ADD CONSTRAINT FK_RolesXUsuarios_Usuarios FOREIGN KEY (id_usuario) REFERENCES LOS_BORBOTONES.Usuarios
+GO
+
+ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles
+ADD CONSTRAINT FK_FuncionalidadesXRoles_Funcionalidades FOREIGN KEY (id_funcionalidad) REFERENCES LOS_BORBOTONES.Funcionalidades
+GO
+
+ALTER TABLE LOS_BORBOTONES.FuncionalidadesXRoles
+ADD CONSTRAINT FK_FuncionalidadesXRoles_Roles FOREIGN KEY (id_rol) REFERENCES LOS_BORBOTONES.Roles
 GO
