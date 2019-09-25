@@ -83,7 +83,7 @@ GO
 
 CREATE TABLE LOS_BORBOTONES.Roles (
 	id_rol INT IDENTITY(1,1) NOT NULL,
-	nombre NVARCHAR(50) NOT NULL,
+	nombre NVARCHAR(50) UNIQUE NOT NULL,
 	habilitado BIT DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id_rol)
 )
@@ -98,7 +98,7 @@ GO
 
 CREATE TABLE LOS_BORBOTONES.Funcionalidades (
 	id_funcionalidad INT IDENTITY(1,1) NOT NULL,
-	descripcion NVARCHAR(50) NOT NULL,
+	descripcion NVARCHAR(50) UNIQUE NOT NULL,
 	PRIMARY KEY (id_funcionalidad)
 )
 GO
