@@ -29,6 +29,14 @@ IF OBJECT_ID('LOS_BORBOTONES.Proveedores', 'U') IS NOT NULL AND OBJECT_ID('LOS_B
 ALTER TABLE LOS_BORBOTONES.Proveedores DROP CONSTRAINT FK_Proveedores_Usuarios
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.Tarjetas', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Tarjetas_Clientes', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.Tarjetas DROP CONSTRAINT FK_Tarjetas_Clientes
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Cargas', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Cargas_Tarjetas', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.Cargas DROP CONSTRAINT FK_Cargas_Tarjetas
+GO
+
 ------------------------------------------------
 --            DROP TABLES
 ------------------------------------------------
@@ -59,6 +67,14 @@ GO
 
 IF OBJECT_ID('LOS_BORBOTONES.Proveedores', 'U') IS NOT NULL
 DROP TABLE LOS_BORBOTONES.Proveedores
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Tarjetas', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.Tarjetas
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Cargas', 'U') IS NOT NULL
+DROP TABLE LOS_BORBOTONES.Cargas
 GO
 
 ------------------------------------------------
@@ -151,6 +167,24 @@ CREATE TABLE LOS_BORBOTONES.Proveedores (
 )
 GO
 
+CREATE TABLE LOS_BORBOTONES.Tarjetas (
+	id_tarjeta INT IDENTITY(1,1) NOT NULL,
+	id_cliente INT NOT NULL,
+	tipo NVARCHAR(7) NOT NULL,
+	codigo NVARCHAR(63) NOT NULL,
+	PRIMARY KEY (id_tarjeta)
+)
+GO
+
+CREATE TABLE LOS_BORBOTONES.Cargas (
+	id_carga INT IDENTITY(1,1) NOT NULL,
+	id_tarjeta INT NOT NULL,
+	fecha DATETIME NOT NULL,
+	monto NUMERIC(18,2) NOT NULL,
+	PRIMARY KEY (id_carga)
+)
+GO
+
 ------------------------------------------------
 --            INSERTS INICIALES
 ------------------------------------------------
@@ -213,4 +247,12 @@ GO
 
 ALTER TABLE LOS_BORBOTONES.Proveedores
 ADD CONSTRAINT FK_Proveedores_Usuarios FOREIGN KEY (id_usuario) REFERENCES LOS_BORBOTONES.Usuarios
+GO
+
+ALTER TABLE LOS_BORBOTONES.Tarjetas
+ADD CONSTRAINT FK_Tarjetas_Clientes FOREIGN KEY (id_cliente) REFERENCES LOS_BORBOTONES.Clientes
+GO
+
+ALTER TABLE LOS_BORBOTONES.Cargas
+ADD CONSTRAINT FK_Cargas_Tarjetas FOREIGN KEY (id_tarjeta) REFERENCES LOS_BORBOTONES.Tarjetas
 GO
