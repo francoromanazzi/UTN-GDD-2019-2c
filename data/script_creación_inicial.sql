@@ -141,7 +141,7 @@ GO
 
 CREATE TABLE LOS_BORBOTONES.Usuarios (
 	id_usuario INT IDENTITY(1,1) NOT NULL,
-	username NVARCHAR(50) NOT NULL,
+	username NVARCHAR(50) UNIQUE NOT NULL,
 	[password] NVARCHAR(255) NOT NULL,
 	habilitado BIT DEFAULT 1 NOT NULL,
 	motivo_deshabilitacion NVARCHAR(50) DEFAULT NULL,
@@ -185,11 +185,11 @@ CREATE TABLE LOS_BORBOTONES.Clientes (
 	credito NUMERIC(18,2) DEFAULT 200.00 NOT NULL,
 	nombre NVARCHAR(255) NOT NULL,
 	apellido NVARCHAR(255) NOT NULL,
-	dni NUMERIC(18,0) NOT NULL,
+	dni NUMERIC(18,0) UNIQUE NOT NULL,
 	mail NVARCHAR(255) NOT NULL,
 	telefono NUMERIC(18,0) NOT NULL,
 	direccion NVARCHAR(255) NOT NULL,
-	codigo_postal NVARCHAR(15) NOT NULL,
+	codigo_postal NVARCHAR(15),
 	fecha_nacimiento DATETIME NOT NULL
 	PRIMARY KEY (id_cliente)
 )
@@ -198,13 +198,13 @@ GO
 CREATE TABLE LOS_BORBOTONES.Proveedores (
 	id_proveedor INT IDENTITY(1,1) NOT NULL,
 	id_usuario INT,
-	razon_social NVARCHAR(100) NOT NULL,
-	mail NVARCHAR(255) NOT NULL,
+	razon_social NVARCHAR(100) UNIQUE NOT NULL,
+	mail NVARCHAR(255),
 	telefono NUMERIC(18,0) NOT NULL,
 	direccion NVARCHAR(255) NOT NULL,
-	codigo_postal NVARCHAR(15) NOT NULL,
+	codigo_postal NVARCHAR(15),
 	ciudad NVARCHAR(255) NOT NULL,
-	cuit NVARCHAR(20) NOT NULL,
+	cuit NVARCHAR(20) UNIQUE NOT NULL,
 	rubro NVARCHAR(100) NOT NULL,
 	nombre_contacto NVARCHAR(255) NOT NULL,
 	PRIMARY KEY (id_proveedor)
@@ -285,7 +285,7 @@ GO
 
 INSERT INTO LOS_BORBOTONES.Funcionalidades (descripcion) VALUES
 ('ABM de Rol'), -- Administrativo
-('Registro de Usuario'), -- ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+('Registro de Usuario'), -- ????????????????????????????????????????????????????????????? TODO: Preguntar
 ('ABM de Clientes'), -- Administrativo
 ('ABM de Proveedor'), -- Administrativo
 ('Carga de crédito'), -- Cliente
@@ -307,6 +307,49 @@ INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_rol, id_funcionalidad) VALU
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Facturación a Proveedor')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Listado Estadístico'))
+GO
+
+-- Creo usuario administrador
+INSERT INTO LOS_BORBOTONES.Usuarios (username, [password]) VALUES
+('admin', 'w23e') -- TODO: Hash password
+GO
+INSERT INTO LOS_BORBOTONES.RolesXUsuarios (id_rol, id_usuario) VALUES
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre = 'Administrativo'), (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = 'admin'))
+GO
+
+------------------------------------------------
+--            MIGRACIÓN TABLA MAESTRA
+------------------------------------------------
+
+-- Asigno usuarios arbitrarios a los clientes y proveedores ya existentes
+INSERT INTO LOS_BORBOTONES.Usuarios (username, [password])
+SELECT DISTINCT STR(Cli_Dni), STR(Cli_Dni) -- TODO: Hash a la password
+FROM gd_esquema.Maestra
+UNION
+SELECT DISTINCT Provee_CUIT, Provee_CUIT -- TODO: Hash a la password
+FROM gd_esquema.Maestra WHERE Provee_CUIT IS NOT NULL
+GO
+
+-- Migración clientes
+INSERT INTO LOS_BORBOTONES.Clientes (nombre, apellido, dni, mail, telefono, fecha_nacimiento, direccion, id_usuario)
+SELECT DISTINCT Cli_Nombre, Cli_Apellido, Cli_Dni, Cli_Mail, Cli_Telefono, Cli_Fecha_Nac, CONCAT(Cli_Direccion, ', ', Cli_Ciudad), u.id_usuario
+FROM gd_esquema.Maestra
+JOIN LOS_BORBOTONES.Usuarios u ON u.username = STR(Cli_Dni)
+GO
+
+-- Migración proveedores
+INSERT INTO LOS_BORBOTONES.Proveedores (razon_social, mail, telefono, direccion, codigo_postal, ciudad, cuit, rubro, nombre_contacto, id_usuario)
+SELECT DISTINCT Provee_RS, NULL, Provee_Telefono, Provee_Dom, NULL, Provee_Ciudad, Provee_CUIT, Provee_Rubro, Provee_RS, u.id_usuario
+FROM gd_esquema.Maestra 
+JOIN LOS_BORBOTONES.Usuarios u ON u.username = Provee_CUIT
+WHERE Provee_CUIT IS NOT NULL
+GO
+
+-- Asigno roles de cliente y proveedor
+INSERT INTO LOS_BORBOTONES.RolesXUsuarios (id_usuario, id_rol)
+SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente') FROM LOS_BORBOTONES.Usuarios
+UNION
+SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor') FROM LOS_BORBOTONES.Proveedores
 GO
 
 ------------------------------------------------
