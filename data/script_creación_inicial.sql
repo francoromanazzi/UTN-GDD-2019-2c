@@ -232,7 +232,7 @@ CREATE TABLE LOS_BORBOTONES.Cargas (
 GO
 
 CREATE TABLE LOS_BORBOTONES.Ofertas (
-	id_oferta INT IDENTITY(1,1) NOT NULL,
+	codigo_oferta NVARCHAR(50) NOT NULL,
 	id_proveedor INT NOT NULL,
 	fecha_publicacion DATETIME NOT NULL,
 	fecha_vencimiento DATETIME NOT NULL,
@@ -240,14 +240,14 @@ CREATE TABLE LOS_BORBOTONES.Ofertas (
 	precio_de_lista NUMERIC(18,2) NOT NULL,
 	cant_disponible NUMERIC(18,0) NOT NULL,
 	max_unidades_por_cliente NUMERIC(18,0) NOT NULL
-	PRIMARY KEY (id_oferta)
+	PRIMARY KEY (codigo_oferta)
 )
 GO
 
 CREATE TABLE LOS_BORBOTONES.Compras (
 	id_compra INT IDENTITY(1,1) NOT NULL,
 	id_cliente_comprador INT NOT NULL,
-	id_oferta INT NOT NULL,
+	codigo_oferta NVARCHAR(50) NOT NULL,
 	id_canje INT,
 	id_factura INT,
 	cant_unidades NUMERIC(18,0) NOT NULL,
@@ -352,6 +352,31 @@ UNION
 SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor') FROM LOS_BORBOTONES.Proveedores
 GO
 
+-- Migración cargas
+INSERT INTO LOS_BORBOTONES.Cargas (fecha, monto, medio_pago, id_cliente)
+SELECT Carga_Fecha, Carga_Credito, Tipo_Pago_Desc, (SELECT c.id_cliente FROM LOS_BORBOTONES.Clientes c WHERE c.dni = m.Cli_Dni)
+FROM gd_esquema.Maestra m WHERE Carga_Fecha IS NOT NULL AND Carga_Credito IS NOT NULL AND Tipo_Pago_Desc IS NOT NULL
+GO
+
+-- Migración compras
+INSERT INTO LOS_BORBOTONES.Compras (id_cliente_comprador, codigo_oferta, fecha, cant_unidades)
+SELECT (SELECT id_cliente FROM LOS_BORBOTONES.Clientes WHERE dni = Cli_Dni), Oferta_Codigo, Oferta_Fecha_Compra, count(*)
+FROM gd_esquema.Maestra m 
+WHERE Oferta_Codigo IS NOT NULL
+GROUP BY Oferta_Codigo, Cli_Dni, Oferta_Fecha_Compra
+
+-- Migración ofertas
+INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, id_proveedor)
+SELECT DISTINCT Oferta_Codigo, Oferta_Fecha, Oferta_Fecha_Venc, Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Cantidad,
+	100000, -- TODO: El max por cliente deberia calcularse de la tabla maestra
+	(SELECT p.id_proveedor FROM LOS_BORBOTONES.Proveedores p WHERE Provee_CUIT = p.cuit)
+FROM gd_esquema.Maestra
+WHERE Oferta_Codigo IS NOT NULL
+
+-- Migración canjes
+
+-- Migración facturas
+
 ------------------------------------------------
 --            ADD FOREIGN KEYS
 ------------------------------------------------
@@ -405,7 +430,7 @@ ADD CONSTRAINT FK_Compras_Canjes FOREIGN KEY (id_canje) REFERENCES LOS_BORBOTONE
 GO
 
 ALTER TABLE LOS_BORBOTONES.Compras
-ADD CONSTRAINT FK_Compras_Ofertas FOREIGN KEY (id_compra) REFERENCES LOS_BORBOTONES.Ofertas
+ADD CONSTRAINT FK_Compras_Ofertas FOREIGN KEY (codigo_oferta) REFERENCES LOS_BORBOTONES.Ofertas
 GO
 
 ALTER TABLE LOS_BORBOTONES.Compras
