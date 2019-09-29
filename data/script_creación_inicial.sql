@@ -45,10 +45,6 @@ IF OBJECT_ID('LOS_BORBOTONES.Ofertas', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBO
 ALTER TABLE LOS_BORBOTONES.Ofertas DROP CONSTRAINT FK_Ofertas_Proveedores
 GO
 
-IF OBJECT_ID('LOS_BORBOTONES.Compras', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Compras_Canjes', 'F') IS NOT NULL
-ALTER TABLE LOS_BORBOTONES.Compras DROP CONSTRAINT FK_Compras_Canjes
-GO
-
 IF OBJECT_ID('LOS_BORBOTONES.Compras', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Compras_Ofertas', 'F') IS NOT NULL
 ALTER TABLE LOS_BORBOTONES.Compras DROP CONSTRAINT FK_Compras_Ofertas
 GO
@@ -63,6 +59,10 @@ GO
 
 IF OBJECT_ID('LOS_BORBOTONES.Canjes', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Canjes_Clientes', 'F') IS NOT NULL
 ALTER TABLE LOS_BORBOTONES.Canjes DROP CONSTRAINT FK_Canjes_Clientes
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.Canjes', 'U') IS NOT NULL AND OBJECT_ID('LOS_BORBOTONES.FK_Canjes_Compras', 'F') IS NOT NULL
+ALTER TABLE LOS_BORBOTONES.Canjes DROP CONSTRAINT FK_Canjes_Compras
 GO
 
 ------------------------------------------------
@@ -248,8 +248,7 @@ CREATE TABLE LOS_BORBOTONES.Compras (
 	id_compra INT IDENTITY(1,1) NOT NULL,
 	id_cliente_comprador INT NOT NULL,
 	codigo_oferta NVARCHAR(50) NOT NULL,
-	id_canje INT,
-	id_factura INT,
+	id_factura NUMERIC(18,0),
 	cant_unidades NUMERIC(18,0) NOT NULL,
 	fecha DATETIME NOT NULL
 	PRIMARY KEY (id_compra)
@@ -259,13 +258,14 @@ GO
 CREATE TABLE LOS_BORBOTONES.Canjes (
 	id_canje INT IDENTITY(1,1) NOT NULL,
 	id_cliente_canjeador INT NOT NULL,
+	id_compra INT NOT NULL,
 	fecha DATETIME NOT NULL
 	PRIMARY KEY (id_canje)
 )
 GO
 
 CREATE TABLE LOS_BORBOTONES.Facturas (
-	id_factura INT IDENTITY(1,1) NOT NULL,
+	id_factura NUMERIC(18,0) NOT NULL,
 	fecha_inicio DATETIME NOT NULL,
 	fecha_fin DATETIME NOT NULL,
 	importe NUMERIC(18,2) NOT NULL,
@@ -327,55 +327,92 @@ SELECT DISTINCT STR(Cli_Dni), STR(Cli_Dni) -- TODO: Hash a la password
 FROM gd_esquema.Maestra
 UNION
 SELECT DISTINCT Provee_CUIT, Provee_CUIT -- TODO: Hash a la password
-FROM gd_esquema.Maestra WHERE Provee_CUIT IS NOT NULL
+FROM gd_esquema.Maestra
+WHERE Provee_CUIT IS NOT NULL
 GO
 
 -- Migración clientes
 INSERT INTO LOS_BORBOTONES.Clientes (nombre, apellido, dni, mail, telefono, fecha_nacimiento, direccion, id_usuario)
-SELECT DISTINCT Cli_Nombre, Cli_Apellido, Cli_Dni, Cli_Mail, Cli_Telefono, Cli_Fecha_Nac, CONCAT(Cli_Direccion, ', ', Cli_Ciudad), u.id_usuario
+SELECT DISTINCT Cli_Nombre, Cli_Apellido, Cli_Dni, Cli_Mail, Cli_Telefono, Cli_Fecha_Nac, CONCAT(Cli_Direccion, ', ', Cli_Ciudad), id_usuario
 FROM gd_esquema.Maestra
-JOIN LOS_BORBOTONES.Usuarios u ON u.username = STR(Cli_Dni)
+JOIN LOS_BORBOTONES.Usuarios ON username = STR(Cli_Dni)
 GO
 
 -- Migración proveedores
 INSERT INTO LOS_BORBOTONES.Proveedores (razon_social, mail, telefono, direccion, codigo_postal, ciudad, cuit, rubro, nombre_contacto, id_usuario)
-SELECT DISTINCT Provee_RS, NULL, Provee_Telefono, Provee_Dom, NULL, Provee_Ciudad, Provee_CUIT, Provee_Rubro, Provee_RS, u.id_usuario
+SELECT DISTINCT Provee_RS, NULL, Provee_Telefono, Provee_Dom, NULL, Provee_Ciudad, Provee_CUIT, Provee_Rubro, Provee_RS, id_usuario
 FROM gd_esquema.Maestra 
-JOIN LOS_BORBOTONES.Usuarios u ON u.username = Provee_CUIT
+JOIN LOS_BORBOTONES.Usuarios ON username = Provee_CUIT
 WHERE Provee_CUIT IS NOT NULL
 GO
 
 -- Asigno roles de cliente y proveedor
 INSERT INTO LOS_BORBOTONES.RolesXUsuarios (id_usuario, id_rol)
-SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente') FROM LOS_BORBOTONES.Usuarios
+SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente')
+FROM LOS_BORBOTONES.Clientes
 UNION
-SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor') FROM LOS_BORBOTONES.Proveedores
+SELECT id_usuario, (SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor')
+FROM LOS_BORBOTONES.Proveedores
 GO
 
 -- Migración cargas
 INSERT INTO LOS_BORBOTONES.Cargas (fecha, monto, medio_pago, id_cliente)
-SELECT Carga_Fecha, Carga_Credito, Tipo_Pago_Desc, (SELECT c.id_cliente FROM LOS_BORBOTONES.Clientes c WHERE c.dni = m.Cli_Dni)
-FROM gd_esquema.Maestra m WHERE Carga_Fecha IS NOT NULL AND Carga_Credito IS NOT NULL AND Tipo_Pago_Desc IS NOT NULL
+SELECT Carga_Fecha, Carga_Credito, Tipo_Pago_Desc, id_cliente
+FROM gd_esquema.Maestra
+JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
+WHERE Carga_Fecha IS NOT NULL AND Carga_Credito IS NOT NULL AND Tipo_Pago_Desc IS NOT NULL
 GO
 
 -- Migración compras
-INSERT INTO LOS_BORBOTONES.Compras (id_cliente_comprador, codigo_oferta, fecha, cant_unidades)
-SELECT (SELECT id_cliente FROM LOS_BORBOTONES.Clientes WHERE dni = Cli_Dni), Oferta_Codigo, Oferta_Fecha_Compra, count(*)
-FROM gd_esquema.Maestra m 
-WHERE Oferta_Codigo IS NOT NULL
-GROUP BY Oferta_Codigo, Cli_Dni, Oferta_Fecha_Compra
+INSERT INTO LOS_BORBOTONES.Compras (codigo_oferta, fecha, cant_unidades, id_cliente_comprador)
+SELECT Oferta_Codigo, Oferta_Fecha_Compra, COUNT(*), id_cliente
+FROM gd_esquema.Maestra 
+JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
+WHERE Oferta_Codigo IS NOT NULL AND Oferta_Fecha_Compra IS NOT NULL
+AND Oferta_Entregado_Fecha IS NULL -- Porque son registros duplicados pero con la información de su canje
+AND Factura_Nro IS NULL -- Porque son registros duplicados pero con la información de su facturación
+GROUP BY Oferta_Codigo, Cli_Dni, Oferta_Fecha_Compra, id_cliente
+GO
 
 -- Migración ofertas
+SELECT codigo_oferta, id_cliente_comprador, SUM(cant_unidades) total_unidades_compradas
+INTO #TotalUnidadesPorClienteDeCadaOferta
+FROM LOS_BORBOTONES.Compras
+GROUP BY codigo_oferta, id_cliente_comprador
+
 INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, id_proveedor)
 SELECT DISTINCT Oferta_Codigo, Oferta_Fecha, Oferta_Fecha_Venc, Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Cantidad,
-	100000, -- TODO: El max por cliente deberia calcularse de la tabla maestra
-	(SELECT p.id_proveedor FROM LOS_BORBOTONES.Proveedores p WHERE Provee_CUIT = p.cuit)
+	(SELECT MAX(total_unidades_compradas)
+	 FROM #TotalUnidadesPorClienteDeCadaOferta
+	 WHERE #TotalUnidadesPorClienteDeCadaOferta.codigo_oferta = Oferta_Codigo
+	 ),
+	id_proveedor
 FROM gd_esquema.Maestra
+JOIN LOS_BORBOTONES.Proveedores ON cuit = Provee_CUIT
 WHERE Oferta_Codigo IS NOT NULL
+GO
+
+DROP TABLE #TotalUnidadesPorClienteDeCadaOferta
 
 -- Migración canjes
+INSERT INTO LOS_BORBOTONES.Canjes (fecha, id_cliente_canjeador, id_compra)
+SELECT Oferta_Entregado_Fecha, id_cliente, id_compra
+FROM gd_esquema.Maestra
+JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
+JOIN LOS_BORBOTONES.Compras ON id_cliente_comprador = id_cliente AND codigo_oferta = Oferta_Codigo AND fecha = Oferta_Fecha_Compra
+WHERE Oferta_Entregado_Fecha IS NOT NULL AND Oferta_Codigo IS NOT NULL
+GO
 
 -- Migración facturas
+INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha_inicio, fecha_fin, importe)
+SELECT Factura_Nro, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta)
+FROM gd_esquema.Maestra
+JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
+JOIN LOS_BORBOTONES.Compras ON id_cliente_comprador = id_cliente AND codigo_oferta = Oferta_Codigo AND fecha = Oferta_Fecha_Compra
+JOIN LOS_BORBOTONES.Ofertas ON Compras.codigo_oferta = Ofertas.codigo_oferta
+WHERE Factura_Nro IS NOT NULL 
+GROUP BY Factura_Nro
+GO
 
 ------------------------------------------------
 --            ADD FOREIGN KEYS
@@ -426,10 +463,6 @@ ADD CONSTRAINT FK_Compras_Clientes FOREIGN KEY (id_cliente_comprador) REFERENCES
 GO
 
 ALTER TABLE LOS_BORBOTONES.Compras
-ADD CONSTRAINT FK_Compras_Canjes FOREIGN KEY (id_canje) REFERENCES LOS_BORBOTONES.Canjes
-GO
-
-ALTER TABLE LOS_BORBOTONES.Compras
 ADD CONSTRAINT FK_Compras_Ofertas FOREIGN KEY (codigo_oferta) REFERENCES LOS_BORBOTONES.Ofertas
 GO
 
@@ -439,4 +472,8 @@ GO
 
 ALTER TABLE LOS_BORBOTONES.Canjes
 ADD CONSTRAINT FK_Canjes_Clientes FOREIGN KEY (id_cliente_canjeador) REFERENCES LOS_BORBOTONES.Clientes
+GO
+
+ALTER TABLE LOS_BORBOTONES.Canjes
+ADD CONSTRAINT FK_Canjes_Compras FOREIGN KEY (id_compra) REFERENCES LOS_BORBOTONES.Compras
 GO
