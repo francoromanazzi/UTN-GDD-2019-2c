@@ -266,9 +266,11 @@ GO
 
 CREATE TABLE LOS_BORBOTONES.Facturas (
 	id_factura NUMERIC(18,0) NOT NULL,
+	fecha DATETIME NOT NULL,
 	fecha_inicio DATETIME NOT NULL,
 	fecha_fin DATETIME NOT NULL,
 	importe NUMERIC(18,2) NOT NULL,
+	id_proveedor INT NOT NULL,
 	PRIMARY KEY (id_factura)
 )
 GO
@@ -371,7 +373,7 @@ JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
 WHERE Oferta_Codigo IS NOT NULL AND Oferta_Fecha_Compra IS NOT NULL
 AND Oferta_Entregado_Fecha IS NULL -- Porque son registros duplicados pero con la información de su canje
 AND Factura_Nro IS NULL -- Porque son registros duplicados pero con la información de su facturación
-GROUP BY Oferta_Codigo, Cli_Dni, Oferta_Fecha_Compra, id_cliente
+GROUP BY Oferta_Codigo,  Oferta_Fecha_Compra, id_cliente
 GO
 
 -- Migración ofertas
@@ -405,14 +407,14 @@ WHERE Oferta_Entregado_Fecha IS NOT NULL AND Oferta_Codigo IS NOT NULL
 GO
 
 -- Migración facturas
-INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha_inicio, fecha_fin, importe)
-SELECT Factura_Nro, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta)
+INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha, fecha_inicio, fecha_fin, importe)
+SELECT Factura_Nro, Factura_Fecha, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta)
 FROM gd_esquema.Maestra
 JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
 JOIN LOS_BORBOTONES.Compras ON id_cliente_comprador = id_cliente AND codigo_oferta = Oferta_Codigo AND fecha = Oferta_Fecha_Compra
 JOIN LOS_BORBOTONES.Ofertas ON Compras.codigo_oferta = Ofertas.codigo_oferta
 WHERE Factura_Nro IS NOT NULL 
-GROUP BY Factura_Nro
+GROUP BY Factura_Nro, Factura_Fecha
 GO
 
 UPDATE LOS_BORBOTONES.Compras
@@ -427,6 +429,7 @@ SET id_factura = (
 	AND Compras.fecha = Oferta_Fecha_Compra
 )
 GO
+
 
 ------------------------------------------------
 --            ADD FOREIGN KEYS
