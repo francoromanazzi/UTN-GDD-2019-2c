@@ -393,6 +393,7 @@ WHERE Oferta_Codigo IS NOT NULL
 GO
 
 DROP TABLE #TotalUnidadesPorClienteDeCadaOferta
+GO
 
 -- Migración canjes
 INSERT INTO LOS_BORBOTONES.Canjes (fecha, id_cliente_canjeador, id_compra)
@@ -412,6 +413,19 @@ JOIN LOS_BORBOTONES.Compras ON id_cliente_comprador = id_cliente AND codigo_ofer
 JOIN LOS_BORBOTONES.Ofertas ON Compras.codigo_oferta = Ofertas.codigo_oferta
 WHERE Factura_Nro IS NOT NULL 
 GROUP BY Factura_Nro
+GO
+
+UPDATE LOS_BORBOTONES.Compras
+SET id_factura = (
+	SELECT id_factura
+	FROM gd_esquema.Maestra
+	JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
+	JOIN LOS_BORBOTONES.Facturas ON id_factura = Factura_Nro
+	WHERE Factura_Nro IS NOT NULL
+	AND Compras.codigo_oferta = Oferta_Codigo
+	AND Compras.id_cliente_comprador = Clientes.id_cliente
+	AND Compras.fecha = Oferta_Fecha_Compra
+)
 GO
 
 ------------------------------------------------
