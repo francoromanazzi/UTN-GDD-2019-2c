@@ -66,6 +66,13 @@ ALTER TABLE LOS_BORBOTONES.Canjes DROP CONSTRAINT FK_Canjes_Compras
 GO
 
 ------------------------------------------------
+--            DROP STORED PROCEDURES
+------------------------------------------------
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+GO
+
+------------------------------------------------
 --            DROP TABLES
 ------------------------------------------------
 
@@ -224,7 +231,7 @@ CREATE TABLE LOS_BORBOTONES.Cargas (
 	id_carga INT IDENTITY(1,1) NOT NULL,
 	id_cliente INT NOT NULL,
 	id_tarjeta INT,
-	medio_pago NVARCHAR(30) NOT NULL,
+	medio_pago NVARCHAR(30) CHECK(medio_pago IN ('Crédito', 'Débito', 'Efectivo')) NOT NULL,
 	fecha DATETIME NOT NULL,
 	monto NUMERIC(18,2) NOT NULL,
 	PRIMARY KEY (id_carga)
@@ -274,6 +281,27 @@ CREATE TABLE LOS_BORBOTONES.Facturas (
 	PRIMARY KEY (id_factura)
 )
 GO
+
+------------------------------------------------
+--            PROCEDURES
+------------------------------------------------
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+@id_cliente INT,
+@fecha DATETIME,
+@medio_pago NVARCHAR(30),
+@monto NUMERIC(18,2),
+@id_tarjeta INT
+AS
+BEGIN
+	INSERT INTO LOS_BORBOTONES.Cargas
+	(id_cliente, fecha, medio_pago, monto, id_tarjeta)
+	VALUES
+	(@id_cliente, @fecha, @medio_pago, @monto, @id_tarjeta)
+
+	RETURN SCOPE_IDENTITY()
+END
+GO
+
 
 ------------------------------------------------
 --            INSERTS INICIALES
@@ -407,14 +435,14 @@ WHERE Oferta_Entregado_Fecha IS NOT NULL AND Oferta_Codigo IS NOT NULL
 GO
 
 -- Migración facturas
-INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha, fecha_inicio, fecha_fin, importe)
-SELECT Factura_Nro, Factura_Fecha, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta)
+INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha, fecha_inicio, fecha_fin, importe, id_proveedor)
+SELECT Factura_Nro, Factura_Fecha, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta), id_proveedor
 FROM gd_esquema.Maestra
 JOIN LOS_BORBOTONES.Clientes ON dni = Cli_Dni
 JOIN LOS_BORBOTONES.Compras ON id_cliente_comprador = id_cliente AND codigo_oferta = Oferta_Codigo AND fecha = Oferta_Fecha_Compra
 JOIN LOS_BORBOTONES.Ofertas ON Compras.codigo_oferta = Ofertas.codigo_oferta
 WHERE Factura_Nro IS NOT NULL 
-GROUP BY Factura_Nro, Factura_Fecha
+GROUP BY Factura_Nro, Factura_Fecha, id_proveedor
 GO
 
 UPDATE LOS_BORBOTONES.Compras
