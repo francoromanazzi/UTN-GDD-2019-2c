@@ -66,10 +66,28 @@ ALTER TABLE LOS_BORBOTONES.Canjes DROP CONSTRAINT FK_Canjes_Compras
 GO
 
 ------------------------------------------------
+--            DROP FUNCTIONS
+------------------------------------------------
+IF OBJECT_ID('LOS_BORBOTONES.FN_Hash_Password', 'FN') IS NOT NULL
+DROP FUNCTION LOS_BORBOTONES.FN_Hash_Password
+GO
+
+------------------------------------------------
 --            DROP STORED PROCEDURES
 ------------------------------------------------
-IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito') IS NOT NULL
+IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Login', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Login
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+GO
+
+------------------------------------------------
+--            DROP TRIGGERS
+------------------------------------------------
+IF OBJECT_ID('LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos', 'TR') IS NOT NULL
+DROP TRIGGER LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos
 GO
 
 ------------------------------------------------
@@ -151,7 +169,7 @@ CREATE TABLE LOS_BORBOTONES.Usuarios (
 	username NVARCHAR(50) UNIQUE NOT NULL,
 	[password] NVARCHAR(255) NOT NULL,
 	habilitado BIT DEFAULT 1 NOT NULL,
-	motivo_deshabilitacion NVARCHAR(50) DEFAULT NULL,
+	motivo_deshabilitacion NVARCHAR(20) CHECK(motivo_deshabilitacion IN (NULL, 'Admin', 'Intentos fallidos')) DEFAULT NULL,
 	cant_intentos_fallidos TINYINT DEFAULT 0 NOT NULL,
 	PRIMARY KEY (id_usuario)
 )
@@ -283,8 +301,76 @@ CREATE TABLE LOS_BORBOTONES.Facturas (
 GO
 
 ------------------------------------------------
+--            FUNCTIONS
+------------------------------------------------
+CREATE FUNCTION LOS_BORBOTONES.FN_Hash_Password(@password nvarchar(255))
+RETURNS nvarchar(255)
+AS
+BEGIN
+	RETURN CONVERT(nvarchar(255),HASHBYTES('SHA2_256',@password),1)
+END
+GO
+
+------------------------------------------------
 --            PROCEDURES
 ------------------------------------------------
+CREATE PROCEDURE LOS_BORBOTONES.SP_Validar_Login
+@username nvarchar(50),
+@password nvarchar(255),
+@loginCorrecto bit OUTPUT
+AS 
+BEGIN
+	DECLARE @habilitado bit
+	DECLARE @motivo_deshabilitacion NVARCHAR(20)
+	SET NOCOUNT ON
+	
+	--Username incorrecto
+	IF NOT EXISTS (SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE username = @username)
+		BEGIN;
+			THROW 50001, 'Username/password incorrecto', 1
+		END;
+	ELSE
+		BEGIN
+			--Password incorrecto (pero existe el username => incremento intentos fallidos)
+			IF NOT EXISTS(SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE username = @username AND [password] = LOS_BORBOTONES.FN_Hash_Password(@password))
+				BEGIN
+					BEGIN TRAN;
+						UPDATE LOS_BORBOTONES.Usuarios SET cant_intentos_fallidos = cant_intentos_fallidos + 1 WHERE username = @username --Ejecuta trigger
+					COMMIT TRAN;
+					THROW 50002, 'Username/password incorrecto', 1
+				END
+			ELSE --Password valido
+				BEGIN
+					SELECT @habilitado = u.habilitado, @motivo_deshabilitacion = u.motivo_deshabilitacion
+					FROM LOS_BORBOTONES.Usuarios u WHERE u.username = @username
+					
+					--Deshabilitado
+					IF (@habilitado = 0) 
+						BEGIN
+							IF (@motivo_deshabilitacion = 'Admin')
+								BEGIN;
+									THROW 50003, 'El usuario fue deshabilitado por el administrador', 1
+								END;
+							ELSE IF (@motivo_deshabilitacion = 'Intentos fallidos') 
+								BEGIN;
+									THROW 50004, 'El usuario fue deshabilitado por superar la cantidad máxima de intentos fallidos', 1
+								END;
+						END
+
+					--Login correcto!
+					ELSE
+						BEGIN
+							SET @loginCorrecto = 1
+							BEGIN TRAN;
+								UPDATE LOS_BORBOTONES.Usuarios SET cant_intentos_fallidos = 0 WHERE username = @username
+							COMMIT TRAN;
+							RETURN;
+						END					
+				END
+		END		
+END
+GO
+
 CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
 @id_cliente INT,
 @fecha DATETIME,
@@ -302,6 +388,16 @@ BEGIN
 END
 GO
 
+------------------------------------------------
+--            TRIGGERS
+------------------------------------------------
+CREATE TRIGGER LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos ON LOS_BORBOTONES.Usuarios AFTER UPDATE
+AS
+BEGIN
+	IF (SELECT cant_intentos_fallidos FROM inserted) >= 3
+		UPDATE LOS_BORBOTONES.Usuarios SET habilitado = 0, motivo_deshabilitacion = 'Intentos fallidos' WHERE username = (SELECT username FROM inserted)
+END
+GO
 
 ------------------------------------------------
 --            INSERTS INICIALES
@@ -341,7 +437,7 @@ GO
 
 -- Creo usuario administrador
 INSERT INTO LOS_BORBOTONES.Usuarios (username, [password]) VALUES
-('admin', 'w23e') -- TODO: Hash password
+('admin', LOS_BORBOTONES.FN_Hash_Password('w23e'))
 GO
 INSERT INTO LOS_BORBOTONES.RolesXUsuarios (id_rol, id_usuario) VALUES
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre = 'Administrativo'), (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = 'admin'))
@@ -353,10 +449,10 @@ GO
 
 -- Asigno usuarios arbitrarios a los clientes y proveedores ya existentes
 INSERT INTO LOS_BORBOTONES.Usuarios (username, [password])
-SELECT DISTINCT STR(Cli_Dni), STR(Cli_Dni) -- TODO: Hash a la password
+SELECT DISTINCT STR(Cli_Dni), LOS_BORBOTONES.FN_Hash_Password(STR(Cli_Dni))
 FROM gd_esquema.Maestra
 UNION
-SELECT DISTINCT Provee_CUIT, Provee_CUIT -- TODO: Hash a la password
+SELECT DISTINCT Provee_CUIT, LOS_BORBOTONES.FN_Hash_Password(Provee_CUIT)
 FROM gd_esquema.Maestra
 WHERE Provee_CUIT IS NOT NULL
 GO
