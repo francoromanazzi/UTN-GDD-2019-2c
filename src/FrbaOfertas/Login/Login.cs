@@ -1,4 +1,5 @@
 ﻿using FrbaOfertas.Clases.Exceptions;
+using FrbaOfertas.Clases.Modelo;
 using FrbaOfertas.Clases.Repositorios;
 using FrbaOfertas.Clases.Session;
 using FrbaOfertas.Clases.Utils.Form;
@@ -18,12 +19,15 @@ namespace FrbaOfertas.Login
     {
         public Login()
         {
+            Session.Instance.CloseSession();
+
             InitializeComponent();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
             RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios();
+            RepositorioRoles repositorioRoles = new RepositorioRoles();
 
             try
             {
@@ -31,8 +35,9 @@ namespace FrbaOfertas.Login
 
                 Session.Instance.OpenSession(inputUsername.Text);
 
-                //Rol userRol = rolRepository.IdRolDeUsuario(txtUsername.Text);
-                //NavigableFormUtil.ForwardTo(this, new SeleccionarFuncionalidadForm(this, userRol));
+                IList<Rol> rolesUsuario = repositorioRoles.ObtenerRolesDeUsuario(inputUsername.Text);
+
+                NavigableFormUtil.ForwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(this, rolesUsuario));
             }
             catch (StoredProcedureException ex)
             {

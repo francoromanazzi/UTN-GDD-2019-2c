@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.grpLogin = new System.Windows.Forms.GroupBox();
-            this.lblUsername = new System.Windows.Forms.Label();
-            this.inputUsername = new System.Windows.Forms.TextBox();
-            this.lblPassword = new System.Windows.Forms.Label();
-            this.inputPassword = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
+            this.inputPassword = new System.Windows.Forms.TextBox();
+            this.lblPassword = new System.Windows.Forms.Label();
+            this.inputUsername = new System.Windows.Forms.TextBox();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.grpLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,47 +51,47 @@
             this.grpLogin.TabStop = false;
             this.grpLogin.Text = "Bienvenido";
             // 
-            // lblUsername
+            // btnLogin
             // 
-            this.lblUsername.AutoSize = true;
-            this.lblUsername.Location = new System.Drawing.Point(6, 31);
-            this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(96, 13);
-            this.lblUsername.TabIndex = 0;
-            this.lblUsername.Text = "Nombre de usuario";
+            this.btnLogin.Location = new System.Drawing.Point(27, 143);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(206, 23);
+            this.btnLogin.TabIndex = 4;
+            this.btnLogin.Text = "Ingresar";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // inputUsername
+            // inputPassword
             // 
-            this.inputUsername.Location = new System.Drawing.Point(9, 47);
-            this.inputUsername.Name = "inputUsername";
-            this.inputUsername.Size = new System.Drawing.Size(100, 20);
-            this.inputUsername.TabIndex = 1;
+            this.inputPassword.Location = new System.Drawing.Point(27, 102);
+            this.inputPassword.Name = "inputPassword";
+            this.inputPassword.Size = new System.Drawing.Size(206, 20);
+            this.inputPassword.TabIndex = 3;
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(6, 86);
+            this.lblPassword.Location = new System.Drawing.Point(24, 86);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(61, 13);
             this.lblPassword.TabIndex = 2;
             this.lblPassword.Text = "Contraseña";
             // 
-            // inputPassword
+            // inputUsername
             // 
-            this.inputPassword.Location = new System.Drawing.Point(9, 102);
-            this.inputPassword.Name = "inputPassword";
-            this.inputPassword.Size = new System.Drawing.Size(100, 20);
-            this.inputPassword.TabIndex = 3;
+            this.inputUsername.Location = new System.Drawing.Point(27, 47);
+            this.inputUsername.Name = "inputUsername";
+            this.inputUsername.Size = new System.Drawing.Size(206, 20);
+            this.inputUsername.TabIndex = 1;
             // 
-            // btnLogin
+            // lblUsername
             // 
-            this.btnLogin.Location = new System.Drawing.Point(9, 141);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(75, 23);
-            this.btnLogin.TabIndex = 4;
-            this.btnLogin.Text = "Ingresar";
-            this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(24, 31);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(96, 13);
+            this.lblUsername.TabIndex = 0;
+            this.lblUsername.Text = "Nombre de usuario";
             // 
             // Login
             // 

@@ -79,6 +79,14 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Login', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Login
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Roles_De_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Funcionalidades_De_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
+GO
+
 IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
 GO
@@ -303,11 +311,11 @@ GO
 ------------------------------------------------
 --            FUNCTIONS
 ------------------------------------------------
-CREATE FUNCTION LOS_BORBOTONES.FN_Hash_Password(@password nvarchar(255))
-RETURNS nvarchar(255)
+CREATE FUNCTION LOS_BORBOTONES.FN_Hash_Password(@password NVARCHAR(255))
+RETURNS NVARCHAR(255)
 AS
 BEGIN
-	RETURN CONVERT(nvarchar(255),HASHBYTES('SHA2_256',@password),1)
+	RETURN CONVERT(NVARCHAR(255),HASHBYTES('SHA2_256',@password),1)
 END
 GO
 
@@ -315,9 +323,9 @@ GO
 --            PROCEDURES
 ------------------------------------------------
 CREATE PROCEDURE LOS_BORBOTONES.SP_Validar_Login
-@username nvarchar(50),
-@password nvarchar(255),
-@loginCorrecto bit OUTPUT
+@username NVARCHAR(50),
+@password NVARCHAR(255),
+@login_correcto BIT OUTPUT
 AS 
 BEGIN
 	DECLARE @habilitado bit
@@ -360,7 +368,7 @@ BEGIN
 					--Login correcto!
 					ELSE
 						BEGIN
-							SET @loginCorrecto = 1
+							SET @login_correcto = 1
 							BEGIN TRAN;
 								UPDATE LOS_BORBOTONES.Usuarios SET cant_intentos_fallidos = 0 WHERE username = @username
 							COMMIT TRAN;
@@ -368,6 +376,29 @@ BEGIN
 						END					
 				END
 		END		
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
+@username NVARCHAR(50)
+AS
+BEGIN
+	SELECT r.*
+	FROM LOS_BORBOTONES.Roles r
+	JOIN LOS_BORBOTONES.RolesXUsuarios rxu ON (r.id_rol = rxu.id_rol)
+	JOIN  LOS_BORBOTONES.Usuarios u ON (u.id_usuario = rxu.id_usuario)
+	WHERE u.username = @username
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
+@idRol INT
+AS
+BEGIN
+	SELECT f.*
+	FROM LOS_BORBOTONES.Funcionalidades f 
+	JOIN LOS_BORBOTONES.FuncionalidadesXRoles fxr ON f.id_funcionalidad = fxr.id_funcionalidad
+	WHERE fxr.id_rol = @idRol
 END
 GO
 

@@ -41,5 +41,39 @@ namespace FrbaOfertas.Clases.Database
                 }
             }
         }
+
+        public IList<TMapped> ExecMappedStoredProcedure<TMapped>(string procedureName, StoredProcedureParameters inputParameters, IStoredProcedureResultMapper<TMapped> mapper)
+        {
+            DataTable result = this.ExecDataTableStoredProcedure(procedureName, inputParameters);
+            return mapper.Map(result);
+        }
+
+        public DataTable ExecDataTableStoredProcedure(string procedureName, StoredProcedureParameters parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(procedureName, sqlConnection))
+            using (SqlDataAdapter dataAdapter = new SqlDataAdapter(command))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                parameters.AddParametersToCommand(command);
+
+                try
+                {
+                    dataAdapter.Fill(dataTable);
+                }
+                catch (SqlException e)
+                {
+                    throw new StoredProcedureException(e.Message, e);
+                }
+
+            }
+
+            return dataTable;
+        }
     }
 }

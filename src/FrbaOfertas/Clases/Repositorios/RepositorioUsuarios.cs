@@ -16,7 +16,7 @@ namespace FrbaOfertas.Clases.Repositorios
                 .AddParameter("@username", username)
                 .AddParameter("@password", password);
 
-            return new Conexion().ExecSingleOutputStoredProcedure<Boolean>(StoredProcedures.ValidarLogin, parameters, "@loginCorrecto");
+            return new Conexion().ExecSingleOutputStoredProcedure<Boolean>(StoredProcedures.ValidarLogin, parameters, StoredProcedures.ValidarLoginOutput);
         }
     }
 }
