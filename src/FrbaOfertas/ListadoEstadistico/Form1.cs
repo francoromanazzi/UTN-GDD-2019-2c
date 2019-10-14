@@ -16,5 +16,10 @@ namespace FrbaOfertas.ListadoEstadistico
         {
             InitializeComponent();
         }
+
+        private void list_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
