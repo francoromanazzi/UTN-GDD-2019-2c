@@ -51,9 +51,20 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
             }
             else
             {
-                int selectedItemId = ((ComboBoxItem<int>) cmbFuncionalidades.SelectedItem).Value;
-                MessageBoxUtil.ShowInfo("Seleccionaste" + selectedItemId);
-                //NavigableFormUtil.ForwardTo(this, PostLoginFormFactory.CreateForm(selectedItemId, this));
+                int funcionalidadId = ((ComboBoxItem<int>) cmbFuncionalidades.SelectedItem).Value;
+
+                NavigableFormUtil.ForwardTo(this, GetSelectedForm(funcionalidadId));
+            }
+        }
+
+        private Form GetSelectedForm(int funcionalidadId)
+        {
+            switch (funcionalidadId)
+            {
+                case 5:
+                    return new CargaCredito.CargaCredito(this);
+                default:
+                    return this;
             }
         }
     }

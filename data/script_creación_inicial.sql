@@ -87,8 +87,8 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Funcionalidades_De_Rol', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
 GO
 
-IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito', 'P') IS NOT NULL
-DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+IF OBJECT_ID('LOS_BORBOTONES.SP_Tarjetas_Del_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
 GO
 
 ------------------------------------------------
@@ -247,7 +247,7 @@ GO
 CREATE TABLE LOS_BORBOTONES.Tarjetas (
 	id_tarjeta INT IDENTITY(1,1) NOT NULL,
 	id_cliente INT NOT NULL,
-	tipo NVARCHAR(7) NOT NULL,
+	tipo NVARCHAR(7) CHECK(tipo IN ('Crédito', 'Débito')) NOT NULL,
 	codigo NVARCHAR(63) NOT NULL,
 	PRIMARY KEY (id_tarjeta)
 )
@@ -380,42 +380,35 @@ END
 GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
-@username NVARCHAR(50)
+@id_usuario INT
 AS
 BEGIN
 	SELECT r.*
 	FROM LOS_BORBOTONES.Roles r
 	JOIN LOS_BORBOTONES.RolesXUsuarios rxu ON (r.id_rol = rxu.id_rol)
 	JOIN  LOS_BORBOTONES.Usuarios u ON (u.id_usuario = rxu.id_usuario)
-	WHERE u.username = @username
+	WHERE u.id_usuario = @id_usuario
 END
 GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
-@idRol INT
+@id_rol INT
 AS
 BEGIN
 	SELECT f.*
 	FROM LOS_BORBOTONES.Funcionalidades f 
 	JOIN LOS_BORBOTONES.FuncionalidadesXRoles fxr ON f.id_funcionalidad = fxr.id_funcionalidad
-	WHERE fxr.id_rol = @idRol
+	WHERE fxr.id_rol = @id_rol
 END
 GO
 
-CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
-@id_cliente INT,
-@fecha DATETIME,
-@medio_pago NVARCHAR(30),
-@monto NUMERIC(18,2),
-@id_tarjeta INT
+CREATE PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
+@id_cliente INT
 AS
 BEGIN
-	INSERT INTO LOS_BORBOTONES.Cargas
-	(id_cliente, fecha, medio_pago, monto, id_tarjeta)
-	VALUES
-	(@id_cliente, @fecha, @medio_pago, @monto, @id_tarjeta)
-
-	RETURN SCOPE_IDENTITY()
+	SELECT *
+	FROM LOS_BORBOTONES.Tarjetas
+	WHERE id_cliente = @id_cliente
 END
 GO
 

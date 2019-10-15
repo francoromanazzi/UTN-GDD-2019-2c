@@ -30,15 +30,9 @@ namespace FrbaOfertas.Clases.Database
 
                 command.Parameters.Add(outputParameterName, SqlDbTypes.Of(typeof(TOutput))).Direction = ParameterDirection.Output;
 
-                try
-                {
-                    command.ExecuteNonQuery();
-                    return (TOutput) command.Parameters[outputParameterName].Value;
-                }
-                catch (SqlException e)
-                {
-                    throw new StoredProcedureException(e.Message, e);
-                }
+                command.ExecuteNonQuery();
+                return (TOutput) command.Parameters[outputParameterName].Value;
+
             }
         }
 
@@ -62,18 +56,36 @@ namespace FrbaOfertas.Clases.Database
 
                 parameters.AddParametersToCommand(command);
 
-                try
-                {
-                    dataAdapter.Fill(dataTable);
-                }
-                catch (SqlException e)
-                {
-                    throw new StoredProcedureException(e.Message, e);
-                }
-
+                dataAdapter.Fill(dataTable);
             }
 
             return dataTable;
+        }
+
+        public TOutput ExecSingleOutputSqlQuery<TOutput>(string query)
+        {
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(query, sqlConnection))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.Text;
+
+                return (TOutput) command.ExecuteScalar();
+            }
+        }
+
+        public void ExecSqlQuery(string query)
+        {
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(query, sqlConnection))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.Text;
+
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

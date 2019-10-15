@@ -63,22 +63,38 @@
     <Compile Include="AbmRol\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="CargaCredito\CargaCredito.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CargaCredito\CargaCredito.Designer.cs">
+      <DependentUpon>CargaCredito.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CargaCredito\CargarTarjeta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CargaCredito\CargarTarjeta.Designer.cs">
+      <DependentUpon>CargarTarjeta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Clases\Constantes\StoredProcedures.cs" />
     <Compile Include="Clases\Database\IStoredProcedureResultMapper.cs" />
     <Compile Include="Clases\Database\SqlDbTypes.cs" />
     <Compile Include="Clases\Database\StoredProcedureParams.cs" />
     <Compile Include="Clases\Exceptions\AutoMappingException.cs" />
-    <Compile Include="Clases\Exceptions\StoredProcedureException.cs" />
     <Compile Include="Clases\Modelo\Funcionalidad.cs" />
     <Compile Include="Clases\Modelo\Rol.cs" />
+    <Compile Include="Clases\Modelo\Tarjeta.cs" />
     <Compile Include="Clases\Repositorios\Mapper\AutoMapper.cs" />
+    <Compile Include="Clases\Repositorios\RepositorioCargas.cs" />
+    <Compile Include="Clases\Repositorios\RepositorioClientes.cs" />
     <Compile Include="Clases\Repositorios\RepositorioFuncionalidades.cs" />
     <Compile Include="Clases\Repositorios\RepositorioRoles.cs" />
+    <Compile Include="Clases\Repositorios\RepositorioTarjetas.cs" />
     <Compile Include="Clases\Session\Session.cs" />
     <Compile Include="Clases\Utils\Form\ComboBoxFiller.cs" />
     <Compile Include="Clases\Utils\Form\ComboBoxItem.cs" />
     <Compile Include="Clases\Utils\Form\MessageBoxUtil.cs" />
     <Compile Include="Clases\Utils\Form\NavigableFormUtil.cs" />
+    <Compile Include="Clases\Utils\Form\TextFieldUtil.cs" />
     <Compile Include="ComprarOferta\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,12 +102,6 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Clases\Database\Conexion.cs" />
-    <Compile Include="CragaCredito\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CragaCredito\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="CrearOferta\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +135,12 @@
     <Compile Include="SeleccionarFuncionalidad\SeleccionarFuncionalidad.Designer.cs">
       <DependentUpon>SeleccionarFuncionalidad.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CargaCredito\CargaCredito.resx">
+      <DependentUpon>CargaCredito.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CargaCredito\CargarTarjeta.resx">
+      <DependentUpon>CargarTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListadoEstadistico\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

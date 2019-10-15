@@ -18,5 +18,11 @@ namespace FrbaOfertas.Clases.Repositorios
 
             return new Conexion().ExecSingleOutputStoredProcedure<Boolean>(StoredProcedures.ValidarLogin, parameters, StoredProcedures.ValidarLoginOutput);
         }
+
+        public int ObtenerIdUsuarioDeUsername(string username)
+        {
+            return new Conexion()
+                .ExecSingleOutputSqlQuery<int>("SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = " + username);
+        }
     }
 }

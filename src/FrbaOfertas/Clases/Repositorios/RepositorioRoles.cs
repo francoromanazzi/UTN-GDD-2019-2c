@@ -11,10 +11,10 @@ namespace FrbaOfertas.Clases.Repositorios
 {
     class RepositorioRoles
     {
-        public IList<Rol> ObtenerRolesDeUsuario(string username)
+        public IList<Rol> ObtenerRolesDeUsuario(int idUsuario)
         {
             StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                .AddParameter("@username", username);
+                .AddParameter("@id_usuario", idUsuario);
 
                 return new Conexion()
                     .ExecMappedStoredProcedure<Rol>(StoredProcedures.RolesDeUsuario, inputParameters, new Mapper.AutoMapper<Rol>());

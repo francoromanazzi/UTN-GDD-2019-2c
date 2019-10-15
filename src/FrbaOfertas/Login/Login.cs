@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -33,13 +34,15 @@ namespace FrbaOfertas.Login
             {
                 repositorioUsuarios.ExisteUsernameYPassword(inputUsername.Text, inputPassword.Text);
 
-                Session.Instance.OpenSession(inputUsername.Text);
+                int idUsuario = repositorioUsuarios.ObtenerIdUsuarioDeUsername(inputUsername.Text);
 
-                IList<Rol> rolesUsuario = repositorioRoles.ObtenerRolesDeUsuario(inputUsername.Text);
+                Session.Instance.OpenSession(idUsuario);
+
+                IList<Rol> rolesUsuario = repositorioRoles.ObtenerRolesDeUsuario(idUsuario);
 
                 NavigableFormUtil.ForwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(this, rolesUsuario));
             }
-            catch (StoredProcedureException ex)
+            catch (SqlException ex)
             {
                 MessageBoxUtil.ShowError(ex.Message);
             }

@@ -21,5 +21,15 @@ namespace FrbaOfertas.Clases.Utils.Form
 
             backTo.Show();
         }
+
+        public static void ForwardToDifferentWindow(System.Windows.Forms.Form from, System.Windows.Forms.Form to)
+        {
+            to.ShowDialog();
+        }
+
+        public static void BackwardToDifferentWindow(System.Windows.Forms.Form from, System.Windows.Forms.Form backTo)
+        {
+            from.Dispose();
+        }
     }
 }

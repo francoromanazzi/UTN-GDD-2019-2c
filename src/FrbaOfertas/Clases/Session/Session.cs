@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaOfertas.Clases.Modelo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace FrbaOfertas.Clases.Session
     class Session
     {
         private static Session instance;
-        public string loggedUsername { get; private set; }
+        public int IdUsuario { get; private set; }
 
         static Session()
         {
@@ -29,9 +30,9 @@ namespace FrbaOfertas.Clases.Session
             }
         }
 
-        public void OpenSession(string username)
+        public void OpenSession(int idUsuario)
         {
-            loggedUsername = username;
+            this.IdUsuario = idUsuario;
         }
 
         public void CloseSession()

@@ -14,7 +14,7 @@ namespace FrbaOfertas.Clases.Repositorios
         public IList<Funcionalidad> FuncionalidadesDeUnRol(int idRol)
         {
             StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                .AddParameter("@idRol", idRol);
+                .AddParameter("@id_rol", idRol);
 
             return new Conexion()
                     .ExecMappedStoredProcedure<Funcionalidad>(StoredProcedures.FuncionalidadesDeRol, inputParameters, new Mapper.AutoMapper<Funcionalidad>());
