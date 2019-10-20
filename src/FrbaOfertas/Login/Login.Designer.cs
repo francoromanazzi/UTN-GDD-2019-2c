@@ -34,11 +34,13 @@
             this.lblPassword = new System.Windows.Forms.Label();
             this.inputUsername = new System.Windows.Forms.TextBox();
             this.lblUsername = new System.Windows.Forms.Label();
+            this.btnRegistrarse = new System.Windows.Forms.Button();
             this.grpLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpLogin
             // 
+            this.grpLogin.Controls.Add(this.btnRegistrarse);
             this.grpLogin.Controls.Add(this.btnLogin);
             this.grpLogin.Controls.Add(this.inputPassword);
             this.grpLogin.Controls.Add(this.lblPassword);
@@ -93,6 +95,16 @@
             this.lblUsername.TabIndex = 0;
             this.lblUsername.Text = "Nombre de usuario";
             // 
+            // btnRegistrarse
+            // 
+            this.btnRegistrarse.Location = new System.Drawing.Point(94, 192);
+            this.btnRegistrarse.Name = "btnRegistrarse";
+            this.btnRegistrarse.Size = new System.Drawing.Size(75, 23);
+            this.btnRegistrarse.TabIndex = 5;
+            this.btnRegistrarse.Text = "Registrarse";
+            this.btnRegistrarse.UseVisualStyleBackColor = true;
+            this.btnRegistrarse.Click += new System.EventHandler(this.btnRegistrarse_Click);
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -115,5 +127,6 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.TextBox inputPassword;
         private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.Button btnRegistrarse;
     }
 }

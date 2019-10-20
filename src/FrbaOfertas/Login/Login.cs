@@ -3,6 +3,8 @@ using FrbaOfertas.Clases.Modelo;
 using FrbaOfertas.Clases.Repositorios;
 using FrbaOfertas.Clases.Session;
 using FrbaOfertas.Clases.Utils.Form;
+using FrbaOfertas.RegistroUsuario;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,6 +48,12 @@ namespace FrbaOfertas.Login
             {
                 MessageBoxUtil.ShowError(ex.Message);
             }
+        }
+
+        private void btnRegistrarse_Click(object sender, EventArgs e)
+        {
+            RegistroDeUsuario formRegistro = new RegistroDeUsuario();
+            formRegistro.ShowDialog();
         }
     }
 }
