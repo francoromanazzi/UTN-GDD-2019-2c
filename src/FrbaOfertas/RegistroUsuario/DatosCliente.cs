@@ -12,12 +12,11 @@ using FrbaOfertas.Clases.Utils.Form;
 
 namespace FrbaOfertas.RegistroUsuario
 {
-    
-    public partial class RegistroDeUsuario : Form
+    public partial class DatosCliente : Form
     {
-        private readonly Form previusForm;
+        private readonly RegistroDeUsuario previusForm;
 
-        public RegistroDeUsuario(Form previusForm)
+        public DatosCliente(RegistroDeUsuario previusForm)
         {
             this.previusForm = previusForm;
             InitializeComponent();
@@ -26,8 +25,8 @@ namespace FrbaOfertas.RegistroUsuario
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             /*Revisar porque no anda bien cuando Limpias y queres Volver al form anterior */
-            RegistroDeUsuario newFormReg = new RegistroDeUsuario(previusForm);
-            newFormReg.Show();
+            DatosCliente formDatosCli = new DatosCliente(previusForm);
+            formDatosCli.Show();
             this.Dispose(false);
         }
 
@@ -35,20 +34,5 @@ namespace FrbaOfertas.RegistroUsuario
         {
             NavigableFormUtil.BackwardToDifferentWindow(this, previusForm);
         }
-
-        private void btnCliente_Click(object sender, EventArgs e)
-        {
-            DatosCliente formDatosCli = new DatosCliente(this);
-            formDatosCli.ShowDialog();
-        }
-
-        private void btnProveedor_Click(object sender, EventArgs e)
-        {
-            DatosProveedor formDatosProv = new DatosProveedor(this);
-            formDatosProv.ShowDialog();
-        }
-
-      
-      
     }
 }

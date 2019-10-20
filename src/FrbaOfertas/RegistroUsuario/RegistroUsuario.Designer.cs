@@ -31,6 +31,8 @@
             this.grpRegistroUsuario = new System.Windows.Forms.GroupBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.grpUserType = new System.Windows.Forms.GroupBox();
+            this.btnProveedor = new System.Windows.Forms.Button();
+            this.btnCliente = new System.Windows.Forms.Button();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.lblRol = new System.Windows.Forms.Label();
             this.txtUserPass = new System.Windows.Forms.TextBox();
@@ -38,8 +40,7 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.btnLimpiar = new System.Windows.Forms.Button();
-            this.btnCliente = new System.Windows.Forms.Button();
-            this.btnProveedor = new System.Windows.Forms.Button();
+            this.btnVolver = new System.Windows.Forms.Button();
             this.grpRegistroUsuario.SuspendLayout();
             this.grpUserType.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +57,7 @@
             this.grpRegistroUsuario.Controls.Add(this.lblUserName);
             this.grpRegistroUsuario.Location = new System.Drawing.Point(12, 24);
             this.grpRegistroUsuario.Name = "grpRegistroUsuario";
-            this.grpRegistroUsuario.Size = new System.Drawing.Size(260, 508);
+            this.grpRegistroUsuario.Size = new System.Drawing.Size(260, 478);
             this.grpRegistroUsuario.TabIndex = 0;
             this.grpRegistroUsuario.TabStop = false;
             this.grpRegistroUsuario.Text = "Registro de Usuario";
@@ -80,9 +81,29 @@
             this.grpUserType.TabStop = false;
             this.grpUserType.Text = "Seleccione el tipo de Usuario";
             // 
+            // btnProveedor
+            // 
+            this.btnProveedor.Location = new System.Drawing.Point(113, 29);
+            this.btnProveedor.Name = "btnProveedor";
+            this.btnProveedor.Size = new System.Drawing.Size(75, 23);
+            this.btnProveedor.TabIndex = 1;
+            this.btnProveedor.Text = "Proveedor";
+            this.btnProveedor.UseVisualStyleBackColor = true;
+            this.btnProveedor.Click += new System.EventHandler(this.btnProveedor_Click);
+            // 
+            // btnCliente
+            // 
+            this.btnCliente.Location = new System.Drawing.Point(12, 29);
+            this.btnCliente.Name = "btnCliente";
+            this.btnCliente.Size = new System.Drawing.Size(75, 23);
+            this.btnCliente.TabIndex = 0;
+            this.btnCliente.Text = "Cliente";
+            this.btnCliente.UseVisualStyleBackColor = true;
+            this.btnCliente.Click += new System.EventHandler(this.btnCliente_Click);
+            // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(169, 467);
+            this.btnAceptar.Location = new System.Drawing.Point(162, 429);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 10;
@@ -132,7 +153,7 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(181, 550);
+            this.btnLimpiar.Location = new System.Drawing.Point(174, 532);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 9;
@@ -140,29 +161,22 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // btnCliente
+            // btnVolver
             // 
-            this.btnCliente.Location = new System.Drawing.Point(12, 29);
-            this.btnCliente.Name = "btnCliente";
-            this.btnCliente.Size = new System.Drawing.Size(75, 23);
-            this.btnCliente.TabIndex = 0;
-            this.btnCliente.Text = "Cliente";
-            this.btnCliente.UseVisualStyleBackColor = true;
-            // 
-            // btnProveedor
-            // 
-            this.btnProveedor.Location = new System.Drawing.Point(113, 29);
-            this.btnProveedor.Name = "btnProveedor";
-            this.btnProveedor.Size = new System.Drawing.Size(75, 23);
-            this.btnProveedor.TabIndex = 1;
-            this.btnProveedor.Text = "Proveedor";
-            this.btnProveedor.UseVisualStyleBackColor = true;
+            this.btnVolver.Location = new System.Drawing.Point(35, 532);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(75, 23);
+            this.btnVolver.TabIndex = 10;
+            this.btnVolver.Text = "<<Volver";
+            this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
             // RegistroDeUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 585);
+            this.ClientSize = new System.Drawing.Size(284, 567);
+            this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.grpRegistroUsuario);
             this.Name = "RegistroDeUsuario";
@@ -188,5 +202,6 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button btnProveedor;
         private System.Windows.Forms.Button btnCliente;
+        private System.Windows.Forms.Button btnVolver;
     }
 }

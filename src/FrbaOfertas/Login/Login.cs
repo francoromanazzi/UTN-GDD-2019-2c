@@ -52,7 +52,7 @@ namespace FrbaOfertas.Login
 
         private void btnRegistrarse_Click(object sender, EventArgs e)
         {
-            RegistroDeUsuario formRegistro = new RegistroDeUsuario();
+            RegistroDeUsuario formRegistro = new RegistroDeUsuario(this);
             formRegistro.ShowDialog();
         }
     }
