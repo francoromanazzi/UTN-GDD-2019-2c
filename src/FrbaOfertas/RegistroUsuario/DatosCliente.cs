@@ -12,6 +12,8 @@ using FrbaOfertas.Clases.Utils.Form;
 
 namespace FrbaOfertas.RegistroUsuario
 {
+    /* Hay que mudar esta clase a AbmCliente*/
+
     public partial class DatosCliente : Form
     {
         private readonly RegistroDeUsuario previusForm;
@@ -33,6 +35,42 @@ namespace FrbaOfertas.RegistroUsuario
         private void btnVolver_Click(object sender, EventArgs e)
         {
             NavigableFormUtil.BackwardToDifferentWindow(this, previusForm);
+        }
+
+        private void DatosCliente_Load(object sender, EventArgs e) // Cargo los CombosBox
+        {
+            /* Sugerencia: ¿Como diseño, MonthCalendar no sería mas comodo? */
+            CargarDias();
+            CargarMeses();
+            CargarAnios();
+        }
+
+        private void btnAceptar_Click(object sender, EventArgs e)
+        {
+            try { }
+            catch { }
+        }
+
+        private void CargarDias()
+        {
+            for (int i = 1; i <= 31; i++)
+            {
+                comboDia.Items.Add(i);
+            }
+        }
+        private void CargarMeses()
+        {
+            for (int i = 1; i <= 12; i++)
+            {
+                comboMes.Items.Add(i);
+            }
+        }
+        private void CargarAnios()
+        {
+            for (int i = 1950; i <= 2019; i++)
+            {
+                comboAnio.Items.Add(i);
+            }
         }
     }
 }

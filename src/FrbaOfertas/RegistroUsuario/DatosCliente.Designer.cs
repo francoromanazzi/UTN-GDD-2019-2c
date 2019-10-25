@@ -195,7 +195,7 @@
             this.comboAnio.FormattingEnabled = true;
             this.comboAnio.Location = new System.Drawing.Point(295, 297);
             this.comboAnio.Name = "comboAnio";
-            this.comboAnio.Size = new System.Drawing.Size(43, 21);
+            this.comboAnio.Size = new System.Drawing.Size(49, 21);
             this.comboAnio.TabIndex = 17;
             this.comboAnio.Text = "Año";
             // 
@@ -207,6 +207,7 @@
             this.btnAceptar.TabIndex = 18;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // btnLimpiar
             // 
@@ -256,6 +257,7 @@
             this.Controls.Add(this.lblNombre);
             this.Name = "DatosCliente";
             this.Text = "DatosCliente";
+            this.Load += new System.EventHandler(this.DatosCliente_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

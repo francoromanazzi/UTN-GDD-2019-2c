@@ -12,6 +12,8 @@ using FrbaOfertas.Clases.Utils.Form;
 
 namespace FrbaOfertas.RegistroUsuario
 {
+    /* Hay que mudar esta clase a AbmProveedor */
+
     public partial class DatosProveedor : Form
     {
         private readonly RegistroDeUsuario formAnterior;
