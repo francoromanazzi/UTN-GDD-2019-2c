@@ -16,9 +16,49 @@ namespace FrbaOfertas.Clases.Utils.Form
                 if (c < '0' || c > '9')
                     return false;
             }
-
             return true;
         }
 
-    }
+        // Compruebo si los campos TextBox solo tienen digitos
+        public static bool CampoNumericoValido(params TextBox[] fields)
+        {
+            List<TextBox> campos = new List<TextBox>();
+            campos.AddRange(fields);
+
+            foreach (var c in campos.FindAll(camp => camp.Text != "")) // Campos que no esten vacios
+            {
+                if(!c.Text.All(char.IsDigit))
+                {
+                    MessageBox.Show("Revisar el campo: " + c.Name);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Compruebo si los campos TextBox solo tienen letras
+        public static bool CampoTextoValido(params TextBox[] fields)
+        {
+            List<TextBox> campos = new List<TextBox>();
+            campos.AddRange(fields);
+
+            foreach (var c in campos.FindAll(camp => camp.Text != "")) // Campos que no esten vacios
+            {
+                if (!c.Text.All(char.IsLetter))
+                {
+                    MessageBox.Show("Revisar el campo: " + c.Name);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Compruebo si los cambos tienen caracteres invalidos
+        public static bool CampoSinCaracteres(params TextBox[] fields)
+        {
+            // No se si implementarla, no lo pide
+            return true;
+        }
+
+        }
 }

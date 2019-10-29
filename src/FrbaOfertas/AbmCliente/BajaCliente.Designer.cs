@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.AbmCliente
 {
-    partial class Form3
+    partial class BajaCliente
     {
         /// <summary>
         /// Required designer variable.

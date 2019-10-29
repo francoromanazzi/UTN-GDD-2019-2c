@@ -63,11 +63,11 @@
     <Compile Include="AbmCliente\ModificarCliente.Designer.cs">
       <DependentUpon>ModificarCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmCliente\Baja Cliente.cs">
+    <Compile Include="AbmCliente\BajaCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmCliente\Baja Cliente.Designer.cs">
-      <DependentUpon>Baja Cliente.cs</DependentUpon>
+    <Compile Include="AbmCliente\BajaCliente.Designer.cs">
+      <DependentUpon>BajaCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmProveedor\Form1.cs">
       <SubType>Form</SubType>

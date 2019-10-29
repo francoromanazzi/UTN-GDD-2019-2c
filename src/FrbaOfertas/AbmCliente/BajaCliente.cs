@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.AbmCliente
 {
-    public partial class Form3 : Form
+    public partial class BajaCliente : Form
     {
-        public Form3()
+        public BajaCliente(Form previousForm)
         {
             InitializeComponent();
         }

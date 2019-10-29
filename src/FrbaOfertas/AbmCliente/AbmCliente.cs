@@ -7,34 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaOfertas.Clases.Utils.Form;
 
 namespace FrbaOfertas.AbmCliente
 {
     public partial class AbmCliente : Form
     {
-        public AbmCliente()
+        private readonly Form previousForm; // Ventana Anterior
+
+        public AbmCliente(Form previousForm)
         {
+            this.previousForm = previousForm;
             InitializeComponent();
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        // Alta Cliente
+        private void altaCliente_Click(object sender, EventArgs e)
         {
-
+            AltaCliente nuevoCliente = new AltaCliente(previousForm);
+            nuevoCliente.ShowDialog();
         }
 
-        private void AbmCliente_Load(object sender, EventArgs e)
+        // Modificar Cliente
+        private void modificarCliente_Click(object sender, EventArgs e)
         {
-
+            ModificarCliente modifCliente = new ModificarCliente(previousForm);
+            modifCliente.ShowDialog();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        // Baja Cliente
+        private void bajaCliente_Click(object sender, EventArgs e)
         {
-
+            BajaCliente bajCliente = new BajaCliente(previousForm);
+            bajCliente.ShowDialog();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        // Volver atras
+        private void volver_Click(object sender, EventArgs e)
         {
-
+            NavigableFormUtil.BackwardToDifferentWindow(this, previousForm);
         }
+
     }
 }
