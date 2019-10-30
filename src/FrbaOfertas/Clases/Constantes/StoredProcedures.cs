@@ -11,7 +11,7 @@ namespace FrbaOfertas.Clases.Constantes
         private const string Schema = "LOS_BORBOTONES.";
 
         public const string ValidarLogin = Schema + "SP_Validar_Login";
-        public const string ValidarLoginOutput = "@login_correcto";
+        public const string ValidarLoginOutput = "@id_usuario";
 
         public const string RolesDeUsuario = Schema + "SP_Roles_De_Usuario";
 

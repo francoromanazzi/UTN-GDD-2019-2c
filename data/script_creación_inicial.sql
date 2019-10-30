@@ -325,7 +325,7 @@ GO
 CREATE PROCEDURE LOS_BORBOTONES.SP_Validar_Login
 @username NVARCHAR(50),
 @password NVARCHAR(255),
-@login_correcto BIT OUTPUT
+@id_usuario INT OUTPUT
 AS 
 BEGIN
 	DECLARE @habilitado bit
@@ -349,7 +349,7 @@ BEGIN
 				END
 			ELSE --Password valido
 				BEGIN
-					SELECT @habilitado = u.habilitado, @motivo_deshabilitacion = u.motivo_deshabilitacion
+					SELECT @habilitado = u.habilitado, @motivo_deshabilitacion = u.motivo_deshabilitacion, @id_usuario = id_usuario
 					FROM LOS_BORBOTONES.Usuarios u WHERE u.username = @username
 					
 					--Deshabilitado
@@ -365,10 +365,9 @@ BEGIN
 								END;
 						END
 
-					--Login correcto!
+					--Login correcto! Reseteo los intentos fallidos. El id_usuario esta seteado mas arriba
 					ELSE
 						BEGIN
-							SET @login_correcto = 1
 							BEGIN TRAN;
 								UPDATE LOS_BORBOTONES.Usuarios SET cant_intentos_fallidos = 0 WHERE username = @username
 							COMMIT TRAN;

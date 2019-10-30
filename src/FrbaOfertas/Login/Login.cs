@@ -34,9 +34,7 @@ namespace FrbaOfertas.Login
 
             try
             {
-                repositorioUsuarios.ExisteUsernameYPassword(inputUsername.Text, inputPassword.Text);
-
-                int idUsuario = repositorioUsuarios.ObtenerIdUsuarioDeUsername(inputUsername.Text);
+                int idUsuario = repositorioUsuarios.ObtenerIdUsuarioAPartirDeCredenciales(inputUsername.Text, inputPassword.Text);
 
                 Session.Instance.OpenSession(idUsuario);
 
