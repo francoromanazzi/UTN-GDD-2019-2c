@@ -13,11 +13,14 @@ namespace FrbaOfertas.Clases.Repositorios
     {
         public IList<Rol> ObtenerRolesDeUsuario(int idUsuario)
         {
-            StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                .AddParameter("@id_usuario", idUsuario);
-
                 return new Conexion()
-                    .ExecMappedStoredProcedure<Rol>(StoredProcedures.RolesDeUsuario, inputParameters, new Mapper.AutoMapper<Rol>());
+                    .ExecMappedSqlQuery<Rol>("SELECT r.* " +
+                                           "FROM LOS_BORBOTONES.Roles r " +
+                                           "JOIN LOS_BORBOTONES.RolesXUsuarios rxu ON r.id_rol = rxu.id_rol " +
+                                           "JOIN  LOS_BORBOTONES.Usuarios u ON u.id_usuario = rxu.id_usuario " +
+                                           "WHERE u.id_usuario = " + idUsuario +
+                                            ";"
+                                , new Mapper.AutoMapper<Rol>());
         }
     }
 }

@@ -12,11 +12,5 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string ValidarLogin = Schema + "SP_Validar_Login";
         public const string ValidarLoginOutput = "@id_usuario";
-
-        public const string RolesDeUsuario = Schema + "SP_Roles_De_Usuario";
-
-        public const string FuncionalidadesDeRol = Schema + "SP_Funcionalidades_De_Rol";
-
-        public const string TarjetasDelCliente = Schema + "SP_Tarjetas_Del_Cliente";
     }
 }

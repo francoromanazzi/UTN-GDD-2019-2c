@@ -79,18 +79,6 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Login', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Login
 GO
 
-IF OBJECT_ID('LOS_BORBOTONES.SP_Roles_De_Usuario', 'P') IS NOT NULL
-DROP PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
-GO
-
-IF OBJECT_ID('LOS_BORBOTONES.SP_Funcionalidades_De_Rol', 'P') IS NOT NULL
-DROP PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
-GO
-
-IF OBJECT_ID('LOS_BORBOTONES.SP_Tarjetas_Del_Cliente', 'P') IS NOT NULL
-DROP PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
-GO
-
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -375,39 +363,6 @@ BEGIN
 						END					
 				END
 		END		
-END
-GO
-
-CREATE PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
-@id_usuario INT
-AS
-BEGIN
-	SELECT r.*
-	FROM LOS_BORBOTONES.Roles r
-	JOIN LOS_BORBOTONES.RolesXUsuarios rxu ON (r.id_rol = rxu.id_rol)
-	JOIN  LOS_BORBOTONES.Usuarios u ON (u.id_usuario = rxu.id_usuario)
-	WHERE u.id_usuario = @id_usuario
-END
-GO
-
-CREATE PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
-@id_rol INT
-AS
-BEGIN
-	SELECT f.*
-	FROM LOS_BORBOTONES.Funcionalidades f 
-	JOIN LOS_BORBOTONES.FuncionalidadesXRoles fxr ON f.id_funcionalidad = fxr.id_funcionalidad
-	WHERE fxr.id_rol = @id_rol
-END
-GO
-
-CREATE PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
-@id_cliente INT
-AS
-BEGIN
-	SELECT *
-	FROM LOS_BORBOTONES.Tarjetas
-	WHERE id_cliente = @id_cliente
 END
 GO
 

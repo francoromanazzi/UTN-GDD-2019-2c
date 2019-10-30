@@ -26,11 +26,12 @@ namespace FrbaOfertas.Clases.Repositorios
 
         public IList<Tarjeta> ObtenerTarjetasDelCliente(int idCliente)
         {
-            StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                .AddParameter("@id_cliente", idCliente);
-
             return new Conexion()
-                .ExecMappedStoredProcedure<Tarjeta>(StoredProcedures.TarjetasDelCliente, inputParameters, new Mapper.AutoMapper<Tarjeta>());
+                .ExecMappedSqlQuery<Tarjeta>("SELECT * " +
+                                       "FROM LOS_BORBOTONES.Tarjetas " +
+                                       "WHERE id_cliente = " + idCliente +
+                                        ";"
+                            , new Mapper.AutoMapper<Tarjeta>());
         }
     }
 }

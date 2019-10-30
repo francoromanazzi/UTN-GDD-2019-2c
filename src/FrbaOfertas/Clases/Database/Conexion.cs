@@ -17,6 +17,8 @@ namespace FrbaOfertas.Clases.Database
             return new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionDB"].ConnectionString);
         }
 
+        #region Stored procedures
+
         public TOutput ExecSingleOutputStoredProcedure<TOutput>(string procedureName, StoredProcedureParameters parameters, string outputParameterName)
         {
             using (SqlConnection sqlConnection = GetSqlConnection())
@@ -34,12 +36,6 @@ namespace FrbaOfertas.Clases.Database
                 return (TOutput) command.Parameters[outputParameterName].Value;
 
             }
-        }
-
-        public IList<TMapped> ExecMappedStoredProcedure<TMapped>(string procedureName, StoredProcedureParameters inputParameters, IStoredProcedureResultMapper<TMapped> mapper)
-        {
-            DataTable result = this.ExecDataTableStoredProcedure(procedureName, inputParameters);
-            return mapper.Map(result);
         }
 
         public DataTable ExecDataTableStoredProcedure(string procedureName, StoredProcedureParameters parameters)
@@ -62,18 +58,15 @@ namespace FrbaOfertas.Clases.Database
             return dataTable;
         }
 
-        public TOutput ExecSingleOutputSqlQuery<TOutput>(string query)
+        public IList<TMapped> ExecMappedStoredProcedure<TMapped>(string procedureName, StoredProcedureParameters inputParameters, IStoredProcedureResultMapper<TMapped> mapper)
         {
-            using (SqlConnection sqlConnection = GetSqlConnection())
-            using (SqlCommand command = new SqlCommand(query, sqlConnection))
-            {
-                sqlConnection.Open();
-
-                command.CommandType = CommandType.Text;
-
-                return (TOutput) command.ExecuteScalar();
-            }
+            DataTable result = this.ExecDataTableStoredProcedure(procedureName, inputParameters);
+            return mapper.Map(result);
         }
+
+        #endregion
+
+        #region Queries
 
         public void ExecSqlQuery(string query)
         {
@@ -87,5 +80,44 @@ namespace FrbaOfertas.Clases.Database
                 command.ExecuteNonQuery();
             }
         }
+
+        public TOutput ExecSingleOutputSqlQuery<TOutput>(string query)
+        {
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(query, sqlConnection))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.Text;
+
+                return (TOutput) command.ExecuteScalar();
+            }
+        }
+
+        public DataTable ExecDataTableSqlQuery(string query)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(query, sqlConnection))
+            using (SqlDataAdapter da = new SqlDataAdapter(command))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.Text;
+
+                da.Fill(dt);
+
+                return dt;
+            }
+        }
+
+        public IList<TMapped> ExecMappedSqlQuery<TMapped>(string query, IStoredProcedureResultMapper<TMapped> mapper)
+        {
+            DataTable result = this.ExecDataTableSqlQuery(query);
+            return mapper.Map(result);
+        }
+
+        #endregion
     }
 }

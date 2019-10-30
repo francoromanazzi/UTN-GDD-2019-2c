@@ -10,7 +10,6 @@ namespace FrbaOfertas.Clases.Repositorios
 {
     class RepositorioUsuarios
     {
-
         public int ObtenerIdUsuarioAPartirDeCredenciales(string username, string password)
         {
             StoredProcedureParameters parameters = new StoredProcedureParameters()

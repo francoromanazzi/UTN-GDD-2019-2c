@@ -13,12 +13,13 @@ namespace FrbaOfertas.Clases.Repositorios
     {
         public IList<Funcionalidad> FuncionalidadesDeUnRol(int idRol)
         {
-            StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                .AddParameter("@id_rol", idRol);
-
             return new Conexion()
-                    .ExecMappedStoredProcedure<Funcionalidad>(StoredProcedures.FuncionalidadesDeRol, inputParameters, new Mapper.AutoMapper<Funcionalidad>());
-
+                    .ExecMappedSqlQuery<Funcionalidad>("SELECT f.* " +
+                                                       "FROM LOS_BORBOTONES.Funcionalidades f " + 
+                                                       "JOIN LOS_BORBOTONES.FuncionalidadesXRoles fxr ON f.id_funcionalidad = fxr.id_funcionalidad " + 
+                                                       "WHERE fxr.id_rol = " + idRol +
+                                                        ";"
+                                            , new Mapper.AutoMapper<Funcionalidad>());
         }
     }
 }
