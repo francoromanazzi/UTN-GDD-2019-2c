@@ -79,6 +79,18 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Login', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Login
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Roles_De_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Roles_De_Usuario
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Funcionalidades_De_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Funcionalidades_De_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Tarjetas_Del_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
