@@ -1,6 +1,6 @@
-﻿namespace FrbaOfertas.CrearOferta
+﻿namespace FrbaOfertas.AbmRol
 {
-    partial class Form1
+    partial class AbmRol
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.Text = "AbmRol";
         }
 
         #endregion

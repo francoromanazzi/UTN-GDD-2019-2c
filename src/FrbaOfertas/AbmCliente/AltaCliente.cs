@@ -13,9 +13,9 @@ namespace FrbaOfertas.AbmCliente
 {
     public partial class AltaCliente : Form
     {
-        private readonly AltaCliente previousForm;
+        private readonly AbmCliente previousForm;
 
-        public AltaCliente(AltaCliente previousForm)
+        public AltaCliente(AbmCliente previousForm)
         {
             this.previousForm = previousForm;
             InitializeComponent();
@@ -25,14 +25,14 @@ namespace FrbaOfertas.AbmCliente
         private void limpiar_Click(object sender, EventArgs e)
         {
             AltaCliente newForm = new AltaCliente(previousForm);
-            newForm.ShowDialog();
+            newForm.Show();
             this.Dispose(false);
         }
 
         // Volver atras
         private void volver_Click(object sender, EventArgs e)
         {
-            NavigableFormUtil.BackwardToDifferentWindow(this, previousForm);
+            NavigableFormUtil.BackwardTo(this, previousForm);
         }
 
         private void guardar_Click(object sender, EventArgs e)

@@ -26,15 +26,13 @@ namespace FrbaOfertas.RegistroUsuario
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            /*Revisar porque no anda bien cuando Limpias y queres Volver al form anterior */
-            DatosProveedor formDatosProv = new DatosProveedor(formAnterior);
-            formDatosProv.Show();
-            this.Dispose(false);
+            this.Dispose();
+            NavigableFormUtil.ForwardToDifferentWindow(formAnterior, new DatosCliente(formAnterior));
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
-            NavigableFormUtil.BackwardTo(this, formAnterior);
+            NavigableFormUtil.BackwardToDifferentWindow(this, formAnterior);
         }
     }
 }

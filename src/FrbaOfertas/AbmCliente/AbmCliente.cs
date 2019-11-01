@@ -24,28 +24,25 @@ namespace FrbaOfertas.AbmCliente
         // Alta Cliente
         private void altaCliente_Click(object sender, EventArgs e)
         {
-            AltaCliente nuevoCliente = new AltaCliente(previousForm);
-            nuevoCliente.ShowDialog();
+            NavigableFormUtil.ForwardTo(this, new AltaCliente(this));
         }
 
         // Modificar Cliente
         private void modificarCliente_Click(object sender, EventArgs e)
         {
-            ModificarCliente modifCliente = new ModificarCliente(previousForm);
-            modifCliente.ShowDialog();
+            NavigableFormUtil.ForwardTo(this, new ModificarCliente(this));
         }
 
         // Baja Cliente
         private void bajaCliente_Click(object sender, EventArgs e)
         {
-            BajaCliente bajCliente = new BajaCliente(previousForm);
-            bajCliente.ShowDialog();
+            NavigableFormUtil.ForwardTo(this, new BajaCliente(this));
         }
 
         // Volver atras
         private void volver_Click(object sender, EventArgs e)
         {
-            NavigableFormUtil.BackwardToDifferentWindow(this, previousForm);
+            NavigableFormUtil.BackwardTo(this, previousForm);
         }
 
     }

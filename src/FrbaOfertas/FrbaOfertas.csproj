@@ -69,17 +69,17 @@
     <Compile Include="AbmCliente\BajaCliente.Designer.cs">
       <DependentUpon>BajaCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmProveedor\Form1.cs">
+    <Compile Include="AbmProveedor\AbmProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmProveedor\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="AbmProveedor\AbmProveedor.Designer.cs">
+      <DependentUpon>AbmProveedor.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmRol\Form1.cs">
+    <Compile Include="AbmRol\AbmRol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmRol\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="AbmRol\AbmRol.Designer.cs">
+      <DependentUpon>AbmRol.cs</DependentUpon>
     </Compile>
     <Compile Include="CargaCredito\CargaCredito.cs">
       <SubType>Form</SubType>
@@ -113,30 +113,36 @@
     <Compile Include="Clases\Utils\Form\MessageBoxUtil.cs" />
     <Compile Include="Clases\Utils\Form\NavigableFormUtil.cs" />
     <Compile Include="Clases\Utils\Form\TextFieldUtil.cs" />
-    <Compile Include="ComprarOferta\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ComprarOferta\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Clases\Database\Conexion.cs" />
-    <Compile Include="CrearOferta\Form1.cs">
+    <Compile Include="ComprarOferta\ComprarOferta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CrearOferta\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ComprarOferta\ComprarOferta.Designer.cs">
+      <DependentUpon>ComprarOferta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Facturar\Form1.cs">
+    <Compile Include="CrearOferta\CrearOferta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Facturar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="CrearOferta\CrearOferta.Designer.cs">
+      <DependentUpon>CrearOferta.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListadoEstadistico\Form1.cs">
+    <Compile Include="EntregarOferta\EntregarOferta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListadoEstadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="EntregarOferta\EntregarOferta.Designer.cs">
+      <DependentUpon>EntregarOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Facturar\Facturar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturar\Facturar.Designer.cs">
+      <DependentUpon>Facturar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadistico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadistico.Designer.cs">
+      <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -182,9 +188,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CargaCredito\CargarTarjeta.resx">
       <DependentUpon>CargarTarjeta.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ListadoEstadistico\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

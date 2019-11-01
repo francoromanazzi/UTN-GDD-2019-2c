@@ -61,8 +61,26 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
         {
             switch (funcionalidadId)
             {
+                case 1:
+                    return new AbmRol.AbmRol(this);
+                case 2:
+                    return new RegistroUsuario.RegistroDeUsuario(this);
+                case 3:
+                    return new AbmCliente.AbmCliente(this);
+                case 4:
+                    return new AbmProveedor.AbmProveedor(this);
                 case 5:
                     return new CargaCredito.CargaCredito(this);
+                case 6:
+                    return new CrearOferta.CrearOferta(this);
+                case 7:
+                    return new ComprarOferta.ComprarOferta(this);
+                case 8:
+                    return new EntregarOferta.EntregarOferta(this);
+                case 9:
+                    return new Facturar.Facturar(this);
+                case 10:
+                    return new ListadoEstadistico.ListadoEstadistico(this);
                 default:
                     return this;
             }
