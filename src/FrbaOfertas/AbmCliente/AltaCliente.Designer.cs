@@ -419,7 +419,7 @@
             this.ClientSize = new System.Drawing.Size(519, 390);
             this.Controls.Add(this.groupBox1);
             this.Name = "AltaCliente";
-            this.Text = "Form1";
+            this.Text = "Alta Cliente";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

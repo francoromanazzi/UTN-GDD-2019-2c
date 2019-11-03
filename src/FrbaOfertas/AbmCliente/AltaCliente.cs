@@ -37,6 +37,8 @@ namespace FrbaOfertas.AbmCliente
 
         private void guardar_Click(object sender, EventArgs e)
         {
+            // Validaciones
+
             try { }
             catch { }
         }
