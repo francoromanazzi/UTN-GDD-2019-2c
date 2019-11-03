@@ -12,5 +12,6 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string ValidarLogin = Schema + "SP_Validar_Login";
         public const string ValidarLoginOutput = "@id_usuario";
+        public const string AltaCliente = Schema + "SP_Cargar_Cliente"; // No hecha
     }
 }

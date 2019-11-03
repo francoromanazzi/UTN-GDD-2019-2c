@@ -222,6 +222,10 @@ CREATE TABLE LOS_BORBOTONES.Clientes (
 	mail NVARCHAR(255) NOT NULL,
 	telefono NUMERIC(18,0) NOT NULL,
 	direccion NVARCHAR(255) NOT NULL,
+--  numero NVARCHAR(15) NOT NULL,
+--	piso NVARCHAR(15),
+--	departamento NVARCHAR(15),
+--	localidad NVARCHAR(255),
 	codigo_postal NVARCHAR(15),
 	fecha_nacimiento DATETIME NOT NULL
 	PRIMARY KEY (id_cliente)

@@ -53,12 +53,6 @@ namespace FrbaOfertas.Clases.Utils.Form
             return true;
         }
 
-        // Compruebo si los cambos tienen caracteres invalidos
-        public static bool CampoSinCaracteres(params TextBox[] fields)
-        {
-            // No se si implementarla, no lo pide
-            return true;
-        }
 
         }
 }
