@@ -43,83 +43,90 @@ namespace FrbaOfertas.AbmCliente
         private void guardar_Click(object sender, EventArgs e)
         {
             // Validaciones de campos
-            if (!TextFieldUtil.CampoNumericoValido(DNI, numeroCalle, piso, codPostal) &&
-                !TextFieldUtil.CampoTextoValido(nombre, apellido, direccion, localidad) 
-                &&  !CamposRequeridosVacios())
+            if (!TextFieldUtil.CampoNumericoValido(DNI, Piso, CodigoPostal) ||
+                !TextFieldUtil.CampoTextoValido(Nombre, Apellido, Direccion, Localidad))
             {
-                // Dentro de la funcion esta el mensaje de error
+                // Dentro del metodo esta el mensaje de error
             }
-            else 
+            else
             {
-                // Armo el Store Procedure con los parametros REQUERIDOS
-                StoredProcedureParameters parametros = new StoredProcedureParameters()
-                    .AddParameter("@nombre", nombre.Text)
-                    .AddParameter("@apellido", apellido.Text)
-                    .AddParameter("@dni", decimal.Parse(DNI.Text))
-                    .AddParameter("@mail", email.Text)
-                    .AddParameter("@telefono", telefono.Text)
-                    .AddParameter("@direccion", direccion.Text)
-                    .AddParameter("@fecha_nacimiento", Convert.ToDateTime(fechaDeNac.Text))
-                    .AddParameter("@numero", decimal.Parse(numeroCalle.Text));
-                // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
-                // Piso
-                if (piso.Text == "")
+                if (CamposRequeridosNoVacios())
                 {
-                    parametros.AddParameter("@piso", DBNull.Value); // Muy diferente de NULL 
-                }
-                else
-                {
-                    parametros.AddParameter("@piso", decimal.Parse(piso.Text));
-                }
-                // Dpto
-                if (dpto.Text == "")
-                {
-                    parametros.AddParameter("@departamento", DBNull.Value);
-                }
-                else
-                {
-                    parametros.AddParameter("@departamento", decimal.Parse(dpto.Text));
-                }
-                // Localidad
-                if (localidad.Text == "")
-                {
-                    parametros.AddParameter("@localidad", DBNull.Value);
-                }
-                else
-                {
-                    parametros.AddParameter("@localidad", localidad.Text);
-                }
-                // Codigo Postal
-                if (codPostal.Text == "")
-                {
-                    parametros.AddParameter("@codigo_postal", DBNull.Value); 
-                }
-                else
-                {
-                    parametros.AddParameter("@codigo_postal", decimal.Parse(codPostal.Text));
-                }
+                    // Armo el Store Procedure con los parametros REQUERIDOS
+                    StoredProcedureParameters parametros = new StoredProcedureParameters()
+                        .AddParameter("@nombre", Nombre.Text)
+                        .AddParameter("@apellido", Apellido.Text)
+                        .AddParameter("@dni", double.Parse(DNI.Text))
+                        .AddParameter("@mail", Email.Text)
+                        .AddParameter("@telefono", double.Parse(Telefono.Text))
+                        .AddParameter("@direccion", Direccion.Text)
+                        .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text));
+                    // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
+                    // Piso
+                    if (Piso.Text == "")
+                    {
+                        parametros.AddParameter("@piso", DBNull.Value); // Muy diferente de NULL 
+                    }
+                    else
+                    {
+                        parametros.AddParameter("@piso", decimal.Parse(Piso.Text));
+                    }
+                    // Dpto
+                    if (labelDpto.Text == "")
+                    {
+                        parametros.AddParameter("@departamento", DBNull.Value);
+                    }
+                    else
+                    {
+                        parametros.AddParameter("@departamento", Departamento.Text);
+                    }
+                    // Localidad
+                    if (Localidad.Text == "")
+                    {
+                        parametros.AddParameter("@localidad", DBNull.Value);
+                    }
+                    else
+                    {
+                        parametros.AddParameter("@localidad", Localidad.Text);
+                    }
+                    // Codigo Postal
+                    if (CodigoPostal.Text == "")
+                    {
+                        parametros.AddParameter("@codigo_postal", DBNull.Value);
+                    }
+                    else
+                    {
+                        parametros.AddParameter("@codigo_postal", decimal.Parse(CodigoPostal.Text));
+                    }
 
-                try 
-                {
-                    // Impacto en la base
-                    Conexion con = new Conexion();
-                    con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
+                    // TENGO QUE VERIFICAR LO DE CLIENTES GEMELOS
+
+                    try
+                    {
+                        // Impacto en la base
+                        Conexion con = new Conexion();
+                        con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
+                        MessageBoxUtil.ShowInfo("Cliente generado con exito");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBoxUtil.ShowError(ex.Message);
+                    }
                 }
-                catch { }
             }
         }
 
         #region Validadores
 
-        private bool CamposRequeridosVacios()
+        private bool CamposRequeridosNoVacios()
         {
-            if (nombre.Text == "" || apellido.Text == "" || DNI.Text == "" || fechaDeNac.Text == ""
-                || email.Text == "" || telefono.Text == "" || direccion.Text == "" || numeroCalle.Text == "")
+            if (Nombre.Text == "" || Apellido.Text == "" || DNI.Text == "" || FechaDeNacimiento.Text == ""
+                || Email.Text == "" || Telefono.Text == "" || Direccion.Text == "")
             {
-                MessageBox.Show("Hay campos requeridos incompletos.");
-                return true;
+                MessageBoxUtil.ShowError("Hay campos requeridos incompletos.");
+                return false;
             }
-            return false;
+            return true;
         }
 
         #endregion

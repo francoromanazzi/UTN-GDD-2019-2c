@@ -91,6 +91,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Tarjetas_Del_Cliente', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Tarjetas_Del_Cliente
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -222,10 +226,9 @@ CREATE TABLE LOS_BORBOTONES.Clientes (
 	mail NVARCHAR(255) NOT NULL,
 	telefono NUMERIC(18,0) NOT NULL,
 	direccion NVARCHAR(255) NOT NULL,
---  numero NVARCHAR(15) NOT NULL,
---	piso NVARCHAR(15),
---	departamento NVARCHAR(15),
---	localidad NVARCHAR(255),
+	piso NVARCHAR(15),
+	departamento NVARCHAR(15),
+	localidad NVARCHAR(255),
 	codigo_postal NVARCHAR(15),
 	fecha_nacimiento DATETIME NOT NULL
 	PRIMARY KEY (id_cliente)
@@ -379,6 +382,32 @@ BEGIN
 						END					
 				END
 		END		
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
+@nombre NVARCHAR(255),
+@apellido NVARCHAR(255),
+@dni NUMERIC(18,0),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@fecha_nacimiento DATETIME
+AS
+BEGIN
+	IF(NOT EXISTS (SELECT dni FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
+		BEGIN
+			INSERT INTO LOS_BORBOTONES.Clientes(nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
+			VALUES (@nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
+		END
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un usuario registrado con ese DNI',16,1)
+		END
 END
 GO
 

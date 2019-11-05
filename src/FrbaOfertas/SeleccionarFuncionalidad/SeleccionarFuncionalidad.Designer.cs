@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.grpFuncionalidad = new System.Windows.Forms.GroupBox();
-            this.cmbFuncionalidades = new System.Windows.Forms.ComboBox();
-            this.btnAceptar = new System.Windows.Forms.Button();
             this.btnVolver = new System.Windows.Forms.Button();
+            this.btnAceptar = new System.Windows.Forms.Button();
+            this.cmbFuncionalidades = new System.Windows.Forms.ComboBox();
             this.grpFuncionalidad.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,13 +47,15 @@
             this.grpFuncionalidad.TabStop = false;
             this.grpFuncionalidad.Text = "Seleccionar funcionalidad";
             // 
-            // cmbFuncionalidades
+            // btnVolver
             // 
-            this.cmbFuncionalidades.FormattingEnabled = true;
-            this.cmbFuncionalidades.Location = new System.Drawing.Point(6, 33);
-            this.cmbFuncionalidades.Name = "cmbFuncionalidades";
-            this.cmbFuncionalidades.Size = new System.Drawing.Size(248, 21);
-            this.cmbFuncionalidades.TabIndex = 0;
+            this.btnVolver.Location = new System.Drawing.Point(6, 130);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(75, 23);
+            this.btnVolver.TabIndex = 2;
+            this.btnVolver.Text = "<< Volver";
+            this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
             // btnAceptar
             // 
@@ -65,15 +67,14 @@
             this.btnAceptar.UseVisualStyleBackColor = true;
             this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
-            // btnVolver
+            // cmbFuncionalidades
             // 
-            this.btnVolver.Location = new System.Drawing.Point(6, 130);
-            this.btnVolver.Name = "btnVolver";
-            this.btnVolver.Size = new System.Drawing.Size(75, 23);
-            this.btnVolver.TabIndex = 2;
-            this.btnVolver.Text = "<< Volver";
-            this.btnVolver.UseVisualStyleBackColor = true;
-            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
+            this.cmbFuncionalidades.FormattingEnabled = true;
+            this.cmbFuncionalidades.Location = new System.Drawing.Point(6, 33);
+            this.cmbFuncionalidades.Name = "cmbFuncionalidades";
+            this.cmbFuncionalidades.Size = new System.Drawing.Size(248, 21);
+            this.cmbFuncionalidades.TabIndex = 0;
+            this.cmbFuncionalidades.Text = "Seleccione una función..";
             // 
             // SeleccionarFuncionalidad
             // 
