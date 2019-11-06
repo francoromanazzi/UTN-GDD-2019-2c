@@ -18,7 +18,8 @@ namespace FrbaOfertas.Clases.Repositorios
                                            "FROM LOS_BORBOTONES.Roles r " +
                                            "JOIN LOS_BORBOTONES.RolesXUsuarios rxu ON r.id_rol = rxu.id_rol " +
                                            "JOIN  LOS_BORBOTONES.Usuarios u ON u.id_usuario = rxu.id_usuario " +
-                                           "WHERE u.id_usuario = " + idUsuario +
+                                           "WHERE u.id_usuario = " + idUsuario + " " +
+                                           "AND r.habilitado = 1" +
                                             ";"
                                 , new Mapper.AutoMapper<Rol>());
         }
