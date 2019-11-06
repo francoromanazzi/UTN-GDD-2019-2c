@@ -105,6 +105,8 @@
     <Compile Include="Clases\Repositorios\RepositorioCargas.cs" />
     <Compile Include="Clases\Repositorios\RepositorioClientes.cs" />
     <Compile Include="Clases\Repositorios\RepositorioFuncionalidades.cs" />
+    <Compile Include="Clases\Repositorios\RepositorioOfertas.cs" />
+    <Compile Include="Clases\Repositorios\RepositorioProveedores.cs" />
     <Compile Include="Clases\Repositorios\RepositorioRoles.cs" />
     <Compile Include="Clases\Repositorios\RepositorioTarjetas.cs" />
     <Compile Include="Clases\Session\Session.cs" />
@@ -125,6 +127,18 @@
     </Compile>
     <Compile Include="CrearOferta\CrearOferta.Designer.cs">
       <DependentUpon>CrearOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearOferta\CrearOfertaPaso2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearOferta\CrearOfertaPaso2.Designer.cs">
+      <DependentUpon>CrearOfertaPaso2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearOferta\SeleccionarProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearOferta\SeleccionarProveedor.Designer.cs">
+      <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
     </Compile>
     <Compile Include="EntregarOferta\EntregarOferta.cs">
       <SubType>Form</SubType>
@@ -194,6 +208,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CargaCredito\CargarTarjeta.resx">
       <DependentUpon>CargarTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrearOferta\CrearOfertaPaso2.resx">
+      <DependentUpon>CrearOfertaPaso2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrearOferta\SeleccionarProveedor.resx">
+      <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

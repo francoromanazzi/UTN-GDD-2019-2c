@@ -1,4 +1,6 @@
-﻿using FrbaOfertas.Clases.Utils.Form;
+﻿using FrbaOfertas.Clases.Repositorios;
+using FrbaOfertas.Clases.Session;
+using FrbaOfertas.Clases.Utils.Form;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,11 +22,16 @@ namespace FrbaOfertas.CrearOferta
             this.previousForm = previousForm;
 
             InitializeComponent();
-        }
 
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            NavigableFormUtil.BackwardTo(this, previousForm);
+            try
+            {
+                int idProveedor = new RepositorioProveedores().ObtenerIdProveedorDeUsuario(Session.Instance.IdUsuario);
+                NavigableFormUtil.ForwardTo(this, new CrearOfertaPaso2(previousForm, idProveedor));
+            }
+            catch(Exception ex)
+            {
+                NavigableFormUtil.ForwardTo(this, new SeleccionarProveedor(previousForm));
+            }
         }
     }
 }

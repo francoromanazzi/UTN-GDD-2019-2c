@@ -95,6 +95,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Cliente', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Guardar_Oferta', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -279,7 +283,8 @@ CREATE TABLE LOS_BORBOTONES.Ofertas (
 	precio_en_oferta NUMERIC(18,2) NOT NULL,
 	precio_de_lista NUMERIC(18,2) NOT NULL,
 	cant_disponible NUMERIC(18,0) NOT NULL,
-	max_unidades_por_cliente NUMERIC(18,0) NOT NULL
+	max_unidades_por_cliente NUMERIC(18,0) NOT NULL,
+	descripcion NVARCHAR(255) NOT NULL
 	PRIMARY KEY (codigo_oferta)
 )
 GO
@@ -411,6 +416,41 @@ BEGIN
 END
 GO
 
+/* 
+	codigo_oferta NVARCHAR(50) NOT NULL,
+	id_proveedor INT NOT NULL,
+	fecha_publicacion DATETIME NOT NULL,
+	fecha_vencimiento DATETIME NOT NULL,
+	precio_en_oferta NUMERIC(18,2) NOT NULL,
+	precio_de_lista NUMERIC(18,2) NOT NULL,
+	cant_disponible NUMERIC(18,0) NOT NULL,
+	max_unidades_por_cliente NUMERIC(18,0) NOT NULL
+	PRIMARY KEY (codigo_oferta) */
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
+@fecha_publicacion DATETIME,
+@fecha_vencimiento DATETIME,
+@precio_en_oferta NUMERIC(18,2),
+@precio_de_lista NUMERIC(18,2),
+@cant_disponible NUMERIC(18,0),
+@max_unidades_por_cliente NUMERIC(18,0),
+@codigo_oferta NVARCHAR(50),
+@descripcion NVARCHAR(50),
+@id_proveedor INT
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, id_proveedor, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, descripcion)
+		VALUES (@codigo_oferta, @id_proveedor, @fecha_publicacion, @fecha_vencimiento, @precio_en_oferta, @precio_de_lista, @cant_disponible, @max_unidades_por_cliente, @descripcion)
+	END TRY
+	BEGIN CATCH
+		BEGIN;
+			THROW 50001, 'El codigo de oferta ya se encuentra en uso', 1
+		END;
+	END CATCH
+END
+GO
+
 ------------------------------------------------
 --            TRIGGERS
 ------------------------------------------------
@@ -529,13 +569,14 @@ INTO #TotalUnidadesPorClienteDeCadaOferta
 FROM LOS_BORBOTONES.Compras
 GROUP BY codigo_oferta, id_cliente_comprador
 
-INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, id_proveedor)
+INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, id_proveedor, descripcion)
 SELECT DISTINCT Oferta_Codigo, Oferta_Fecha, Oferta_Fecha_Venc, Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Cantidad,
 	(SELECT MAX(total_unidades_compradas)
 	 FROM #TotalUnidadesPorClienteDeCadaOferta
 	 WHERE #TotalUnidadesPorClienteDeCadaOferta.codigo_oferta = Oferta_Codigo
 	 ),
-	id_proveedor
+	id_proveedor,
+	Oferta_Descripcion
 FROM gd_esquema.Maestra
 JOIN LOS_BORBOTONES.Proveedores ON cuit = Provee_CUIT
 WHERE Oferta_Codigo IS NOT NULL

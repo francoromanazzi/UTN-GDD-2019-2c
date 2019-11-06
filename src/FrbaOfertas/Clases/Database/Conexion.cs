@@ -38,6 +38,21 @@ namespace FrbaOfertas.Clases.Database
             }
         }
 
+        public void ExecStoredProcedure(string procedureName, StoredProcedureParameters parameters)
+        {
+            using (SqlConnection sqlConnection = GetSqlConnection())
+            using (SqlCommand command = new SqlCommand(procedureName, sqlConnection))
+            {
+                sqlConnection.Open();
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                parameters.AddParametersToCommand(command);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
         public DataTable ExecDataTableStoredProcedure(string procedureName, StoredProcedureParameters parameters)
         {
             DataTable dataTable = new DataTable();
