@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.AbmCliente
 {
-    partial class AltaCliente
+    partial class FormModificacion
     {
         /// <summary>
         /// Required designer variable.
@@ -60,9 +60,8 @@
             this.Email = new System.Windows.Forms.TextBox();
             this.Telefono = new System.Windows.Forms.TextBox();
             this.Nombre = new System.Windows.Forms.TextBox();
-            this.guardar = new System.Windows.Forms.Button();
+            this.actualizar = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
-            this.limpiar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,15 +98,14 @@
             this.groupBox1.Controls.Add(this.Email);
             this.groupBox1.Controls.Add(this.Telefono);
             this.groupBox1.Controls.Add(this.Nombre);
-            this.groupBox1.Controls.Add(this.guardar);
+            this.groupBox1.Controls.Add(this.actualizar);
             this.groupBox1.Controls.Add(this.volver);
-            this.groupBox1.Controls.Add(this.limpiar);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(495, 366);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Alta Cliente";
+            this.groupBox1.Text = "Datos";
             // 
             // FechaDeNacimiento
             // 
@@ -369,44 +367,34 @@
             this.Nombre.Size = new System.Drawing.Size(171, 20);
             this.Nombre.TabIndex = 0;
             // 
-            // guardar
+            // actualizar
             // 
-            this.guardar.Location = new System.Drawing.Point(392, 323);
-            this.guardar.Name = "guardar";
-            this.guardar.Size = new System.Drawing.Size(75, 23);
-            this.guardar.TabIndex = 13;
-            this.guardar.Text = "Guardar";
-            this.guardar.UseVisualStyleBackColor = true;
-            this.guardar.Click += new System.EventHandler(this.guardar_Click);
+            this.actualizar.Location = new System.Drawing.Point(392, 323);
+            this.actualizar.Name = "actualizar";
+            this.actualizar.Size = new System.Drawing.Size(75, 23);
+            this.actualizar.TabIndex = 13;
+            this.actualizar.Text = "Actualizar";
+            this.actualizar.UseVisualStyleBackColor = true;
+            this.actualizar.Click += new System.EventHandler(this.actualizar_Click);
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(294, 323);
+            this.volver.Location = new System.Drawing.Point(17, 323);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
-            this.volver.TabIndex = 12;
+            this.volver.TabIndex = 11;
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
-            // limpiar
-            // 
-            this.limpiar.Location = new System.Drawing.Point(17, 323);
-            this.limpiar.Name = "limpiar";
-            this.limpiar.Size = new System.Drawing.Size(75, 23);
-            this.limpiar.TabIndex = 11;
-            this.limpiar.Text = "Limpiar";
-            this.limpiar.UseVisualStyleBackColor = true;
-            this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
-            // 
-            // AltaCliente
+            // FormModificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 390);
+            this.ClientSize = new System.Drawing.Size(517, 388);
             this.Controls.Add(this.groupBox1);
-            this.Name = "AltaCliente";
-            this.Text = "Alta Cliente";
+            this.Name = "FormModificacion";
+            this.Text = "Modificacion Cliente..";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -416,6 +404,24 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.DateTimePicker FechaDeNacimiento;
+        private System.Windows.Forms.Label labelDpto;
+        private System.Windows.Forms.TextBox Departamento;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox CodigoPostal;
+        private System.Windows.Forms.TextBox Piso;
+        private System.Windows.Forms.TextBox Localidad;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
@@ -429,26 +435,7 @@
         private System.Windows.Forms.TextBox Email;
         private System.Windows.Forms.TextBox Telefono;
         private System.Windows.Forms.TextBox Nombre;
-        private System.Windows.Forms.Button guardar;
+        private System.Windows.Forms.Button actualizar;
         private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.Button limpiar;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox CodigoPostal;
-        private System.Windows.Forms.TextBox Piso;
-        private System.Windows.Forms.TextBox Localidad;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label labelDpto;
-        private System.Windows.Forms.TextBox Departamento;
-        private System.Windows.Forms.DateTimePicker FechaDeNacimiento;
     }
 }
