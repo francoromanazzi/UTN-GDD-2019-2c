@@ -451,6 +451,53 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
+@dniOriginal NUMERIC(18,0),
+@nombre NVARCHAR(255),
+@apellido NVARCHAR(255),
+@dni NUMERIC(18,0),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@fecha_nacimiento DATETIME
+AS
+BEGIN
+	IF (EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni))
+		BEGIN
+			UPDATE LOS_BORBOTONES.Clientes
+			SET nombre = @nombre, apellido = @apellido, dni = @dni, mail = @mail, telefono = @telefono, direccion = @direccion,
+						  piso = @piso, departamento = @departamento, localidad = @localidad, codigo_postal = @codigo_postal, 
+						  fecha_nacimiento = @fecha_nacimiento
+			WHERE dni = @dniOriginal
+		END
+	ELSE
+		BEGIN
+			RAISERROR('No existe el cliente',16,1)
+		END
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Eliminar_Cliente
+@username INT
+AS
+BEGIN
+	IF(EXISTS(SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+		BEGIN	
+			UPDATE LOS_BORBOTONES.Usuarios
+			SET habilitado = 0
+			WHERE username = @username
+		END
+	ELSE
+		BEGIN
+			RAISERROR('No existe el usuario',16,1)
+		END
+END
+GO
+
 ------------------------------------------------
 --            TRIGGERS
 ------------------------------------------------

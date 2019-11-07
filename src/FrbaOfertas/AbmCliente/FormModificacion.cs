@@ -16,6 +16,7 @@ namespace FrbaOfertas.AbmCliente
     public partial class FormModificacion : Form
     {
         private readonly AbmCliente previousForm;
+        private string dniOriginal;
 
         public FormModificacion(AbmCliente previousForm, string nombre, string apellido, string dni, string mail, string telefono,
                                                         string direccion, string piso, string dpto, string localidad, string codigoPostal, DateTime fechaNac)
@@ -35,6 +36,8 @@ namespace FrbaOfertas.AbmCliente
             Localidad.Text = localidad;
             CodigoPostal.Text = codigoPostal;
             FechaDeNacimiento.Value = fechaNac;
+
+            dniOriginal = dni;
         }
 
         private void volver_Click(object sender, EventArgs e)
@@ -54,6 +57,7 @@ namespace FrbaOfertas.AbmCliente
                 if (CamposRequeridosNoVacios())
                 {
                     StoredProcedureParameters datosActualizados = new StoredProcedureParameters()
+                        .AddParameter("@dniOriginal", dniOriginal)
                         .AddParameter("@nombre", Nombre.Text)
                         .AddParameter("@apellido", Apellido.Text)
                         .AddParameter("@dni", double.Parse(DNI.Text))
