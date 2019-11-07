@@ -115,7 +115,7 @@
             this.FechaDeNacimiento.Location = new System.Drawing.Point(295, 88);
             this.FechaDeNacimiento.Name = "FechaDeNacimiento";
             this.FechaDeNacimiento.Size = new System.Drawing.Size(108, 20);
-            this.FechaDeNacimiento.TabIndex = 36;
+            this.FechaDeNacimiento.TabIndex = 3;
             // 
             // labelDpto
             // 
@@ -132,7 +132,7 @@
             this.Departamento.Location = new System.Drawing.Point(294, 211);
             this.Departamento.Name = "Departamento";
             this.Departamento.Size = new System.Drawing.Size(109, 20);
-            this.Departamento.TabIndex = 34;
+            this.Departamento.TabIndex = 8;
             // 
             // label21
             // 
@@ -229,21 +229,21 @@
             this.CodigoPostal.Location = new System.Drawing.Point(84, 241);
             this.CodigoPostal.Name = "CodigoPostal";
             this.CodigoPostal.Size = new System.Drawing.Size(100, 20);
-            this.CodigoPostal.TabIndex = 22;
+            this.CodigoPostal.TabIndex = 9;
             // 
             // Piso
             // 
             this.Piso.Location = new System.Drawing.Point(84, 211);
             this.Piso.Name = "Piso";
             this.Piso.Size = new System.Drawing.Size(100, 20);
-            this.Piso.TabIndex = 21;
+            this.Piso.TabIndex = 7;
             // 
             // Localidad
             // 
             this.Localidad.Location = new System.Drawing.Point(294, 241);
             this.Localidad.Name = "Localidad";
             this.Localidad.Size = new System.Drawing.Size(109, 20);
-            this.Localidad.TabIndex = 20;
+            this.Localidad.TabIndex = 10;
             // 
             // label10
             // 
@@ -331,49 +331,50 @@
             this.Direccion.Location = new System.Drawing.Point(84, 181);
             this.Direccion.Name = "Direccion";
             this.Direccion.Size = new System.Drawing.Size(100, 20);
-            this.Direccion.TabIndex = 8;
+            this.Direccion.TabIndex = 6;
             // 
             // Apellido
             // 
+            this.Apellido.AcceptsTab = true;
             this.Apellido.Location = new System.Drawing.Point(84, 58);
             this.Apellido.Name = "Apellido";
             this.Apellido.Size = new System.Drawing.Size(171, 20);
-            this.Apellido.TabIndex = 7;
+            this.Apellido.TabIndex = 1;
             // 
             // DNI
             // 
             this.DNI.Location = new System.Drawing.Point(84, 88);
             this.DNI.Name = "DNI";
             this.DNI.Size = new System.Drawing.Size(94, 20);
-            this.DNI.TabIndex = 6;
+            this.DNI.TabIndex = 2;
             // 
             // Email
             // 
             this.Email.Location = new System.Drawing.Point(84, 119);
             this.Email.Name = "Email";
             this.Email.Size = new System.Drawing.Size(171, 20);
-            this.Email.TabIndex = 5;
+            this.Email.TabIndex = 4;
             // 
             // Telefono
             // 
             this.Telefono.Location = new System.Drawing.Point(84, 151);
             this.Telefono.Name = "Telefono";
             this.Telefono.Size = new System.Drawing.Size(127, 20);
-            this.Telefono.TabIndex = 4;
+            this.Telefono.TabIndex = 5;
             // 
             // Nombre
             // 
             this.Nombre.Location = new System.Drawing.Point(84, 31);
             this.Nombre.Name = "Nombre";
             this.Nombre.Size = new System.Drawing.Size(171, 20);
-            this.Nombre.TabIndex = 3;
+            this.Nombre.TabIndex = 0;
             // 
             // guardar
             // 
             this.guardar.Location = new System.Drawing.Point(392, 323);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(75, 23);
-            this.guardar.TabIndex = 2;
+            this.guardar.TabIndex = 13;
             this.guardar.Text = "Guardar";
             this.guardar.UseVisualStyleBackColor = true;
             this.guardar.Click += new System.EventHandler(this.guardar_Click);
@@ -383,7 +384,7 @@
             this.volver.Location = new System.Drawing.Point(294, 323);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
-            this.volver.TabIndex = 1;
+            this.volver.TabIndex = 12;
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
@@ -393,7 +394,7 @@
             this.limpiar.Location = new System.Drawing.Point(17, 323);
             this.limpiar.Name = "limpiar";
             this.limpiar.Size = new System.Drawing.Size(75, 23);
-            this.limpiar.TabIndex = 0;
+            this.limpiar.TabIndex = 11;
             this.limpiar.Text = "Limpiar";
             this.limpiar.UseVisualStyleBackColor = true;
             this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
@@ -404,6 +405,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(519, 390);
             this.Controls.Add(this.groupBox1);
+            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.Name = "AltaCliente";
             this.Text = "Alta Cliente";
             this.groupBox1.ResumeLayout(false);
