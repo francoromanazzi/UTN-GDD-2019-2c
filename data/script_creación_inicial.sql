@@ -99,6 +99,21 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Guardar_Oferta', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Actualizar_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Baja_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Eliminar_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Eliminar_Cliente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
+GO
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -390,32 +405,6 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
-@nombre NVARCHAR(255),
-@apellido NVARCHAR(255),
-@dni NUMERIC(18,0),
-@mail NVARCHAR(255),
-@telefono NUMERIC(18,0),
-@direccion NVARCHAR(255),
-@piso NVARCHAR(15),
-@departamento NVARCHAR(15),
-@localidad NVARCHAR(255),
-@codigo_postal NVARCHAR(15),
-@fecha_nacimiento DATETIME
-AS
-BEGIN
-	IF(NOT EXISTS (SELECT dni FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
-		BEGIN
-			INSERT INTO LOS_BORBOTONES.Clientes(nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
-			VALUES (@nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
-		END
-	ELSE
-		BEGIN
-			RAISERROR('Ya existe un usuario registrado con ese DNI',16,1)
-		END
-END
-GO
-
 /* 
 	codigo_oferta NVARCHAR(50) NOT NULL,
 	id_proveedor INT NOT NULL,
@@ -451,6 +440,63 @@ BEGIN
 END
 GO
 
+-------------------------------------------------------
+--------------------- ABM CLIENTE ---------------------
+-------------------------------------------------------
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
+@username NVARCHAR(50),
+@password NVARCHAR(255), 
+@cant_intentos_fallidos TINYINT
+AS
+BEGIN
+	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+		BEGIN
+			INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
+			VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
+		END
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
+		END
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
+@nombre NVARCHAR(255),
+@apellido NVARCHAR(255),
+@dni NUMERIC(18,0),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@fecha_nacimiento DATETIME,
+@username NVARCHAR(50),
+@password NVARCHAR(255)
+AS
+BEGIN
+	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
+		BEGIN
+			INSERT INTO LOS_BORBOTONES.Clientes(nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
+			VALUES (@nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
+			
+			/* FALTA EL IDENTIDY_INSERT
+			DECLARE @id INT
+			SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = STR(@dni))
+			INSERT INTO LOS_BORBOTONES.Usuarios(id_usuario)
+			VALUES (@id)
+			*/
+		END
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un cliente registrado con ese DNI',16,1)
+		END
+END
+GO
+
 CREATE PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
 @dniOriginal NUMERIC(18,0),
 @nombre NVARCHAR(255),
@@ -466,7 +512,7 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
 @fecha_nacimiento DATETIME
 AS
 BEGIN
-	IF (EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni))
+	IF (EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dniOriginal))
 		BEGIN
 			UPDATE LOS_BORBOTONES.Clientes
 			SET nombre = @nombre, apellido = @apellido, dni = @dni, mail = @mail, telefono = @telefono, direccion = @direccion,
@@ -481,7 +527,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE LOS_BORBOTONES.SP_Eliminar_Cliente
+CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
 @username INT
 AS
 BEGIN

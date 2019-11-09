@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,7 @@ namespace FrbaOfertas.AbmCliente
 
         private void guardar_Click(object sender, EventArgs e)
         {
+    
             // Validaciones de campos
             if (!TextFieldUtil.CampoNumericoValido(DNI, Piso, CodigoPostal) ||
                 !TextFieldUtil.CampoTextoValido(Nombre, Apellido, Direccion, Localidad))
@@ -52,6 +54,17 @@ namespace FrbaOfertas.AbmCliente
             {
                 if (CamposRequeridosNoVacios())
                 {
+                    Conexion con = new Conexion();
+                    // Crear el usuario
+                    string username = DNI.Text;
+                    string password = DNI.Text;
+                    StoredProcedureParameters userParametros = new StoredProcedureParameters()
+                        .AddParameter("@username", username)
+                        .AddParameter("@password", password)
+                        .AddParameter("@cant_intentos_fallidos", 0);
+                    con.ExecDataTableStoredProcedure(StoredProcedures.AltaUsuario, userParametros);
+
+
                     // Armo el Store Procedure con los parametros REQUERIDOS
                     StoredProcedureParameters parametros = new StoredProcedureParameters()
                         .AddParameter("@nombre", Nombre.Text)
@@ -60,7 +73,9 @@ namespace FrbaOfertas.AbmCliente
                         .AddParameter("@mail", Email.Text)
                         .AddParameter("@telefono", double.Parse(Telefono.Text))
                         .AddParameter("@direccion", Direccion.Text)
-                        .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text));
+                        .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text))
+                        .AddParameter("@username", username)
+                        .AddParameter("@password", password);
                     // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
                     // Piso
                     if (Piso.Text == "")
@@ -72,7 +87,7 @@ namespace FrbaOfertas.AbmCliente
                         parametros.AddParameter("@piso", decimal.Parse(Piso.Text));
                     }
                     // Dpto
-                    if (labelDpto.Text == "")
+                    if (Departamento.Text == "")
                     {
                         parametros.AddParameter("@departamento", DBNull.Value);
                     }
@@ -104,7 +119,6 @@ namespace FrbaOfertas.AbmCliente
                     try
                     {
                         // Impacto en la base
-                        Conexion con = new Conexion();
                         con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
                         MessageBoxUtil.ShowInfo("Cliente generado con exito");
                     }

@@ -17,8 +17,10 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string GuardarOferta = Schema + "SP_Guardar_Oferta";
 
-        public const string ActualizarCliente = Schema + "SP_Actualizar_Cliente"; // No hecha
+        public const string ActualizarCliente = Schema + "SP_Actualizar_Cliente";
 
-        public const string EliminarCliente = Schema + "SP_Eliminar_Cliente"; // No hecha
+        public const string EliminarCliente = Schema + "SP_Baja_Cliente";
+
+        public const string AltaUsuario = Schema + "SP_Alta_Usuario"; // No hecha
     }
 }

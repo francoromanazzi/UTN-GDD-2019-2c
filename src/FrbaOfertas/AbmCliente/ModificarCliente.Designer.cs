@@ -155,7 +155,7 @@
             this.Controls.Add(this.Nombre);
             this.Controls.Add(this.volver);
             this.Name = "ModificarCliente";
-            this.Text = "7";
+            this.Text = "Modificar Cliente";
             ((System.ComponentModel.ISupportInitialize)(this.grillaClientes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

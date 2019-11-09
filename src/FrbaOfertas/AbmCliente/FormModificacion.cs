@@ -48,7 +48,7 @@ namespace FrbaOfertas.AbmCliente
         private void actualizar_Click(object sender, EventArgs e)
         {
             if (!TextFieldUtil.CampoNumericoValido(DNI, Piso, CodigoPostal) ||
-                !TextFieldUtil.CampoTextoValido(Nombre, Apellido, Direccion, Localidad))
+                !TextFieldUtil.CampoTextoValido(Nombre, Apellido))
             {
                 // Nothing
             }
@@ -76,7 +76,7 @@ namespace FrbaOfertas.AbmCliente
                         datosActualizados.AddParameter("@piso", decimal.Parse(Piso.Text));
                     }
                     // Dpto
-                    if (labelDpto.Text == "")
+                    if (Departamento.Text == "")
                     {
                         datosActualizados.AddParameter("@departamento", DBNull.Value);
                     }

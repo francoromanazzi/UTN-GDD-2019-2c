@@ -62,11 +62,13 @@
             this.Nombre = new System.Windows.Forms.TextBox();
             this.actualizar = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.FechaDeNacimiento);
             this.groupBox1.Controls.Add(this.labelDpto);
             this.groupBox1.Controls.Add(this.Departamento);
@@ -369,7 +371,7 @@
             // 
             // actualizar
             // 
-            this.actualizar.Location = new System.Drawing.Point(392, 323);
+            this.actualizar.Location = new System.Drawing.Point(399, 328);
             this.actualizar.Name = "actualizar";
             this.actualizar.Size = new System.Drawing.Size(75, 23);
             this.actualizar.TabIndex = 13;
@@ -379,13 +381,23 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(17, 323);
+            this.volver.Location = new System.Drawing.Point(16, 328);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 11;
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(294, 283);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(73, 17);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Habilitado";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // FormModificacion
             // 
@@ -437,5 +449,6 @@
         private System.Windows.Forms.TextBox Nombre;
         private System.Windows.Forms.Button actualizar;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
