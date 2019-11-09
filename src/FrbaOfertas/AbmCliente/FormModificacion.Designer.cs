@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.habilitacion = new System.Windows.Forms.CheckBox();
             this.FechaDeNacimiento = new System.Windows.Forms.DateTimePicker();
             this.labelDpto = new System.Windows.Forms.Label();
             this.Departamento = new System.Windows.Forms.TextBox();
@@ -62,13 +63,12 @@
             this.Nombre = new System.Windows.Forms.TextBox();
             this.actualizar = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox1);
+            this.groupBox1.Controls.Add(this.habilitacion);
             this.groupBox1.Controls.Add(this.FechaDeNacimiento);
             this.groupBox1.Controls.Add(this.labelDpto);
             this.groupBox1.Controls.Add(this.Departamento);
@@ -108,6 +108,16 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos";
+            // 
+            // habilitacion
+            // 
+            this.habilitacion.AutoSize = true;
+            this.habilitacion.Location = new System.Drawing.Point(294, 283);
+            this.habilitacion.Name = "habilitacion";
+            this.habilitacion.Size = new System.Drawing.Size(73, 17);
+            this.habilitacion.TabIndex = 2;
+            this.habilitacion.Text = "Habilitado";
+            this.habilitacion.UseVisualStyleBackColor = true;
             // 
             // FechaDeNacimiento
             // 
@@ -389,16 +399,6 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(294, 283);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(73, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Habilitado";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // FormModificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,6 +407,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "FormModificacion";
             this.Text = "Modificacion Cliente..";
+            this.Load += new System.EventHandler(this.FormModificacion_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -449,6 +450,6 @@
         private System.Windows.Forms.TextBox Nombre;
         private System.Windows.Forms.Button actualizar;
         private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox habilitacion;
     }
 }

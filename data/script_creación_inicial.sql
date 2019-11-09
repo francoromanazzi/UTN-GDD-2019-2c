@@ -554,7 +554,8 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
 @departamento NVARCHAR(15),
 @localidad NVARCHAR(255),
 @codigo_postal NVARCHAR(15),
-@fecha_nacimiento DATETIME
+@fecha_nacimiento DATETIME,
+@habilitado BIT
 AS
 BEGIN
 	IF (EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dniOriginal))
@@ -564,6 +565,10 @@ BEGIN
 						  piso = @piso, departamento = @departamento, localidad = @localidad, codigo_postal = @codigo_postal, 
 						  fecha_nacimiento = @fecha_nacimiento
 			WHERE dni = @dniOriginal
+
+			UPDATE LOS_BORBOTONES.Usuarios
+			SET habilitado = @habilitado
+			WHERE id_usuario = (SELECT id_usuario FROM LOS_BORBOTONES.Clientes WHERE dni = @dniOriginal)
 		END
 	ELSE
 		BEGIN
@@ -573,14 +578,14 @@ END
 GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
-@username INT
+@idUsuario INT
 AS
 BEGIN
-	IF(EXISTS(SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+	IF(EXISTS(SELECT * FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = @idUsuario))
 		BEGIN	
 			UPDATE LOS_BORBOTONES.Usuarios
 			SET habilitado = 0
-			WHERE username = @username
+			WHERE id_usuario = @idUsuario
 		END
 	ELSE
 		BEGIN

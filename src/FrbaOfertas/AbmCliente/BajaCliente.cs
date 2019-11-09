@@ -56,19 +56,21 @@ namespace FrbaOfertas.AbmCliente
 
         private void grillaClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            Conexion con = new Conexion();
             string nombre = grillaClientes.CurrentRow.Cells[0].Value.ToString();
             string apellido = grillaClientes.CurrentRow.Cells[1].Value.ToString();
             string DNI = grillaClientes.CurrentRow.Cells[2].Value.ToString();
+            int id_usuario = con.ExecSingleOutputSqlQuery<int>("SELECT id_usuario FROM LOS_BORBOTONES.Clientes WHERE dni = " + DNI);
+
             if (MessageBox.Show("¿Desea eliminar el cliente " + nombre + " " + apellido + " ?", "Atención", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
                 StoredProcedureParameters param = new StoredProcedureParameters()
-                    .AddParameter("@dni", DNI);
+                    .AddParameter("@idUsuario", id_usuario);
 
                 try
                 {
-                    Conexion con = new Conexion();
                     con.ExecDataTableStoredProcedure(StoredProcedures.EliminarCliente, param);
-                    MessageBoxUtil.ShowInfo("Cliente eliminado exitosamente");
+                    MessageBoxUtil.ShowInfo("Cliente deshabilitado exitosamente");
                 }
                 catch (Exception ex)
                 {

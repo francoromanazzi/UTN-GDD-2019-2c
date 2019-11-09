@@ -64,7 +64,9 @@ namespace FrbaOfertas.AbmCliente
                         .AddParameter("@mail", Email.Text)
                         .AddParameter("@telefono", double.Parse(Telefono.Text))
                         .AddParameter("@direccion", Direccion.Text)
-                        .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text));
+                        .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text))
+                        .AddParameter("@habilitado", habilitacion.Checked);
+                 
                     // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
                     // Piso
                     if (Piso.Text == "")
@@ -130,5 +132,17 @@ namespace FrbaOfertas.AbmCliente
             return true;
         }
         #endregion
+
+
+        private void FormModificacion_Load(object sender, EventArgs e)
+        {
+            int id_usuario = new Conexion().ExecSingleOutputSqlQuery<int>("SELECT id_usuario FROM LOS_BORBOTONES.Clientes WHERE dni = " + dniOriginal);
+            bool habilitado = new Conexion().ExecSingleOutputSqlQuery<bool>("SELECT habilitado FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = " + id_usuario);
+            if (habilitado)
+                habilitacion.Checked = true;
+            else
+                habilitacion.Checked = false;
+
+        }
     }
 }
