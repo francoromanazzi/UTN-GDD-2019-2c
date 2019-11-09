@@ -44,7 +44,7 @@ namespace FrbaOfertas.AbmCliente
         {
             // Validaciones de campos
             if (!TextFieldUtil.CampoNumericoValido(DNI, Piso, CodigoPostal) ||
-                !TextFieldUtil.CampoTextoValido(Nombre, Apellido, Direccion, Localidad))
+                !TextFieldUtil.CampoTextoValido(Nombre, Apellido, Localidad))
             {
                 // Dentro del metodo esta el mensaje de error
             }
@@ -72,7 +72,7 @@ namespace FrbaOfertas.AbmCliente
                         parametros.AddParameter("@piso", decimal.Parse(Piso.Text));
                     }
                     // Dpto
-                    if (labelDpto.Text == "")
+                    if (Departamento.Text == "")
                     {
                         parametros.AddParameter("@departamento", DBNull.Value);
                     }
@@ -104,8 +104,7 @@ namespace FrbaOfertas.AbmCliente
                     try
                     {
                         // Impacto en la base
-                        Conexion con = new Conexion();
-                        con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
+                        new Conexion().ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
                         MessageBoxUtil.ShowInfo("Cliente generado con exito");
                     }
                     catch (Exception ex)

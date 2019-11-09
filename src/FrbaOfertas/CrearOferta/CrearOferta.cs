@@ -30,7 +30,7 @@ namespace FrbaOfertas.CrearOferta
             }
             catch(Exception ex)
             {
-                NavigableFormUtil.ForwardTo(this, new SeleccionarProveedor(previousForm));
+                //NavigableFormUtil.ForwardTo(this, new SeleccionarProveedor(previousForm));
             }
         }
     }

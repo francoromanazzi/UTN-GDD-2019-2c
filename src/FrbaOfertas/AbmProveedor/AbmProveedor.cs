@@ -26,5 +26,20 @@ namespace FrbaOfertas.AbmProveedor
         {
             NavigableFormUtil.BackwardTo(this, previousForm);
         }
+
+        private void btnAltaProveedor_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new AltaProveedor(this));
+        }
+
+        private void btnModificarCliente_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new ModificarProveedor(this));
+        }
+
+        private void btnBajaProveedor_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new BajaProveedor(this));
+        }
     }
 }

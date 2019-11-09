@@ -20,5 +20,8 @@ namespace FrbaOfertas.Clases.Constantes
         public const string ActualizarCliente = Schema + "SP_Actualizar_Cliente"; // No hecha
 
         public const string EliminarCliente = Schema + "SP_Eliminar_Cliente"; // No hecha
+
+        public const string AltaProveedor = Schema + "SP_Cargar_Proveedor";
+
     }
 }
