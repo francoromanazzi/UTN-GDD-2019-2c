@@ -23,8 +23,6 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string AltaUsuario = Schema + "SP_Alta_Usuario"; // No hecha
 
-        public const string EliminarCliente = Schema + "SP_Eliminar_Cliente"; // No hecha
-
         public const string AltaProveedor = Schema + "SP_Cargar_Proveedor";
 
     }

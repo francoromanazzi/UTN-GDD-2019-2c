@@ -119,11 +119,7 @@ namespace FrbaOfertas.AbmCliente
                     try
                     {
                         // Impacto en la base
-<<<<<<< HEAD
                         con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
-=======
-                        new Conexion().ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
->>>>>>> 9f0cc548f154a7857e758723516ba17910b5a024
                         MessageBoxUtil.ShowInfo("Cliente generado con exito");
                     }
                     catch (Exception ex)
