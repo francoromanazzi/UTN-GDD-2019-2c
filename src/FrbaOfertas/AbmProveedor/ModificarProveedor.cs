@@ -44,6 +44,19 @@ namespace FrbaOfertas.AbmProveedor
             }
         }
 
+
+        #region Validadores
+        private bool AlMenosUnCampoNoVacio()
+        {
+            if (inputRazonSocial.Text == "" && inputCuit.Text == "" && inputEmail.Text == "")
+            {
+                MessageBoxUtil.ShowError("Debe completar al menos un campo para buscar");
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
         private void grillaProveedores_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             string mail = grillaProveedores.CurrentRow.Cells["mail"].Value.ToString();
@@ -61,17 +74,5 @@ namespace FrbaOfertas.AbmProveedor
 
             NavigableFormUtil.ForwardToDifferentWindow(this, new FormModificacion(previousForm, mail, telefono, cuit, direccion, piso, dpto, localidad, ciudad, codigoPostal, razonSocial, rubro, nombreContacto));
         }
-
-        #region Validadores
-        private bool AlMenosUnCampoNoVacio()
-        {
-            if (inputRazonSocial.Text == "" && inputCuit.Text == "" && inputEmail.Text == "")
-            {
-                MessageBoxUtil.ShowError("Debe completar al menos un campo para buscar");
-                return false;
-            }
-            return true;
-        }
-        #endregion
     }
 }

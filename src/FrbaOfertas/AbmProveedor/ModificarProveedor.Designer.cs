@@ -93,6 +93,7 @@
             this.grillaProveedores.RowTemplate.Height = 28;
             this.grillaProveedores.Size = new System.Drawing.Size(900, 328);
             this.grillaProveedores.TabIndex = 1;
+            this.grillaProveedores.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grillaProveedores_CellContentClick);
             // 
             // inputEmail
             // 

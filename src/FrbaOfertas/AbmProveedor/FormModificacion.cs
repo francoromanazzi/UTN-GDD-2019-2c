@@ -21,6 +21,8 @@ namespace FrbaOfertas.AbmProveedor
         {
             this.previousForm = previousForm;
 
+            InitializeComponent();
+
             inputEmail.Text = mail;
             inputTelefono.Text = telefono.ToString();
             inputCuit.Text = cuit;
@@ -34,7 +36,6 @@ namespace FrbaOfertas.AbmProveedor
             inputRubro.Text = rubro;
             inputNombreContacto.Text = nombreContacto;
 
-            InitializeComponent();
         }
     }
 }
