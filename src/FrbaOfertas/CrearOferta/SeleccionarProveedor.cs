@@ -32,7 +32,7 @@ namespace FrbaOfertas.CrearOferta
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (inputMail.Text == "" && inputTelefono.Text == "" && inputCuit.Text == "" && inputDreccion.Text == "")
+            if (inputMail.Text == "" && inputCuit.Text == "" && inputRazonSocial.Text == "")
             {
                 MessageBoxUtil.ShowError("Se debe introducir por lo menos un dato");
             }
@@ -40,7 +40,7 @@ namespace FrbaOfertas.CrearOferta
             {
                 try
                 {
-                    DataTable dt = new RepositorioProveedores().RealizarBusqueda(inputMail.Text, inputTelefono.Text, inputCuit.Text, inputDreccion.Text);
+                    DataTable dt = new RepositorioProveedores().RealizarBusqueda(inputRazonSocial.Text, inputCuit.Text, inputMail.Text);
 
                     gridProveedores.DataSource = dt;
                 }

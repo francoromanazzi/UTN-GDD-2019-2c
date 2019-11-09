@@ -42,18 +42,21 @@
             this.groupBox1.Controls.Add(this.bajaCliente);
             this.groupBox1.Controls.Add(this.modificarCliente);
             this.groupBox1.Controls.Add(this.altaCliente);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(18, 18);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(254, 196);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(381, 302);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Seleccione una opcion";
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(6, 167);
+            this.volver.Location = new System.Drawing.Point(9, 257);
+            this.volver.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.volver.Name = "volver";
-            this.volver.Size = new System.Drawing.Size(75, 23);
+            this.volver.Size = new System.Drawing.Size(112, 35);
             this.volver.TabIndex = 3;
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
@@ -61,9 +64,10 @@
             // 
             // bajaCliente
             // 
-            this.bajaCliente.Location = new System.Drawing.Point(82, 115);
+            this.bajaCliente.Location = new System.Drawing.Point(123, 177);
+            this.bajaCliente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bajaCliente.Name = "bajaCliente";
-            this.bajaCliente.Size = new System.Drawing.Size(93, 23);
+            this.bajaCliente.Size = new System.Drawing.Size(140, 35);
             this.bajaCliente.TabIndex = 2;
             this.bajaCliente.Text = "Baja Cliente";
             this.bajaCliente.UseVisualStyleBackColor = true;
@@ -71,9 +75,10 @@
             // 
             // modificarCliente
             // 
-            this.modificarCliente.Location = new System.Drawing.Point(82, 77);
+            this.modificarCliente.Location = new System.Drawing.Point(123, 118);
+            this.modificarCliente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.modificarCliente.Name = "modificarCliente";
-            this.modificarCliente.Size = new System.Drawing.Size(93, 23);
+            this.modificarCliente.Size = new System.Drawing.Size(140, 35);
             this.modificarCliente.TabIndex = 1;
             this.modificarCliente.Text = "Modificar Cliente";
             this.modificarCliente.UseVisualStyleBackColor = true;
@@ -81,9 +86,10 @@
             // 
             // altaCliente
             // 
-            this.altaCliente.Location = new System.Drawing.Point(82, 39);
+            this.altaCliente.Location = new System.Drawing.Point(123, 60);
+            this.altaCliente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.altaCliente.Name = "altaCliente";
-            this.altaCliente.Size = new System.Drawing.Size(93, 23);
+            this.altaCliente.Size = new System.Drawing.Size(140, 35);
             this.altaCliente.TabIndex = 0;
             this.altaCliente.Text = "Alta Cliente";
             this.altaCliente.UseVisualStyleBackColor = true;
@@ -91,10 +97,11 @@
             // 
             // AbmCliente
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 220);
+            this.ClientSize = new System.Drawing.Size(417, 338);
             this.Controls.Add(this.groupBox1);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "AbmCliente";
             this.Text = "ABM Cliente";
             this.groupBox1.ResumeLayout(false);

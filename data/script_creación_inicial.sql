@@ -95,6 +95,18 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Cliente', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Eliminar_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Eliminar_Cliente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Actualizar_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Proveedor', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Proveedor
+GO
+
 IF OBJECT_ID('LOS_BORBOTONES.SP_Guardar_Oferta', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
 GO
@@ -261,6 +273,9 @@ CREATE TABLE LOS_BORBOTONES.Proveedores (
 	mail NVARCHAR(255),
 	telefono NUMERIC(18,0) NOT NULL,
 	direccion NVARCHAR(255) NOT NULL,
+	piso NVARCHAR(15),
+	departamento NVARCHAR(15),
+	localidad NVARCHAR(255),
 	codigo_postal NVARCHAR(15),
 	ciudad NVARCHAR(255) NOT NULL,
 	cuit NVARCHAR(20) UNIQUE NOT NULL,
@@ -406,15 +421,48 @@ END
 GO
 
 /* 
-	codigo_oferta NVARCHAR(50) NOT NULL,
-	id_proveedor INT NOT NULL,
-	fecha_publicacion DATETIME NOT NULL,
-	fecha_vencimiento DATETIME NOT NULL,
-	precio_en_oferta NUMERIC(18,2) NOT NULL,
-	precio_de_lista NUMERIC(18,2) NOT NULL,
-	cant_disponible NUMERIC(18,0) NOT NULL,
-	max_unidades_por_cliente NUMERIC(18,0) NOT NULL
-	PRIMARY KEY (codigo_oferta) */
+	id_proveedor INT IDENTITY(1,1) NOT NULL,
+	id_usuario INT,
+	razon_social NVARCHAR(100) UNIQUE NOT NULL,
+	mail NVARCHAR(255),
+	telefono NUMERIC(18,0) NOT NULL,
+	direccion NVARCHAR(255) NOT NULL,
+	piso NVARCHAR(15),
+	departamento NVARCHAR(15),
+	localidad NVARCHAR(255),
+	codigo_postal NVARCHAR(15),
+	ciudad NVARCHAR(255) NOT NULL,
+	cuit NVARCHAR(20) UNIQUE NOT NULL,
+	rubro NVARCHAR(100) NOT NULL,
+	nombre_contacto NVARCHAR(255) NOT NULL,
+*/
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Proveedor
+@razon_social NVARCHAR(100),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@ciudad NVARCHAR(255),
+@cuit NVARCHAR(20),
+@rubro NVARCHAR(100),
+@nombre_contacto NVARCHAR(255)
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO LOS_BORBOTONES.Proveedores (razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
+		VALUES (@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+	END TRY
+	BEGIN CATCH
+		BEGIN;
+			THROW 50001, 'El DNI/Razón social no es único', 1
+		END;
+	END CATCH
+END
+GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
 @fecha_publicacion DATETIME,

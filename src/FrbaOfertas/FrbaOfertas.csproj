@@ -81,6 +81,30 @@
     <Compile Include="AbmProveedor\AbmProveedor.Designer.cs">
       <DependentUpon>AbmProveedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="AbmProveedor\AltaProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\AltaProveedor.Designer.cs">
+      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\BajaProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\BajaProveedor.Designer.cs">
+      <DependentUpon>BajaProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\FormModificacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\FormModificacion.Designer.cs">
+      <DependentUpon>FormModificacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\ModificarProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\ModificarProveedor.Designer.cs">
+      <DependentUpon>ModificarProveedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="AbmRol\AbmRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +235,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmCliente\ModificarCliente.resx">
       <DependentUpon>ModificarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\AbmProveedor.resx">
+      <DependentUpon>AbmProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\AltaProveedor.resx">
+      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\FormModificacion.resx">
+      <DependentUpon>FormModificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\ModificarProveedor.resx">
+      <DependentUpon>ModificarProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CargaCredito\CargaCredito.resx">
       <DependentUpon>CargaCredito.cs</DependentUpon>
