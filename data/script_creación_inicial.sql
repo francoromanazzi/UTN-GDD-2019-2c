@@ -526,17 +526,14 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
 @password NVARCHAR(255)
 AS
 BEGIN
+	DECLARE @id INT
+	SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = CONVERT(VARCHAR, @dni))
 	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
 		BEGIN
-			INSERT INTO LOS_BORBOTONES.Clientes(nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
-			VALUES (@nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
-			
-			/* FALTA EL IDENTIDY_INSERT
-			DECLARE @id INT
-			SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = STR(@dni))
-			INSERT INTO LOS_BORBOTONES.Usuarios(id_usuario)
-			VALUES (@id)
-			*/
+			SET IDENTITY_INSERT LOS_BORBOTONES.Clientes OFF
+			INSERT INTO LOS_BORBOTONES.Clientes(id_usuario, nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
+			VALUES (@id, @nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
+			SET IDENTITY_INSERT LOS_BORBOTONES.Clientes ON
 		END
 	ELSE
 		BEGIN
