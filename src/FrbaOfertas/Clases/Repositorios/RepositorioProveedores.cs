@@ -19,26 +19,22 @@ namespace FrbaOfertas.Clases.Repositorios
                                                "WHERE u.id_usuario = " + idUsuario);
         }
 
-        public DataTable RealizarBusqueda(string mail, string telefono, string cuit, string direccion)
+        public DataTable RealizarBusqueda(string razonSocial, string cuit, string mail)
         {
-            string query = "SELECT id_proveedor, mail, telefono, cuit, direccion, ciudad, codigo_postal, razon_social, rubro FROM LOS_BORBOTONES.Proveedores WHERE ";
+            string query = "SELECT id_proveedor, id_usuario, mail, telefono, cuit, direccion, piso, departamento, localidad, ciudad, codigo_postal, razon_social, rubro, nombre_contacto FROM LOS_BORBOTONES.Proveedores WHERE ";
             List<string> condiciones = new List<string>();
 
             if (mail != "")
             {
                 condiciones.Add(" mail like " + "'%" + mail + "%'");
             }
-            if (telefono != "")
+            if (razonSocial != "")
             {
-                condiciones.Add(" telefono like " + "'%" + telefono + "%'");
+                condiciones.Add(" razon_social like " + "'%" + razonSocial + "%'");
             }
             if (cuit != "")
             {
-                condiciones.Add(" cuit like " + "'%" + cuit + "%'");
-            }
-            if (direccion != "")
-            {
-                condiciones.Add(" direccion like " + "'%" + direccion + "%'");
+                condiciones.Add(" cuit = " + "'" + cuit + "'");
             }
 
             for (int i = 0; i < condiciones.Count; i++)
