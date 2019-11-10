@@ -51,6 +51,9 @@
             // nroSemestre
             // 
             this.nroSemestre.FormattingEnabled = true;
+            this.nroSemestre.Items.AddRange(new object[] {
+            "1",
+            "2"});
             this.nroSemestre.Location = new System.Drawing.Point(71, 86);
             this.nroSemestre.Name = "nroSemestre";
             this.nroSemestre.Size = new System.Drawing.Size(40, 21);
@@ -102,6 +105,7 @@
             this.btnListMayorPorcentaje.TabIndex = 6;
             this.btnListMayorPorcentaje.Text = "Consultar";
             this.btnListMayorPorcentaje.UseVisualStyleBackColor = true;
+            this.btnListMayorPorcentaje.Click += new System.EventHandler(this.btnListMayorPorcentaje_Click);
             // 
             // btnListProvMayorFact
             // 
@@ -115,6 +119,11 @@
             // selectAño
             // 
             this.selectAño.FormattingEnabled = true;
+            this.selectAño.Items.AddRange(new object[] {
+            "2020",
+            "2019",
+            "2018",
+            "2017"});
             this.selectAño.Location = new System.Drawing.Point(329, 86);
             this.selectAño.Name = "selectAño";
             this.selectAño.Size = new System.Drawing.Size(50, 21);
