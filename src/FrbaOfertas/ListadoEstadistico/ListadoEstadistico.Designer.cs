@@ -115,6 +115,7 @@
             this.btnListProvMayorFact.TabIndex = 7;
             this.btnListProvMayorFact.Text = "Consultar";
             this.btnListProvMayorFact.UseVisualStyleBackColor = true;
+            this.btnListProvMayorFact.Click += new System.EventHandler(this.btnListProvMayorFact_Click);
             // 
             // selectAño
             // 
