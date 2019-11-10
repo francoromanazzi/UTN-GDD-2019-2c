@@ -26,5 +26,20 @@ namespace FrbaOfertas.ListadoEstadistico
         {
             NavigableFormUtil.BackwardTo(this, previousForm);
         }
+
+        private void ListadoEstadistico_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nroSemestre_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

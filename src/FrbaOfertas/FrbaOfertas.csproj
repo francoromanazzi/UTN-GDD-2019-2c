@@ -188,6 +188,18 @@
     <Compile Include="ListadoEstadistico\ListadoEstadistico.Designer.cs">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListadoEstadistico\ListadoProMayorDesc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoProMayorDesc.Designer.cs">
+      <DependentUpon>ListadoProMayorDesc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoProMayorFact.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoProMayorFact.Designer.cs">
+      <DependentUpon>ListadoProMayorFact.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,6 +271,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\SeleccionarProveedor.resx">
       <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico.resx">
+      <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
