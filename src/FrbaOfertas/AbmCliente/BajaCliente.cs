@@ -67,14 +67,22 @@ namespace FrbaOfertas.AbmCliente
                 StoredProcedureParameters param = new StoredProcedureParameters()
                     .AddParameter("@idUsuario", id_usuario);
 
-                try
+                bool estabaHabilitado = con.ExecSingleOutputSqlQuery<bool>("SELECT habilitado FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = " + id_usuario);
+                if (!estabaHabilitado)
                 {
-                    con.ExecDataTableStoredProcedure(StoredProcedures.EliminarCliente, param);
-                    MessageBoxUtil.ShowInfo("Cliente deshabilitado exitosamente");
+                    MessageBoxUtil.ShowError("El proveedor ya se encontraba deshabilitado");
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    try
+                    {
+                        con.ExecDataTableStoredProcedure(StoredProcedures.EliminarUsuario, param);
+                        MessageBoxUtil.ShowInfo("Cliente deshabilitado exitosamente");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBoxUtil.ShowError(ex.Message);
+                    }
                 }
             }
         }

@@ -254,6 +254,9 @@
     <EmbeddedResource Include="AbmProveedor\AltaProveedor.resx">
       <DependentUpon>AltaProveedor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\BajaProveedor.resx">
+      <DependentUpon>BajaProveedor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AbmProveedor\FormModificacion.resx">
       <DependentUpon>FormModificacion.cs</DependentUpon>
     </EmbeddedResource>

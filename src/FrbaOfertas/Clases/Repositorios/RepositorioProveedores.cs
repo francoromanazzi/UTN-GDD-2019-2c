@@ -119,5 +119,79 @@ namespace FrbaOfertas.Clases.Repositorios
 
             new Conexion().ExecStoredProcedure(StoredProcedures.AltaProveedor, parametros);
         }
+
+        public void Modificar(
+                int idProveedor,
+                bool habilitado,
+                string inputRazonSocial,
+                string inputTelefono,
+                string inputMail,
+                string inputDireccion,
+                string inputPiso,
+                string inputDepartamento,
+                string inputLocalidad,
+                string inputCodigoPostal,
+                string inputCuit,
+                string inputCiudad,
+                string inputRubro,
+                string inputNombreDeContacto
+            )
+        {
+            // Armo el Store Procedure con los parametros REQUERIDOS
+            StoredProcedureParameters parametros = new StoredProcedureParameters()
+                .AddParameter("@id_proveedor", idProveedor)
+                .AddParameter("@habilitado", habilitado)
+                .AddParameter("@razon_social", inputRazonSocial)
+                .AddParameter("@mail", inputMail)
+                .AddParameter("@telefono", decimal.Parse(inputTelefono))
+                .AddParameter("@direccion", inputDireccion)
+                .AddParameter("@ciudad", inputCiudad)
+                .AddParameter("@cuit", inputCuit)
+                .AddParameter("@rubro", inputRubro)
+                .AddParameter("@nombre_contacto", inputNombreDeContacto);
+
+            // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
+            // Piso
+            if (inputPiso == "")
+            {
+                parametros.AddParameter("@piso", DBNull.Value); // Muy diferente de NULL 
+            }
+            else
+            {
+                parametros.AddParameter("@piso", inputPiso);
+            }
+
+            // Dpto
+            if (inputDepartamento == "")
+            {
+                parametros.AddParameter("@departamento", DBNull.Value);
+            }
+            else
+            {
+                parametros.AddParameter("@departamento", inputDepartamento);
+            }
+
+            // Localidad
+            if (inputLocalidad == "")
+            {
+                parametros.AddParameter("@localidad", DBNull.Value);
+            }
+            else
+            {
+                parametros.AddParameter("@localidad", inputLocalidad);
+            }
+
+            // Codigo Postal
+            if (inputCodigoPostal == "")
+            {
+                parametros.AddParameter("@codigo_postal", DBNull.Value);
+            }
+            else
+            {
+                parametros.AddParameter("@codigo_postal", inputCodigoPostal);
+            }
+
+            new Conexion().ExecStoredProcedure(StoredProcedures.ModificarProveedor, parametros);
+        }
     }
 }

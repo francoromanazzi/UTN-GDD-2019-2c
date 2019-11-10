@@ -60,6 +60,7 @@ namespace FrbaOfertas.AbmProveedor
         private void grillaProveedores_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             string mail = grillaProveedores.CurrentRow.Cells["mail"].Value.ToString();
+            int idProveedor = int.Parse(grillaProveedores.CurrentRow.Cells["id_proveedor"].Value.ToString());
             decimal telefono = decimal.Parse(grillaProveedores.CurrentRow.Cells["telefono"].Value.ToString());
             string cuit = grillaProveedores.CurrentRow.Cells["cuit"].Value.ToString();
             string direccion = grillaProveedores.CurrentRow.Cells["direccion"].Value.ToString();
@@ -72,7 +73,12 @@ namespace FrbaOfertas.AbmProveedor
             string rubro = grillaProveedores.CurrentRow.Cells["rubro"].Value.ToString();
             string nombreContacto = grillaProveedores.CurrentRow.Cells["nombre_contacto"].Value.ToString();
 
-            NavigableFormUtil.ForwardToDifferentWindow(this, new FormModificacion(previousForm, mail, telefono, cuit, direccion, piso, dpto, localidad, ciudad, codigoPostal, razonSocial, rubro, nombreContacto));
+            NavigableFormUtil.ForwardToDifferentWindow(this, new FormModificacion(this, idProveedor, mail, telefono, cuit, direccion, piso, dpto, localidad, ciudad, codigoPostal, razonSocial, rubro, nombreContacto));
+        }
+
+        public void RefrescarBusqueda()
+        {
+            this.brnBuscar_Click(null, null);
         }
     }
 }
