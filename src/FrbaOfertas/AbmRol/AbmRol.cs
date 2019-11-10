@@ -26,5 +26,20 @@ namespace FrbaOfertas.AbmRol
         {
             NavigableFormUtil.BackwardTo(this, previousForm);
         }
+
+        private void btnAlta_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new AltaRol(this));
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new ModificarRol(this));
+        }
+
+        private void btnBaja_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.ForwardTo(this, new BajaRol(this));
+        }
     }
 }

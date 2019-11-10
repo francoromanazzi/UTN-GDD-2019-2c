@@ -130,11 +130,36 @@ GO
 IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
 GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Modificar_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Modificar_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Baja_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Rol
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
 IF OBJECT_ID('LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos', 'TR') IS NOT NULL
 DROP TRIGGER LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios', 'TR') IS NOT NULL
+DROP TRIGGER LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios
 GO
 
 ------------------------------------------------
@@ -589,6 +614,72 @@ END
 GO
 
 -------------------------------------------------------
+--------------------- ABM ROL -------------------------
+-------------------------------------------------------
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Rol
+@nombre NVARCHAR(50),
+@id_rol INT OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO LOS_BORBOTONES.Roles (nombre) VALUES (@nombre);
+
+		SET @id_rol = SCOPE_IDENTITY();
+	END TRY
+	BEGIN CATCH
+		THROW 50001, 'El nombre ya se encuentra en uso', 1
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol
+@id_rol INT,
+@id_funcionalidad INT
+AS
+BEGIN
+	INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_funcionalidad, id_rol) VALUES (@id_funcionalidad, @id_rol);
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol
+@id_rol INT,
+@id_funcionalidad INT
+AS
+BEGIN
+	DELETE FROM LOS_BORBOTONES.FuncionalidadesXRoles
+	WHERE id_funcionalidad = @id_funcionalidad AND id_rol = @id_rol;
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Modificar_Rol
+@id_rol INT,
+@nombre NVARCHAR(50),
+@habilitado BIT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE LOS_BORBOTONES.Roles 
+		SET nombre = @nombre, habilitado = @habilitado -- Activa trigger que saca rol a los usuarios si se deshabilita el rol
+		WHERE id_rol = @id_rol;
+	END TRY
+	BEGIN CATCH
+		THROW 50001, 'El nombre ya se encuentra en uso', 1
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Rol
+@id_rol INT
+AS
+BEGIN
+	UPDATE LOS_BORBOTONES.Roles -- Activa trigger que saca rol a los usuarios
+	SET habilitado = 0
+	WHERE id_rol = @id_rol
+END
+GO
+
+-------------------------------------------------------
 --------------------- ABM USUARIO ---------------------
 -------------------------------------------------------
 
@@ -635,6 +726,16 @@ AS
 BEGIN
 	IF (SELECT cant_intentos_fallidos FROM inserted) >= 3
 		UPDATE LOS_BORBOTONES.Usuarios SET habilitado = 0, motivo_deshabilitacion = 'Intentos fallidos' WHERE username = (SELECT username FROM inserted)
+END
+GO
+
+CREATE TRIGGER LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios ON LOS_BORBOTONES.Roles AFTER UPDATE
+AS
+BEGIN
+	IF (SELECT habilitado FROM inserted) = 0
+	BEGIN
+		DELETE FROM LOS_BORBOTONES.RolesXUsuarios WHERE id_rol = (SELECT id_rol FROM inserted)
+	END
 END
 GO
 
