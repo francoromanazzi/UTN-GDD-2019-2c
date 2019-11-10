@@ -53,5 +53,17 @@ namespace FrbaOfertas.ListadoEstadistico
             ListadoProMayorDesc form1 = new ListadoProMayorDesc(semestre, año);
             form1.Show();//showdialog()
         }
+
+        private void btnListProvMayorFact_Click(object sender, EventArgs e)
+        {
+            int indiceSemestre = nroSemestre.SelectedIndex;//indice seleccionado
+            int semestre = Convert.ToInt32(nroSemestre.Items[indiceSemestre].ToString());
+
+            int indiceAño = selectAño.SelectedIndex;
+            int año = Convert.ToInt32(selectAño.Items[indiceAño].ToString());
+
+            ListadoProMayorFact form2 = new ListadoProMayorFact(semestre, año);
+            form2.Show();//showdialog()
+        }
     }
 }
