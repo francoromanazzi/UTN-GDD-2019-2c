@@ -49,3 +49,17 @@ END
 go
 execute ProveedoresMayorFacturacion 2020, 1
 execute ProveedoresMayorFacturacion 2020, 2
+
+USE GD2C2019;  
+GO  
+SELECT name AS object_name   
+  ,SCHEMA_NAME(schema_id) AS schema_name  
+  ,type_desc  
+  ,create_date  
+  ,modify_date  
+FROM sys.objects  
+WHERE modify_date > GETDATE() - 1  
+ORDER BY modify_date;  
+GO
+
+DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
