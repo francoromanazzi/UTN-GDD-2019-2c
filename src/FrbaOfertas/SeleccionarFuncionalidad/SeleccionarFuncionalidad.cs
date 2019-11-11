@@ -1,5 +1,6 @@
 ﻿using FrbaOfertas.Clases.Modelo;
 using FrbaOfertas.Clases.Repositorios;
+using FrbaOfertas.Clases.Session;
 using FrbaOfertas.Clases.Utils.Form;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,15 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
                 case 4:
                     return new CargaCredito.CargaCredito(this);
                 case 5:
-                    return new CrearOferta.CrearOferta(this);
+                    try
+                    {
+                        int idProveedor = new RepositorioProveedores().ObtenerIdProveedorDeUsuario(Session.Instance.IdUsuario);
+                        return new CrearOferta.CrearOferta(this, idProveedor);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new CrearOferta.SeleccionarProveedor(this);
+                    }
                 case 6:
                     return new ComprarOferta.ComprarOferta(this);
                 case 7:
