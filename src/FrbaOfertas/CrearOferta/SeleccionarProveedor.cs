@@ -57,7 +57,7 @@ namespace FrbaOfertas.CrearOferta
 
             Console.WriteLine(idProveedor);
 
-            NavigableFormUtil.ForwardTo(this, new CrearOfertaPaso2(previousForm, idProveedor));
+            NavigableFormUtil.ForwardTo(this, new CrearOferta(previousForm, idProveedor));
         }
     }
 }

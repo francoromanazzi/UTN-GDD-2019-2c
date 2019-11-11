@@ -182,12 +182,6 @@
     <Compile Include="CrearOferta\CrearOferta.Designer.cs">
       <DependentUpon>CrearOferta.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrearOferta\CrearOfertaPaso2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CrearOferta\CrearOfertaPaso2.Designer.cs">
-      <DependentUpon>CrearOfertaPaso2.cs</DependentUpon>
-    </Compile>
     <Compile Include="CrearOferta\SeleccionarProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -314,8 +308,8 @@
     <EmbeddedResource Include="CargaCredito\CargarTarjeta.resx">
       <DependentUpon>CargarTarjeta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CrearOferta\CrearOfertaPaso2.resx">
-      <DependentUpon>CrearOfertaPaso2.cs</DependentUpon>
+    <EmbeddedResource Include="CrearOferta\CrearOferta.resx">
+      <DependentUpon>CrearOferta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\SeleccionarProveedor.resx">
       <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
