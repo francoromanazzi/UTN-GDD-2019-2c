@@ -159,6 +159,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Registro_Usuario_Proveedor', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -723,6 +727,37 @@ BEGIN
 		BEGIN
 			RAISERROR('No existe el usuario',16,1)
 		END
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
+@username nvarchar(50),
+@razon_social NVARCHAR(100),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@ciudad NVARCHAR(255),
+@cuit NVARCHAR(20),
+@rubro NVARCHAR(100),
+@nombre_contacto NVARCHAR(255)
+as
+BEGIN
+	DECLARE @id_usuario int
+	SELECT @id_usuario = id_usuario from Usuarios where username = @username
+	BEGIN TRY
+
+		INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario,razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
+		VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+	END TRY
+	BEGIN CATCH
+		BEGIN;
+			THROW 50001, 'El Usuario/Razón social no es único', 1
+		END;
+	END CATCH
 END
 GO
 

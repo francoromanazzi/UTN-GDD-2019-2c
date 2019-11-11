@@ -40,6 +40,8 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string ModificarProveedor = Schema + "SP_Modificar_Proveedor";
 
+        public const string AltaProveedorDesdeRegistroUsuario = Schema + "SP_Registro_Usuario_Proveedor";
+
         #endregion
 
         #region ABM Rol

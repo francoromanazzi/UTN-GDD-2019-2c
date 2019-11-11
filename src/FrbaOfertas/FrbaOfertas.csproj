@@ -251,6 +251,12 @@
     <Compile Include="RegistroUsuario\DatosProveedor.Designer.cs">
       <DependentUpon>DatosProveedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="RegistroUsuario\RegistroAltaProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistroUsuario\RegistroAltaProveedor.Designer.cs">
+      <DependentUpon>RegistroAltaProveedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegistroUsuario\RegistroUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -346,6 +352,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RegistroUsuario\DatosProveedor.resx">
       <DependentUpon>DatosProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegistroUsuario\RegistroAltaProveedor.resx">
+      <DependentUpon>RegistroAltaProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RegistroUsuario\RegistroUsuario.resx">
       <DependentUpon>RegistroUsuario.cs</DependentUpon>
