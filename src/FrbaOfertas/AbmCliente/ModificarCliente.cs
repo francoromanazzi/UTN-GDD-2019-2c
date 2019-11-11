@@ -65,7 +65,7 @@ namespace FrbaOfertas.AbmCliente
             string localidad = grillaClientes.CurrentRow.Cells[8].Value.ToString();
             string codigoPostal = grillaClientes.CurrentRow.Cells[9].Value.ToString();
             DateTime fechaNac = DateTime.Parse(grillaClientes.CurrentRow.Cells[10].Value.ToString());
-            NavigableFormUtil.ForwardToDifferentWindow(this, new FormModificacion(previousForm, nombre, apellido, dni, mail, telefono, direccion, piso, dpto, localidad, codigoPostal, fechaNac));
+            NavigableFormUtil.ForwardToDifferentWindow(this, new FormModificacion(this, nombre, apellido, dni, mail, telefono, direccion, piso, dpto, localidad, codigoPostal, fechaNac));
         }
 
         #region Validadores
@@ -79,5 +79,10 @@ namespace FrbaOfertas.AbmCliente
             return true;
         }
         #endregion
+
+        public void RefrescarBusqueda()
+        {
+            this.buscar_Click(null, null);
+        }
     }
 }

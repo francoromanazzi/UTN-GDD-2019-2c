@@ -15,10 +15,10 @@ namespace FrbaOfertas.AbmCliente
 {
     public partial class FormModificacion : Form
     {
-        private readonly AbmCliente previousForm;
+        private readonly ModificarCliente previousForm;
         private string dniOriginal;
 
-        public FormModificacion(AbmCliente previousForm, string nombre, string apellido, string dni, string mail, string telefono,
+        public FormModificacion(ModificarCliente previousForm, string nombre, string apellido, string dni, string mail, string telefono,
                                                         string direccion, string piso, string dpto, string localidad, string codigoPostal, DateTime fechaNac)
         {
             this.previousForm = previousForm;
@@ -109,13 +109,15 @@ namespace FrbaOfertas.AbmCliente
                     {
                         Conexion con = new Conexion();
                         con.ExecDataTableStoredProcedure(StoredProcedures.ActualizarCliente, datosActualizados);
+
+                        previousForm.RefrescarBusqueda();
+
                         MessageBoxUtil.ShowInfo("Cliente actualizado correctamente");
                     }
                     catch (Exception ex)
                     {
                         MessageBoxUtil.ShowError(ex.Message);
                     }
-                    previousForm.Refresh(); // Pendiente de revisar
                 }
             }
         }

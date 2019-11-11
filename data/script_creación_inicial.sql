@@ -107,6 +107,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Proveedor', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Proveedor
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Modificar_Proveedor', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Modificar_Proveedor
+GO
+
 IF OBJECT_ID('LOS_BORBOTONES.SP_Guardar_Oferta', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
 GO
@@ -115,8 +119,8 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Actualizar_Cliente', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Actualizar_Cliente
 GO
 
-IF OBJECT_ID('LOS_BORBOTONES.SP_Baja_Cliente', 'P') IS NOT NULL
-DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
+IF OBJECT_ID('LOS_BORBOTONES.SP_Baja_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Usuario
 GO
 
 IF OBJECT_ID('LOS_BORBOTONES.SP_Eliminar_Cliente', 'P') IS NOT NULL
@@ -127,6 +131,26 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Modificar_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Modificar_Rol
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Baja_Rol', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Baja_Rol
+GO
+
 IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Usuario_Existente', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Usuario_Existente
 GO
@@ -134,11 +158,16 @@ GO
 IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
 GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
 IF OBJECT_ID('LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos', 'TR') IS NOT NULL
 DROP TRIGGER LOS_BORBOTONES.TR_Bloquear_Usuario_Por_Intentos_Fallidos
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios', 'TR') IS NOT NULL
+DROP TRIGGER LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios
 GO
 
 ------------------------------------------------
@@ -428,22 +457,33 @@ BEGIN
 END
 GO
 
-/* 
-	id_proveedor INT IDENTITY(1,1) NOT NULL,
-	id_usuario INT,
-	razon_social NVARCHAR(100) UNIQUE NOT NULL,
-	mail NVARCHAR(255),
-	telefono NUMERIC(18,0) NOT NULL,
-	direccion NVARCHAR(255) NOT NULL,
-	piso NVARCHAR(15),
-	departamento NVARCHAR(15),
-	localidad NVARCHAR(255),
-	codigo_postal NVARCHAR(15),
-	ciudad NVARCHAR(255) NOT NULL,
-	cuit NVARCHAR(20) UNIQUE NOT NULL,
-	rubro NVARCHAR(100) NOT NULL,
-	nombre_contacto NVARCHAR(255) NOT NULL,
-*/
+CREATE PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
+@fecha_publicacion DATETIME,
+@fecha_vencimiento DATETIME,
+@precio_en_oferta NUMERIC(18,2),
+@precio_de_lista NUMERIC(18,2),
+@cant_disponible NUMERIC(18,0),
+@max_unidades_por_cliente NUMERIC(18,0),
+@codigo_oferta NVARCHAR(50),
+@descripcion NVARCHAR(50),
+@id_proveedor INT
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, id_proveedor, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, descripcion)
+		VALUES (@codigo_oferta, @id_proveedor, @fecha_publicacion, @fecha_vencimiento, @precio_en_oferta, @precio_de_lista, @cant_disponible, @max_unidades_por_cliente, @descripcion)
+	END TRY
+	BEGIN CATCH
+		BEGIN;
+			THROW 50001, 'El codigo de oferta ya se encuentra en uso', 1
+		END;
+	END CATCH
+END
+GO
+
+-------------------------------------------------------
+--------------------- ABM PROVEEDOR -------------------
+-------------------------------------------------------
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Proveedor
 @razon_social NVARCHAR(100),
@@ -472,25 +512,39 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE LOS_BORBOTONES.SP_Guardar_Oferta
-@fecha_publicacion DATETIME,
-@fecha_vencimiento DATETIME,
-@precio_en_oferta NUMERIC(18,2),
-@precio_de_lista NUMERIC(18,2),
-@cant_disponible NUMERIC(18,0),
-@max_unidades_por_cliente NUMERIC(18,0),
-@codigo_oferta NVARCHAR(50),
-@descripcion NVARCHAR(50),
-@id_proveedor INT
+CREATE PROCEDURE LOS_BORBOTONES.SP_Modificar_Proveedor
+@id_proveedor INT,
+@habilitado BIT,
+@razon_social NVARCHAR(100),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@ciudad NVARCHAR(255),
+@cuit NVARCHAR(20),
+@rubro NVARCHAR(100),
+@nombre_contacto NVARCHAR(255)
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO LOS_BORBOTONES.Ofertas (codigo_oferta, id_proveedor, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente, descripcion)
-		VALUES (@codigo_oferta, @id_proveedor, @fecha_publicacion, @fecha_vencimiento, @precio_en_oferta, @precio_de_lista, @cant_disponible, @max_unidades_por_cliente, @descripcion)
+			BEGIN TRANSACTION
+				UPDATE LOS_BORBOTONES.Proveedores
+				SET razon_social = @razon_social, mail = @mail, telefono = @telefono, direccion = @direccion, piso = @piso, departamento = @departamento,
+					localidad = @localidad, codigo_postal = @codigo_postal, ciudad = @ciudad, cuit = @cuit, rubro = @rubro, nombre_contacto = @nombre_contacto
+				WHERE id_proveedor = @id_proveedor
+
+				UPDATE LOS_BORBOTONES.Usuarios
+				SET habilitado = @habilitado
+				WHERE id_usuario = (SELECT id_usuario FROM LOS_BORBOTONES.Proveedores WHERE id_proveedor = @id_proveedor)
+			COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
 		BEGIN;
-			THROW 50001, 'El codigo de oferta ya se encuentra en uso', 1
+			THROW 50001, 'El DNI/Razón social no es único', 1
+			ROLLBACK TRANSACTION
 		END;
 	END CATCH
 END
@@ -499,24 +553,6 @@ GO
 -------------------------------------------------------
 --------------------- ABM CLIENTE ---------------------
 -------------------------------------------------------
-
-CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
-@username NVARCHAR(50),
-@password NVARCHAR(255), 
-@cant_intentos_fallidos TINYINT
-AS
-BEGIN
-	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
-		BEGIN
-			INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
-			VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
-		END
-	ELSE
-		BEGIN
-			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
-		END
-END
-GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Cliente
 @nombre NVARCHAR(255),
@@ -585,7 +621,95 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Cliente
+-------------------------------------------------------
+--------------------- ABM ROL -------------------------
+-------------------------------------------------------
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Rol
+@nombre NVARCHAR(50),
+@id_rol INT OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO LOS_BORBOTONES.Roles (nombre) VALUES (@nombre);
+
+		SET @id_rol = SCOPE_IDENTITY();
+	END TRY
+	BEGIN CATCH
+		THROW 50001, 'El nombre ya se encuentra en uso', 1
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Agregar_Funcionalidad_Rol
+@id_rol INT,
+@id_funcionalidad INT
+AS
+BEGIN
+	INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_funcionalidad, id_rol) VALUES (@id_funcionalidad, @id_rol);
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Quitar_Funcionalidad_Rol
+@id_rol INT,
+@id_funcionalidad INT
+AS
+BEGIN
+	DELETE FROM LOS_BORBOTONES.FuncionalidadesXRoles
+	WHERE id_funcionalidad = @id_funcionalidad AND id_rol = @id_rol;
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Modificar_Rol
+@id_rol INT,
+@nombre NVARCHAR(50),
+@habilitado BIT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE LOS_BORBOTONES.Roles 
+		SET nombre = @nombre, habilitado = @habilitado -- Activa trigger que saca rol a los usuarios si se deshabilita el rol
+		WHERE id_rol = @id_rol;
+	END TRY
+	BEGIN CATCH
+		THROW 50001, 'El nombre ya se encuentra en uso', 1
+	END CATCH
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Rol
+@id_rol INT
+AS
+BEGIN
+	UPDATE LOS_BORBOTONES.Roles -- Activa trigger que saca rol a los usuarios
+	SET habilitado = 0
+	WHERE id_rol = @id_rol
+END
+GO
+
+-------------------------------------------------------
+--------------------- ABM USUARIO ---------------------
+-------------------------------------------------------
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
+@username NVARCHAR(50),
+@password NVARCHAR(255), 
+@cant_intentos_fallidos TINYINT
+AS
+BEGIN
+	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+		BEGIN
+			INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
+			VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
+		END
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
+		END
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Usuario
 @idUsuario INT
 AS
 BEGIN
@@ -642,6 +766,16 @@ BEGIN
 END
 GO
 
+CREATE TRIGGER LOS_BORBOTONES.TR_Quitar_Rol_Deshabilitado_A_Usuarios ON LOS_BORBOTONES.Roles AFTER UPDATE
+AS
+BEGIN
+	IF (SELECT habilitado FROM inserted) = 0
+	BEGIN
+		DELETE FROM LOS_BORBOTONES.RolesXUsuarios WHERE id_rol = (SELECT id_rol FROM inserted)
+	END
+END
+GO
+
 ------------------------------------------------
 --            INSERTS INICIALES
 ------------------------------------------------
@@ -654,7 +788,6 @@ GO
 
 INSERT INTO LOS_BORBOTONES.Funcionalidades (descripcion) VALUES
 ('ABM de Rol'), -- Administrativo
-('Registro de Usuario'), -- ????????????????????????????????????????????????????????????? TODO: Preguntar
 ('ABM de Clientes'), -- Administrativo
 ('ABM de Proveedor'), -- Administrativo
 ('Carga de crédito'), -- Cliente

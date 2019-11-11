@@ -29,5 +29,11 @@ namespace FrbaOfertas.Clases.Database
                 command.Parameters.AddWithValue(item.Key, item.Value);
             }
         }
+
+        public void RemoveParameters()
+        {
+            parametersMap.Clear();
+            return;
+        }
     }
 }

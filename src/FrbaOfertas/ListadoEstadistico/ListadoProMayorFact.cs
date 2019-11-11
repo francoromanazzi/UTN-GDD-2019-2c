@@ -12,9 +12,16 @@ namespace FrbaOfertas.ListadoEstadistico
 {
     public partial class ListadoProMayorFact : Form
     {
-        public ListadoProMayorFact()
+        public ListadoProMayorFact(int sem, int anio)
         {
             InitializeComponent();
+            año.Text = anio.ToString();
+            semestre.Text = sem.ToString();
+        }
+
+        private void ListadoProMayorFact_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
