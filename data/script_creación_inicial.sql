@@ -995,7 +995,3 @@ GO
 ALTER TABLE LOS_BORBOTONES.Canjes
 ADD CONSTRAINT FK_Canjes_Compras FOREIGN KEY (id_compra) REFERENCES LOS_BORBOTONES.Compras
 GO
-
-select * from LOS_BORBOTONES.Usuarios
-
-select * from LOS_BORBOTONES.RolesXUsuarios
