@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using FrbaOfertas.Clases.Utils.Form;
+using FrbaOfertas.Clases.Database;
+using FrbaOfertas.Clases.Constantes;
+using FrbaOfertas.AbmCliente;
+using FrbaOfertas.RegistroUsuario;
 
 namespace FrbaOfertas.RegistroUsuario
 {
@@ -33,15 +37,71 @@ namespace FrbaOfertas.RegistroUsuario
             NavigableFormUtil.BackwardTo(this, previusForm);
         }
 
-        private void btnCliente_Click(object sender, EventArgs e)
+        private void btnAceptar_Click(object sender, EventArgs e)
         {
-            NavigableFormUtil.ForwardToDifferentWindow(this, new DatosCliente(this));
+            if (this.validarUseryPass())
+            {
+                if (this.comboUserType.Text.Equals("Cliente"))
+                {
+                    NavigableFormUtil.ForwardToDifferentWindow(this, new RegistroAltaCliente(this,txtUserName.Text, txtUserPass.Text));
+                    
+                }
+                else if (this.comboUserType.Text.Equals("Proveedor"))
+                {
+                    //Falta crear el metodo AltaProveedor con su pantalla
+                    // NavigableFormUtil.ForwardToDifferentWindow(this, new AltaProveedor(this));
+                }
+            }
         }
 
-        private void btnProveedor_Click(object sender, EventArgs e)
+       
+        private bool validarUseryPass() // Paso 1
         {
-            NavigableFormUtil.ForwardToDifferentWindow(this, new DatosProveedor(this));
+            if (this.CamposRequeridosNoVacios())
+            {
+                if (this.verificarUsuario())
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
         }
+
+        private bool CamposRequeridosNoVacios() //paso2
+        {
+            if (txtUserName.Text == "" || txtUserPass.Text == "")
+            {
+                MessageBoxUtil.ShowError("Hay campos requeridos incompletos.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool verificarUsuario() //paso3
+        {
+            StoredProcedureParameters parametros = new StoredProcedureParameters()
+                        .AddParameter("@username", txtUserName.Text);
+
+            try
+            {
+                Conexion conexion = new Conexion();
+                conexion.ExecDataTableStoredProcedure(StoredProcedures.VerificarUsername, parametros);
+                MessageBoxUtil.ShowInfo("Nombre de usuario valido");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBoxUtil.ShowError(ex.Message);
+                return false;
+            }
+        }
+
+        
+
+        
       
     }
 }

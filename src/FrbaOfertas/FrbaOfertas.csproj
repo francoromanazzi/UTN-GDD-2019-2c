@@ -209,6 +209,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Clases\Repositorios\RepositorioUsuarios.cs" />
+    <Compile Include="RegistroAltaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistroAltaCliente.Designer.cs">
+      <DependentUpon>RegistroAltaCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegistroUsuario\DatosCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +296,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RegistroAltaCliente.resx">
+      <DependentUpon>RegistroAltaCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RegistroUsuario\DatosCliente.resx">
       <DependentUpon>DatosCliente.cs</DependentUpon>
     </EmbeddedResource>

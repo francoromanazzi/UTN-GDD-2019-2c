@@ -25,5 +25,8 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string AltaProveedor = Schema + "SP_Cargar_Proveedor";
 
+        public const string VerificarUsername = Schema + "SP_Validar_Usuario_Existente";
+        public const string AgregarRolAlUsuario = Schema + "SP_Agregar_Rol_Al_Usuario";
+
     }
 }

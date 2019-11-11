@@ -126,6 +126,14 @@ GO
 IF OBJECT_ID('LOS_BORBOTONES.SP_Alta_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
 GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Validar_Usuario_Existente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Validar_Usuario_Existente
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
+GO
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -594,6 +602,35 @@ BEGIN
 END
 GO
 
+-------------------------------------------------------
+--------------------- REGISTRO DE USUARIO -------------
+-------------------------------------------------------
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Validar_Usuario_Existente
+@username nvarchar(50)
+AS
+BEGIN
+	IF EXISTS (SELECT username FROM LOS_BORBOTONES.Usuarios WHERE username = @username)
+		BEGIN;
+			RAISERROR('El nombre de usuario ya existe',16,1)
+		END;
+	
+	
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
+@id_rol int,
+@username nvarchar(50)
+AS
+BEGIN
+	declare @id_usuario int
+	select @id_usuario = id_usuario from LOS_BORBOTONES.Usuarios where username = @username
+	INSERT INTO LOS_BORBOTONES.RolesXUsuarios (id_rol,id_usuario)
+	values (@id_rol,@id_usuario)
+END
+GO
+
 ------------------------------------------------
 --            TRIGGERS
 ------------------------------------------------
@@ -825,3 +862,7 @@ GO
 ALTER TABLE LOS_BORBOTONES.Canjes
 ADD CONSTRAINT FK_Canjes_Compras FOREIGN KEY (id_compra) REFERENCES LOS_BORBOTONES.Compras
 GO
+
+select * from LOS_BORBOTONES.Usuarios
+
+select * from LOS_BORBOTONES.RolesXUsuarios
