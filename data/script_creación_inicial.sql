@@ -1004,6 +1004,49 @@ GO
 --------------------- FACTURACION AL PROVEEDOR -------------
 ------------------------------------------------------------
 
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Factura
+@id_factura INT OUTPUT,
+@fecha_inicio VARCHAR,
+@fecha_fin VARCHAR,
+@fecha DATETIME,
+@id_proveedor INT
+AS
+BEGIN
+	DECLARE @codigo_oferta NVARCHAR(50), @id_compra INT, @id_cliente INT, @cantidad_unidades INT, @idFactura INT, @importe NUMERIC(18,2) = 0
+	SET @id_factura = SCOPE_IDENTITY()
+	DECLARE C1 CURSOR FOR (SELECT Compras.codigo_oferta, Compras.id_compra, Compras.id_cliente_comprador, Compras.cant_unidades, Compras.fecha, Compras.id_factura
+							FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta
+							WHERE id_proveedor = @id_proveedor AND Compras.fecha BETWEEN CONVERT(datetime2, @fecha_inicio) AND CONVERT(datetime2, @fecha_fin) AND id_factura IS NULL)
+	OPEN C1
+	FETCH NEXT INTO @codigo_oferta, @id_compra, @id_cliente, @cantidad_unidades
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @importe = @importe + ((SELECT precio_en_oferta FROM LOS_BORBOTONES.Ofertas WHERE id_proveedor = @id_proveedor AND codigo_oferta = @codigo_oferta) * @cantidad_unidades)
+		END
+	CLOSE C1
+	DEALLOCATE C1
+	
+	-- Inserto facturas
+	INSERT INTO LOS_BORBOTONES.Facturas VALUES (CONVERT(int,@id_factura), @fecha, @fecha_inicio, @fecha_fin, @importe, @id_proveedor)
+
+	-- Actualizo la compra
+	UPDATE LOS_BORBOTONES.Compras
+	SET id_factura = CONVERT(int,@id_factura)
+	WHERE codigo_oferta = @codigo_oferta AND id_compra = @id_compra
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Mostrar_Listado
+@id_proveedor INT
+AS
+BEGIN
+	SELECT Compras.id_compra, Compras.codigo_oferta 
+	FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta 
+	WHERE Ofertas.id_proveedor = @id_proveedor
+END
+GO
+
+
 ------------------------------------------------
 --            TRIGGERS
 ------------------------------------------------

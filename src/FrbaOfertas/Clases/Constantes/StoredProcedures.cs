@@ -78,6 +78,7 @@ namespace FrbaOfertas.Clases.Constantes
         #region Facturacion al proveedor
 
         public const string CargarFactura = Schema + "SP_Cargar_Factura";
+        public const string MostrarListado = Schema + "SP_Mostrar_Listado";
 
         #endregion
 

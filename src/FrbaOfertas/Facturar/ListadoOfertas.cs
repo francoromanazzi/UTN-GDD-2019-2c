@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 using FrbaOfertas.Clases.Database;
 using FrbaOfertas.Clases.Constantes;
+using FrbaOfertas.Clases.Utils.Form;
 
 namespace FrbaOfertas.Facturar
 {
@@ -33,17 +34,23 @@ namespace FrbaOfertas.Facturar
         private void ListadoOfertas_Load(object sender, EventArgs e)
         {
             label1.Text = "Proveedor ID: " + proveedor;
+            inicio.Text = "Fecha de inicio: " + fechaInicio;
+            fin.Text = "Fecha de fin: " + fechaFin;
+
             try
             {
-                string query = "SELECT Compras.id_compra, Compras.codigo_oferta FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta WHERE Ofertas.id_proveedor = "
-                    + proveedor + "AND Compras.fecha BETWEEN " + fechaInicio + " AND "+ fechaFin  + " ";
-                DataTable dat = new Conexion().ExecDataTableSqlQuery(query);
+                StoredProcedureParameters listadoParametros = new StoredProcedureParameters()
+                    .AddParameter("@id_proveedor", proveedor)
+                    .AddParameter("@fechaInicio", DateTime.Parse(fechaInicio))
+                    .AddParameter("@fechaFin", DateTime.Parse(fechaFin));
+
+                DataTable dat = new Conexion().ExecDataTableStoredProcedure(StoredProcedures.MostrarListado, listadoParametros);
                 dataGridView1.DataSource = dat;
                 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBoxUtil.ShowError(ex.Message);
             }
         }
 

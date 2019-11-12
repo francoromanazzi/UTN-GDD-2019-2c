@@ -29,14 +29,18 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.fin = new System.Windows.Forms.Label();
+            this.inicio = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.inicio);
+            this.groupBox1.Controls.Add(this.fin);
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
@@ -45,22 +49,40 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(27, 91);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(388, 257);
+            this.dataGridView1.TabIndex = 1;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(24, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Proveedor";
+            this.label1.Text = "Inicio";
             // 
-            // dataGridView1
+            // fin
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(27, 65);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(388, 283);
-            this.dataGridView1.TabIndex = 1;
+            this.fin.AutoSize = true;
+            this.fin.Location = new System.Drawing.Point(203, 57);
+            this.fin.Name = "fin";
+            this.fin.Size = new System.Drawing.Size(21, 13);
+            this.fin.TabIndex = 3;
+            this.fin.Text = "Fin";
+            // 
+            // inicio
+            // 
+            this.inicio.AutoSize = true;
+            this.inicio.Location = new System.Drawing.Point(24, 57);
+            this.inicio.Name = "inicio";
+            this.inicio.Size = new System.Drawing.Size(32, 13);
+            this.inicio.TabIndex = 4;
+            this.inicio.Text = "Inicio";
             // 
             // ListadoOfertas
             // 
@@ -83,5 +105,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label inicio;
+        private System.Windows.Forms.Label fin;
     }
 }
