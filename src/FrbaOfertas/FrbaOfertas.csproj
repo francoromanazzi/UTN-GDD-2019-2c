@@ -353,6 +353,9 @@
     <EmbeddedResource Include="ListadoEstadistico\ListadoProMayorDesc.resx">
       <DependentUpon>ListadoProMayorDesc.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\ListadoProMayorFact.resx">
+      <DependentUpon>ListadoProMayorFact.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>

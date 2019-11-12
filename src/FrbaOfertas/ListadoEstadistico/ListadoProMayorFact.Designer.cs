@@ -32,6 +32,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.semestre = new System.Windows.Forms.Label();
+            this.tabla = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.tabla)).BeginInit();
             this.SuspendLayout();
             // 
             // año
@@ -70,11 +72,20 @@
             this.semestre.TabIndex = 3;
             this.semestre.Text = "el semestre seleccionado";
             // 
+            // tabla
+            // 
+            this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabla.Location = new System.Drawing.Point(93, 121);
+            this.tabla.Name = "tabla";
+            this.tabla.Size = new System.Drawing.Size(305, 150);
+            this.tabla.TabIndex = 4;
+            // 
             // ListadoProMayorFact
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(494, 304);
+            this.Controls.Add(this.tabla);
             this.Controls.Add(this.semestre);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -82,6 +93,7 @@
             this.Name = "ListadoProMayorFact";
             this.Text = "ListadoProMayorFact";
             this.Load += new System.EventHandler(this.ListadoProMayorFact_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.tabla)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,5 +105,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label semestre;
+        private System.Windows.Forms.DataGridView tabla;
     }
 }

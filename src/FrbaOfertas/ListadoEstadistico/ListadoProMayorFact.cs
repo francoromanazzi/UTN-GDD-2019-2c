@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaOfertas.Clases.Utils.Form;
+using FrbaOfertas.Clases.Database;
+using FrbaOfertas.Clases.Constantes;
+
 
 namespace FrbaOfertas.ListadoEstadistico
 {
@@ -21,7 +25,19 @@ namespace FrbaOfertas.ListadoEstadistico
 
         private void ListadoProMayorFact_Load(object sender, EventArgs e)
         {
-
+            StoredProcedureParameters listadoProMayorFact = new StoredProcedureParameters()
+            .AddParameter("@anio", año.Text)
+            .AddParameter("@semestre", semestre.Text);
+            try
+            {
+                Conexion con = new Conexion();
+                DataTable arr = con.ExecDataTableStoredProcedure(StoredProcedures.ListProveMayFact, listadoProMayorFact);
+                tabla.DataSource = arr;
+            }
+            catch (Exception ex)
+            {
+                MessageBoxUtil.ShowError(ex.Message);
+            }
         }
     }
 }

@@ -33,8 +33,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabla = new System.Windows.Forms.DataGridView();
-            this.id_proveedor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.may_desc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.tabla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,27 +77,12 @@
             this.tabla.AllowUserToAddRows = false;
             this.tabla.AllowUserToDeleteRows = false;
             this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabla.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.id_proveedor,
-            this.may_desc});
             this.tabla.Location = new System.Drawing.Point(118, 93);
             this.tabla.Name = "tabla";
             this.tabla.ReadOnly = true;
             this.tabla.Size = new System.Drawing.Size(245, 167);
             this.tabla.TabIndex = 4;
             this.tabla.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tabla_CellContentClick);
-            // 
-            // id_proveedor
-            // 
-            this.id_proveedor.HeaderText = "Id Proveedor";
-            this.id_proveedor.Name = "id_proveedor";
-            this.id_proveedor.ReadOnly = true;
-            // 
-            // may_desc
-            // 
-            this.may_desc.HeaderText = "Mayor Descuento";
-            this.may_desc.Name = "may_desc";
-            this.may_desc.ReadOnly = true;
             // 
             // ListadoProMayorDesc
             // 
@@ -127,7 +110,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView tabla;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id_proveedor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn may_desc;
     }
 }
