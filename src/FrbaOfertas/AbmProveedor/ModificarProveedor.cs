@@ -80,5 +80,10 @@ namespace FrbaOfertas.AbmProveedor
         {
             this.brnBuscar_Click(null, null);
         }
+
+        private void ModificarProveedor_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -72,6 +72,10 @@ IF OBJECT_ID('LOS_BORBOTONES.FN_Hash_Password', 'FN') IS NOT NULL
 DROP FUNCTION LOS_BORBOTONES.FN_Hash_Password
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.FN_SemestreFecha', 'FN') IS NOT NULL
+DROP FUNCTION LOS_BORBOTONES.FN_SemestreFecha
+GO
+
 ------------------------------------------------
 --            DROP STORED PROCEDURES
 ------------------------------------------------
@@ -177,6 +181,14 @@ GO
 
 IF OBJECT_ID('LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_ProveedoresMayorDescuento', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorDescuento
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_ProveedoresMayorFacturacion', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorFacturacion
 GO
 
 ------------------------------------------------
@@ -418,6 +430,19 @@ BEGIN
 END
 GO
 
+CREATE FUNCTION LOS_BORBOTONES.FN_SemestreFecha(@fecha DATE)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @semestre int;
+	IF ( MONTH(@fecha)<= 6 )
+		SET @semestre = 1
+	ELSE
+		SET @semestre = 2
+	RETURN @semestre;
+END
+GO
+
 ------------------------------------------------
 --            PROCEDURES
 ------------------------------------------------
@@ -593,6 +618,28 @@ BEGIN
 		SET credito = credito + @monto
 		WHERE id_cliente = @id_cliente;
 	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorDescuento (@anio int,@semestre int) AS
+BEGIN
+	select top 5 p.id_proveedor, Max(o.precio_de_lista-o.precio_en_oferta / o.precio_de_lista ) as Porcentaje
+	from LOS_BORBOTONES.Proveedores p 
+	left join LOS_BORBOTONES.Ofertas o on (p.id_proveedor = o.id_proveedor)
+	where year(o.fecha_publicacion) = @anio AND LOS_BORBOTONES.FN_SemestreFecha(o.fecha_publicacion) = @semestre
+	group by p.id_proveedor
+	order by 2 desc
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorFacturacion (@anio int,@semestre int) AS
+BEGIN
+	select top 5 id_proveedor, sum(precio_en_oferta*cant_unidades) as Facturacion 
+	from LOS_BORBOTONES.Ofertas o 
+	JOIN LOS_BORBOTONES.Compras c on (o.codigo_oferta = c.codigo_oferta)
+	where year(c.fecha) = @anio AND LOS_BORBOTONES.FN_SemestreFecha(c.fecha) = @semestre
+	group by id_proveedor
+	order by 2 desc
 END
 GO
 
