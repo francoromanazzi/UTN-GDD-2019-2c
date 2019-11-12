@@ -308,6 +308,9 @@
     <EmbeddedResource Include="CargaCredito\CargarTarjeta.resx">
       <DependentUpon>CargarTarjeta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOferta\ComprarOferta.resx">
+      <DependentUpon>ComprarOferta.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\CrearOferta.resx">
       <DependentUpon>CrearOferta.cs</DependentUpon>
     </EmbeddedResource>
