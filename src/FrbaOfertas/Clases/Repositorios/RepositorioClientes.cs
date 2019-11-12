@@ -21,7 +21,7 @@ namespace FrbaOfertas.Clases.Repositorios
         public DataTable BuscarCliente(string nombre, string apellido, string dni, string email)
         {
             // Query principal
-            string query = "SELECT nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento FROM LOS_BORBOTONES.Clientes WHERE ";
+            string query = "SELECT nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento, id_cliente FROM LOS_BORBOTONES.Clientes WHERE ";
             //Lista de Condiciones
             List<string> condiciones = new List<string>();
 

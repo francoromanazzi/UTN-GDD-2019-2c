@@ -6,6 +6,7 @@ using FrbaOfertas.Clases.Utils.Form;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -36,16 +37,19 @@ namespace FrbaOfertas.EntregarOferta
 
         private void dgvCompras_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            int idCompra = Int32.Parse(dgvCompras.CurrentRow.Cells["id_compra"].Value.ToString());
 
+            NavigableFormUtil.ForwardToDifferentWindow(this, new SeleccionarCliente(this, idCompra));
         }
 
-        private void LlenarTablaOfertas()
+        public void LlenarTablaOfertas()
         {
             DataTable dt = new DataTable();
             try
             {
                 StoredProcedureParameters inputParameters = new StoredProcedureParameters()
-                        .AddParameter("@id_proveedor", new RepositorioProveedores().ObtenerIdProveedorDeUsuario(Session.Instance.IdUsuario));
+                        .AddParameter("@id_proveedor", new RepositorioProveedores().ObtenerIdProveedorDeUsuario(Session.Instance.IdUsuario))
+                        .AddParameter("@fecha_actual", DateTime.Parse(ConfigurationManager.AppSettings["FechaSistema"]));
 
                 dt = new Conexion().ExecDataTableStoredProcedure(StoredProcedures.MostrarComprasCanjeablesDelProveedor, inputParameters);
 

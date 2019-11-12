@@ -43,6 +43,7 @@ namespace FrbaOfertas.AbmCliente
                     {
                         DataTable dat = new RepositorioClientes().BuscarCliente(Nombre.Text, Apellido.Text, DNI.Text, Email.Text);
                         grillaClientes.DataSource = dat;
+                        grillaClientes.Columns["id_cliente"].Visible = false;
                     }
                     catch (Exception ex)
                     {

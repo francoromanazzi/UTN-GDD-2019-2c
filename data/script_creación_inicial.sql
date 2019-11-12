@@ -191,6 +191,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_ProveedoresMayorFacturacion', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorFacturacion
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Canjear_Compra', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Canjear_Compra
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -536,14 +540,58 @@ END
 GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor
-@id_proveedor INT
+@id_proveedor INT,
+@fecha_actual DATETIME
 AS
 BEGIN
 	SELECT id_compra, id_cliente_comprador, c.codigo_oferta, cant_unidades, fecha
 	FROM LOS_BORBOTONES.Compras c
 	JOIN LOS_BORBOTONES.Ofertas o ON c.codigo_oferta = o.codigo_oferta
 	WHERE o.id_proveedor = @id_proveedor
-	AND id_compra NOT IN (SELECT id_compra FROM LOS_BORBOTONES.Canjes);
+	AND id_compra NOT IN (SELECT id_compra FROM LOS_BORBOTONES.Canjes)
+	AND @fecha_actual BETWEEN fecha_publicacion AND fecha_vencimiento;
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Canjear_Compra
+@id_proveedor INT,
+@id_cliente INT,
+@id_compra INT,
+@fecha_actual DATETIME
+AS
+BEGIN
+	IF(NOT EXISTS(SELECT 1 FROM LOS_BORBOTONES.Canjes WHERE id_compra = @id_compra))
+		BEGIN
+			DECLARE @fecha_venc DATETIME;
+			DECLARE @fecha_publ DATETIME;
+			SELECT @fecha_venc = fecha_vencimiento, @fecha_publ = fecha_publicacion
+			FROM LOS_BORBOTONES.Compras c
+			JOIN LOS_BORBOTONES.Ofertas o
+			ON c.codigo_oferta = o.codigo_oferta
+			WHERE c.id_compra = @id_compra;
+
+				
+			IF(@fecha_actual BETWEEN @fecha_publ AND @fecha_venc)
+				BEGIN	
+					IF(@id_proveedor = (SELECT id_proveedor FROM LOS_BORBOTONES.Compras c JOIN LOS_BORBOTONES.Ofertas o ON c.codigo_oferta = o.codigo_oferta WHERE c.id_compra = @id_compra))
+						BEGIN
+							INSERT INTO LOS_BORBOTONES.Canjes (id_cliente_canjeador, id_compra, fecha)
+							VALUES (@id_cliente, @id_compra, @fecha_actual)
+						END
+					ELSE
+						BEGIN;
+							THROW 50003, 'El proveedor que creo la oferta es otro', 1
+						END;	
+				END
+			ELSE
+				BEGIN;
+					THROW 50002, 'La oferta ya se venció', 1
+				END;			
+		END
+	ELSE
+		BEGIN;
+			THROW 50001, 'La compra ya fue canjeada', 1
+		END;
 END
 GO
 

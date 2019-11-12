@@ -194,6 +194,12 @@
     <Compile Include="EntregarOferta\EntregarOferta.Designer.cs">
       <DependentUpon>EntregarOferta.cs</DependentUpon>
     </Compile>
+    <Compile Include="EntregarOferta\SeleccionarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EntregarOferta\SeleccionarCliente.Designer.cs">
+      <DependentUpon>SeleccionarCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Facturar\Facturar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -322,6 +328,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\SeleccionarProveedor.resx">
       <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntregarOferta\EntregarOferta.resx">
+      <DependentUpon>EntregarOferta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntregarOferta\SeleccionarCliente.resx">
+      <DependentUpon>SeleccionarCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico.resx">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
