@@ -75,5 +75,11 @@ namespace FrbaOfertas.Clases.Constantes
         public const string ListProveMayFact = Schema + "SP_ProveedoresMayorFacturacion";
         #endregion
 
+        #region Facturacion al proveedor
+
+        public const string CargarFactura = Schema + "SP_Cargar_Factura";
+
+        #endregion
+
     }
 }

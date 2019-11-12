@@ -195,6 +195,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Canjear_Compra', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Canjear_Compra
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Factura', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Factura
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -995,6 +999,10 @@ BEGIN
 	values (@id_rol,@id_usuario)
 END
 GO
+
+------------------------------------------------------------
+--------------------- FACTURACION AL PROVEEDOR -------------
+------------------------------------------------------------
 
 ------------------------------------------------
 --            TRIGGERS
