@@ -930,7 +930,7 @@ BEGIN
 	IF(EXISTS(SELECT * FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = @idUsuario))
 		BEGIN	
 			UPDATE LOS_BORBOTONES.Usuarios
-			SET habilitado = 0
+			SET habilitado = 0, motivo_deshabilitacion = 'Admin'
 			WHERE id_usuario = @idUsuario
 		END
 	ELSE
