@@ -48,8 +48,7 @@ namespace FrbaOfertas.RegistroUsuario
                 }
                 else if (this.comboUserType.Text.Equals("Proveedor"))
                 {
-                    //Falta crear el metodo AltaProveedor con su pantalla
-                    // NavigableFormUtil.ForwardToDifferentWindow(this, new AltaProveedor(this));
+                    NavigableFormUtil.ForwardToDifferentWindow(this,new RegistroAltaProveedor(this,txtUserName.Text,txtUserPass.Text));
                 }
             }
         }
@@ -80,7 +79,7 @@ namespace FrbaOfertas.RegistroUsuario
             return true;
         }
 
-        private bool verificarUsuario() //paso3
+        private bool verificarUsuario() //paso3 Verifico si existe ese nombre de usuario
         {
             StoredProcedureParameters parametros = new StoredProcedureParameters()
                         .AddParameter("@username", txtUserName.Text);
