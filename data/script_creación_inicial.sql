@@ -159,7 +159,6 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
 GO
 
-<<<<<<< HEAD
 IF OBJECT_ID('LOS_BORBOTONES.SP_Mostrar_Ofertas_Validas_Para_Fecha', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Mostrar_Ofertas_Validas_Para_Fecha
 GO
