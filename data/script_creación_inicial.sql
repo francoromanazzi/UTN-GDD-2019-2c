@@ -159,6 +159,22 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Agregar_Rol_Al_Usuario
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Mostrar_Ofertas_Validas_Para_Fecha', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Mostrar_Ofertas_Validas_Para_Fecha
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Comprar_Oferta', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Comprar_Oferta
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cargar_Credito', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+GO
+
+IF OBJECT_ID('LOS_BORBOTONES.SP_Registro_Usuario_Proveedor', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -481,6 +497,89 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE LOS_BORBOTONES.SP_Mostrar_Ofertas_Validas_Para_Fecha
+@target_date DATETIME
+AS
+BEGIN
+	SELECT id_proveedor, codigo_oferta, descripcion, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente
+	FROM LOS_BORBOTONES.Ofertas WHERE @target_date BETWEEN fecha_publicacion AND fecha_vencimiento
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Comprar_Oferta
+@id_cliente_comprador INT,
+@codigo_oferta NVARCHAR(50),
+@cant_unidades NUMERIC(18,0),
+@fecha DATETIME
+AS
+BEGIN
+	DECLARE @precio_en_oferta NUMERIC(18,2);
+	DECLARE @max_unidades_por_cliente NUMERIC(18,0);
+	DECLARE @cant_disponible NUMERIC(18,0);
+
+	SELECT @precio_en_oferta = precio_en_oferta, @max_unidades_por_cliente = max_unidades_por_cliente, @cant_disponible = cant_disponible FROM LOS_BORBOTONES.Ofertas WHERE codigo_oferta = @codigo_oferta;
+
+	DECLARE @credito NUMERIC(18,2);
+	SET @credito = (SELECT credito FROM LOS_BORBOTONES.Clientes WHERE id_cliente = @id_cliente_comprador); 
+
+	IF (@credito >= @precio_en_oferta * @cant_unidades)
+		BEGIN
+			DECLARE @unidades_compradas_por_el_cliente NUMERIC(18,0)
+			SET @unidades_compradas_por_el_cliente = COALESCE((SELECT SUM(cant_unidades) FROM LOS_BORBOTONES.Compras WHERE codigo_oferta = @codigo_oferta AND id_cliente_comprador = @id_cliente_comprador), 0);
+
+			IF (@unidades_compradas_por_el_cliente + @cant_unidades <= @max_unidades_por_cliente)
+				BEGIN
+					IF(@cant_disponible >= @cant_unidades)
+						BEGIN
+							BEGIN TRANSACTION
+								INSERT INTO LOS_BORBOTONES.Compras (id_cliente_comprador, codigo_oferta, cant_unidades, fecha)
+								VALUES (@id_cliente_comprador, @codigo_oferta, @cant_unidades, @fecha);
+
+								UPDATE LOS_BORBOTONES.Clientes
+								SET credito = credito - @precio_en_oferta * @cant_unidades
+								WHERE id_cliente = @id_cliente_comprador;
+
+								UPDATE LOS_BORBOTONES.Ofertas
+								SET cant_disponible = cant_disponible - @cant_unidades
+								WHERE codigo_oferta = @codigo_oferta;
+							COMMIT TRANSACTION
+						END
+					ELSE
+						BEGIN;
+							THROW 50003, 'No hay stock disponible', 1
+						END;
+				END
+			ELSE
+				BEGIN;
+					THROW 50002, 'Máximo de compras por cliente superado', 1
+				END;
+		END
+	ELSE
+		BEGIN;
+			THROW 50001, 'Crédito insuficiente', 1
+		END;
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Credito
+@id_cliente INT,
+@fecha DATETIME,
+@medio_pago NVARCHAR(30),
+@monto INT,
+@id_tarjeta INT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		INSERT INTO LOS_BORBOTONES.Cargas (id_cliente, fecha, monto, medio_pago, id_tarjeta)
+		VALUES (@id_cliente, @fecha, @monto, @medio_pago, @id_tarjeta);
+
+		UPDATE LOS_BORBOTONES.Clientes
+		SET credito = credito + @monto
+		WHERE id_cliente = @id_cliente;
+	COMMIT TRANSACTION
+END
+GO
+
 -------------------------------------------------------
 --------------------- ABM PROVEEDOR -------------------
 -------------------------------------------------------
@@ -723,6 +822,37 @@ BEGIN
 		BEGIN
 			RAISERROR('No existe el usuario',16,1)
 		END
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
+@username nvarchar(50),
+@razon_social NVARCHAR(100),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@ciudad NVARCHAR(255),
+@cuit NVARCHAR(20),
+@rubro NVARCHAR(100),
+@nombre_contacto NVARCHAR(255)
+as
+BEGIN
+	DECLARE @id_usuario int
+	SELECT @id_usuario = id_usuario from Usuarios where username = @username
+	BEGIN TRY
+
+		INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario,razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
+		VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+	END TRY
+	BEGIN CATCH
+		BEGIN;
+			THROW 50001, 'El Usuario/Razón social no es único', 1
+		END;
+	END CATCH
 END
 GO
 

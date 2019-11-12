@@ -13,8 +13,15 @@ namespace FrbaOfertas.Clases.Constantes
         public const string ValidarLogin = Schema + "SP_Validar_Login";
         public const string ValidarLoginOutput = "@id_usuario";
 
+        public const string CargarCredito = Schema + "SP_Cargar_Credito";
+
         public const string GuardarOferta = Schema + "SP_Guardar_Oferta";
 
+        public const string ComprarOferta = Schema + "SP_Comprar_Oferta";
+
+        public const string MostrarOfertasValidasParaUnaFecha = Schema + "SP_Mostrar_Ofertas_Validas_Para_Fecha";
+
+        
         #region ABM Cliente
 
         public const string AltaCliente = Schema + "SP_Cargar_Cliente";
@@ -39,6 +46,8 @@ namespace FrbaOfertas.Clases.Constantes
         public const string AltaProveedor = Schema + "SP_Cargar_Proveedor";
 
         public const string ModificarProveedor = Schema + "SP_Modificar_Proveedor";
+
+        public const string AltaProveedorDesdeRegistroUsuario = Schema + "SP_Registro_Usuario_Proveedor";
 
         #endregion
 

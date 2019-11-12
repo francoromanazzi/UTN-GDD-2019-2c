@@ -1,4 +1,5 @@
-﻿using FrbaOfertas.Clases.Database;
+﻿using FrbaOfertas.Clases.Constantes;
+using FrbaOfertas.Clases.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,20 @@ namespace FrbaOfertas.Clases.Repositorios
         {
             int idCliente = new RepositorioClientes().ObtenerIdClienteDeUsuario(Session.Session.Instance.IdUsuario);
 
-            string fecha = System.Configuration.ConfigurationManager.AppSettings["FechaSistema"];
-            string fechaQuery = "CONVERT(DATETIME, '" + fecha + "', 121)";
+            DateTime fecha = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["FechaSistema"]);
 
-            string idTarjetaQuery = idTarjeta != -1 ? idTarjeta.ToString() : "NULL";
+            StoredProcedureParameters parametros = new StoredProcedureParameters()
+                .AddParameter("@id_cliente", idCliente)
+                .AddParameter("@fecha", fecha)
+                .AddParameter("@medio_pago", medioPago)
+                .AddParameter("@monto", monto);
 
-            new Conexion().ExecSqlQuery("INSERT INTO LOS_BORBOTONES.Cargas " +
-                        "(id_cliente, fecha, medio_pago, monto, id_tarjeta) " +
-                        "VALUES " +
-                        "(" + idCliente + ", " + fechaQuery + ", " + "'" + medioPago + "'" + ", " + monto + ", " + idTarjetaQuery + ")" +
-                        ";"
-                        );
+            if (idTarjeta != -1)
+                parametros.AddParameter("@id_tarjeta", idTarjeta);
+            else
+                parametros.AddParameter("@id_tarjeta", DBNull.Value);
+
+            new Conexion().ExecStoredProcedure(StoredProcedures.CargarCredito, parametros);
         }
     }
 }
