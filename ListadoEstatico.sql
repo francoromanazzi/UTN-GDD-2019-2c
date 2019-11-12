@@ -17,9 +17,9 @@ DROP FUNCTION LOS_BORBOTONES.semestreFecha;
 
 
 --Top 5 mejores ofertas
-DROP PROCEDURE ProveedoresMayorDescuento;
+DROP PROCEDURE SP_ProveedoresMayorDescuento;
 go
-CREATE PROCEDURE ProveedoresMayorDescuento (@anio int,@semestre int) AS
+CREATE PROCEDURE SP_ProveedoresMayorDescuento (@anio int,@semestre int) AS
 BEGIN
 	select top 5 p.id_proveedor, Max(o.precio_de_lista-o.precio_en_oferta / o.precio_de_lista ) as Porcentaje
 	from LOS_BORBOTONES.Proveedores p 
@@ -29,15 +29,15 @@ BEGIN
 	order by 2 desc
 END
 go
-execute ProveedoresMayorDescuento 2020, 1
-execute ProveedoresMayorDescuento 2020, 2
+execute SP_ProveedoresMayorDescuento 2020, 1
+execute SP_ProveedoresMayorDescuento 2020, 2
 go
 
 
 --Top 5 Mayor Facturacion
-DROP PROCEDURE ProveedoresMayorFacturacion;
+DROP PROCEDURE SP_ProveedoresMayorFacturacion;
 go
-CREATE PROCEDURE ProveedoresMayorFacturacion (@anio int,@semestre int) AS
+CREATE PROCEDURE SP_ProveedoresMayorFacturacion (@anio int,@semestre int) AS
 BEGIN
 	select top 5 id_proveedor, sum(precio_en_oferta*cant_unidades) as Facturacion 
 	from LOS_BORBOTONES.Ofertas o 
@@ -47,9 +47,9 @@ BEGIN
 	order by 2 desc
 END
 go
-execute ProveedoresMayorFacturacion 2020, 1
-execute ProveedoresMayorFacturacion 2020, 2
-
+execute SP_ProveedoresMayorFacturacion 2020, 1
+execute SP_ProveedoresMayorFacturacion 2020, 2
+---------------------------------------------------------------
 USE GD2C2019;  
 GO  
 SELECT name AS object_name   

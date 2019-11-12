@@ -57,6 +57,11 @@ namespace FrbaOfertas.Clases.Constantes
 
         #endregion
 
+        #region Listado estatico
+
+        public const string ListProveMayDesc = Schema + "SP_ProveedoresMayorDescuento";
+        public const string ListProveMayFact = Schema + "SP_ProveedoresMayorFacturacion";
+        #endregion
 
     }
 }
