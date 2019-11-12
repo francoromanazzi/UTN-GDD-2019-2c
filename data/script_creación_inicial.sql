@@ -175,6 +175,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Registro_Usuario_Proveedor', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -503,6 +507,18 @@ AS
 BEGIN
 	SELECT id_proveedor, codigo_oferta, descripcion, fecha_publicacion, fecha_vencimiento, precio_en_oferta, precio_de_lista, cant_disponible, max_unidades_por_cliente
 	FROM LOS_BORBOTONES.Ofertas WHERE @target_date BETWEEN fecha_publicacion AND fecha_vencimiento
+END
+GO
+
+CREATE PROCEDURE LOS_BORBOTONES.SP_Mostrar_Compras_Canjeables_Del_Proveedor
+@id_proveedor INT
+AS
+BEGIN
+	SELECT id_compra, id_cliente_comprador, c.codigo_oferta, cant_unidades, fecha
+	FROM LOS_BORBOTONES.Compras c
+	JOIN LOS_BORBOTONES.Ofertas o ON c.codigo_oferta = o.codigo_oferta
+	WHERE o.id_proveedor = @id_proveedor
+	AND id_compra NOT IN (SELECT id_compra FROM LOS_BORBOTONES.Canjes);
 END
 GO
 

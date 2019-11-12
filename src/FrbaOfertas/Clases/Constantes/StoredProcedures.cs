@@ -21,6 +21,7 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string MostrarOfertasValidasParaUnaFecha = Schema + "SP_Mostrar_Ofertas_Validas_Para_Fecha";
 
+        public const string MostrarComprasCanjeablesDelProveedor = Schema + "SP_Mostrar_Compras_Canjeables_Del_Proveedor";
         
         #region ABM Cliente
 
