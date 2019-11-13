@@ -89,7 +89,14 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
                 case 9:
                     return new ListadoEstadistico.ListadoEstadistico(this);
                 case 10:
-                    return new RegistroUsuario.ModificarPasswordUsuario(this);
+                    if (rolesUsuario.Any(rol => rol.Nombre == "Administrativo" && rol.Habilitado))
+                    {
+                        return new RegistroUsuario.SeleccionarUsuarioACambiarPassword(this);
+                    }
+                    else
+                    {
+                        return new RegistroUsuario.ModificarPasswordUsuario(this);
+                    }
                 case 11:
                     return new DeshabilitarUsuario.DeshabilitarUsuario(this);
                 default:
