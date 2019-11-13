@@ -203,6 +203,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Mostrar_Listado', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Mostrar_Listado
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Cambiar_Password_Usuario', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Cambiar_Password_Usuario
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -1004,6 +1008,23 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE LOS_BORBOTONES.SP_Cambiar_Password_Usuario
+@id_usuario int,
+@password nvarchar(255)
+as
+BEGIN
+	declare @new_password nvarchar(255)
+	set @new_password = LOS_BORBOTONES.FN_Hash_Password (@password)
+	BEGIN TRY
+		UPDATE LOS_BORBOTONES.Usuarios 
+		SET password = @new_password
+		WHERE id_usuario = @id_usuario;
+	END TRY
+	BEGIN CATCH
+		THROW 50001, 'El usuario no existe', 1
+	END CATCH
+END
+GO
 ------------------------------------------------------------
 --------------------- FACTURACION AL PROVEEDOR -------------
 ------------------------------------------------------------
@@ -1103,20 +1124,24 @@ INSERT INTO LOS_BORBOTONES.Funcionalidades (descripcion) VALUES
 ('Comprar oferta'), -- Cliente
 ('Entrega/Consumo de Oferta'), -- Proveedor
 ('Facturación a Proveedor'), -- Administrativo
-('Listado Estadístico') -- Administrativo
+('Listado Estadístico'), -- Administrativo
+('Cambiar Contraseña') -- Usuario (Cliente y Proveedor)
 GO
 
 INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_rol, id_funcionalidad) VALUES
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Carga de crédito')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Comprar oferta')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Cliente'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Cambiar Contraseña')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Entrega/Consumo de Oferta')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Proveedor'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Cambiar Contraseña')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Rol')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Clientes')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='ABM de Proveedor')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Facturación a Proveedor')),
-((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Listado Estadístico'))
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Listado Estadístico')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Cambiar Contraseña'))
 GO
 
 -- Creo usuario administrador
