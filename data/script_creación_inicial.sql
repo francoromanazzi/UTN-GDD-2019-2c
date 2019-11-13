@@ -679,7 +679,7 @@ GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_ProveedoresMayorDescuento (@anio int,@semestre int) AS
 BEGIN
-	select top 5 p.id_proveedor, Max(o.precio_de_lista-o.precio_en_oferta / o.precio_de_lista ) as Porcentaje
+	select top 5 p.id_proveedor, Max((o.precio_de_lista - o.precio_en_oferta) / o.precio_de_lista ) as Porcentaje
 	from LOS_BORBOTONES.Proveedores p 
 	left join LOS_BORBOTONES.Ofertas o on (p.id_proveedor = o.id_proveedor)
 	where year(o.fecha_publicacion) = @anio AND LOS_BORBOTONES.FN_SemestreFecha(o.fecha_publicacion) = @semestre
