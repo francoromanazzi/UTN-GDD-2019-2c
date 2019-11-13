@@ -188,6 +188,12 @@
     <Compile Include="CrearOferta\SeleccionarProveedor.Designer.cs">
       <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeshabilitarUsuario\DeshabilitarUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeshabilitarUsuario\DeshabilitarUsuario.Designer.cs">
+      <DependentUpon>DeshabilitarUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="EntregarOferta\EntregarOferta.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -328,6 +334,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\SeleccionarProveedor.resx">
       <DependentUpon>SeleccionarProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeshabilitarUsuario\DeshabilitarUsuario.resx">
+      <DependentUpon>DeshabilitarUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EntregarOferta\EntregarOferta.resx">
       <DependentUpon>EntregarOferta.cs</DependentUpon>

@@ -1207,7 +1207,8 @@ INSERT INTO LOS_BORBOTONES.Funcionalidades (descripcion) VALUES
 ('Entrega/Consumo de Oferta'), -- Proveedor
 ('Facturación a Proveedor'), -- Administrativo
 ('Listado Estadístico'), -- Administrativo
-('Cambiar Contraseña') -- Usuario (Cliente y Proveedor)
+('Cambiar Contraseña'), -- Usuario (Cliente y Proveedor)
+('Deshabilitar usuario') -- Administrativo
 GO
 
 INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_rol, id_funcionalidad) VALUES
@@ -1223,7 +1224,8 @@ INSERT INTO LOS_BORBOTONES.FuncionalidadesXRoles (id_rol, id_funcionalidad) VALU
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Confección y publicación de Ofertas')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Facturación a Proveedor')),
 ((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Listado Estadístico')),
-((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Cambiar Contraseña'))
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Cambiar Contraseña')),
+((SELECT id_rol FROM LOS_BORBOTONES.Roles WHERE nombre='Administrativo'), (SELECT id_funcionalidad FROM LOS_BORBOTONES.Funcionalidades WHERE descripcion='Deshabilitar usuario'))
 GO
 
 -- Creo usuario administrador

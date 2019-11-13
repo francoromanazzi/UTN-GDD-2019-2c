@@ -90,6 +90,8 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
                     return new ListadoEstadistico.ListadoEstadistico(this);
                 case 10:
                     return new RegistroUsuario.ModificarPasswordUsuario(this);
+                case 11:
+                    return new DeshabilitarUsuario.DeshabilitarUsuario(this);
                 default:
                     return this;
             }
