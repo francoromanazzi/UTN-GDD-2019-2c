@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using FrbaOfertas.Clases.Utils.Form;
 using FrbaOfertas.Clases.Database;
 using FrbaOfertas.Clases.Constantes;
+using FrbaOfertas.Clases.Session;
+using FrbaOfertas.Clases.Repositorios;
 
 namespace FrbaOfertas
 {
@@ -72,8 +74,7 @@ namespace FrbaOfertas
                         .AddParameter("@direccion", Direccion.Text)
                         .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text))
                         .AddParameter("@username", username)
-                        .AddParameter("@password", password)
-                        .AddParameter("@cant_intentos_fallidos", 0);
+                        .AddParameter("@password", password);
                     // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
                     // Piso
                     if (Piso.Text == "")
@@ -117,11 +118,15 @@ namespace FrbaOfertas
                     try
                     {
                         // Impacto en la base
-                        con.ExecDataTableStoredProcedure(StoredProcedures.AltaClienteDesdeRegistroUsuario, parametros);
+                        int id_usuario = con.ExecSingleOutputStoredProcedure<int>(StoredProcedures.AltaClienteDesdeRegistroUsuario, parametros, "id_usuario");
                         MessageBoxUtil.ShowInfo("Cliente generado con exito");
                         con.ExecDataTableStoredProcedure(StoredProcedures.AgregarRolAlUsuario, parametrosUsuarioRol);
                         MessageBoxUtil.ShowInfo("Rol asignado con exito");
-                        NavigableFormUtil.BackwardTo(this, previousForm);
+
+                        // Logueo al usuario
+                        Session.Instance.OpenSession(id_usuario);
+
+                        NavigableFormUtil.BackwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(new Login.Login(), new RepositorioRoles().ObtenerRolesDeUsuario(id_usuario)));
                     }
                     catch (Exception ex)
                     {

@@ -927,7 +927,7 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Alta_Usuario
 @cant_intentos_fallidos TINYINT
 AS
 BEGIN
-	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+	IF(NOT EXISTS (SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
 		BEGIN
 			INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
 			VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
@@ -943,7 +943,7 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Baja_Usuario
 @idUsuario INT
 AS
 BEGIN
-	IF(EXISTS(SELECT * FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = @idUsuario))
+	IF(EXISTS(SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE id_usuario = @idUsuario))
 		BEGIN	
 			UPDATE LOS_BORBOTONES.Usuarios
 			SET habilitado = 0, motivo_deshabilitacion = 'Admin'
@@ -959,7 +959,6 @@ GO
 CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
 @username nvarchar(50),
 @password NVARCHAR(255),
-@cant_intentos_fallidos TINYINT,
 @razon_social NVARCHAR(100),
 @mail NVARCHAR(255),
 @telefono NUMERIC(18,0),
@@ -971,19 +970,20 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
 @ciudad NVARCHAR(255),
 @cuit NVARCHAR(20),
 @rubro NVARCHAR(100),
-@nombre_contacto NVARCHAR(255)
+@nombre_contacto NVARCHAR(255),
+@id_usuario INT OUT
 as
 BEGIN
-	DECLARE @id_usuario int
-	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+	IF(NOT EXISTS (SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
 		BEGIN TRY
 			BEGIN TRANSACTION
-				INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
-				VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
+				INSERT INTO LOS_BORBOTONES.Usuarios(username, [password])
+				VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password));
 
-				SELECT @id_usuario = id_usuario from Usuarios where username = @username
+				SELECT @id_usuario = id_usuario from Usuarios where username = @username;
+
 				INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario,razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
-				VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+				VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto);
 			COMMIT TRANSACTION
 		END TRY
 		BEGIN CATCH
@@ -1012,24 +1012,21 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Cliente
 @fecha_nacimiento DATETIME,
 @username NVARCHAR(50),
 @password NVARCHAR(255),
-@cant_intentos_fallidos TINYINT
+@id_usuario INT OUT
 as
 BEGIN
-	DECLARE @id INT
-
-	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+	IF(NOT EXISTS (SELECT 1 FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
 		BEGIN
-			IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
+			IF(NOT EXISTS (SELECT 1 FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
 				BEGIN
 					BEGIN TRANSACTION
-						INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
-						VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
-						SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = @username)
+						INSERT INTO LOS_BORBOTONES.Usuarios(username, [password])
+						VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password));
+
+						SET @id_usuario = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = @username);
 							
-						SET IDENTITY_INSERT LOS_BORBOTONES.Clientes OFF
 						INSERT INTO LOS_BORBOTONES.Clientes(id_usuario, nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
-						VALUES (@id, @nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
-						SET IDENTITY_INSERT LOS_BORBOTONES.Clientes ON
+						VALUES (@id_usuario, @nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento);
 					COMMIT TRANSACTION
 				END
 			ELSE

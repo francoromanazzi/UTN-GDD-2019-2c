@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using FrbaOfertas.Clases.Utils.Form;
 using FrbaOfertas.Clases.Database;
 using FrbaOfertas.Clases.Constantes;
+using FrbaOfertas.Clases.Session;
+using FrbaOfertas.Clases.Repositorios;
 
 namespace FrbaOfertas.RegistroUsuario
 {
@@ -66,7 +68,6 @@ namespace FrbaOfertas.RegistroUsuario
                     StoredProcedureParameters parametros = new StoredProcedureParameters()
                         .AddParameter("@username" , username)
                         .AddParameter("@password", password)
-                        .AddParameter("@cant_intentos_fallidos", 0)
                         .AddParameter("@razon_social", inputRazonSocial.Text)
                         .AddParameter("@mail", inputMail.Text)
                         .AddParameter("@telefono", decimal.Parse(inputTelefono.Text))
@@ -120,13 +121,17 @@ namespace FrbaOfertas.RegistroUsuario
                     try
                     {  
                         //Aca se guarda el usuario y sus datos propios de proveedor en la tabla proveedor
-                        con.ExecStoredProcedure(StoredProcedures.AltaProveedorDesdeRegistroUsuario, parametros);
+                        int id_usuario = con.ExecSingleOutputStoredProcedure<int>(StoredProcedures.AltaProveedorDesdeRegistroUsuario, parametros, "id_usuario");
                         MessageBoxUtil.ShowInfo("Proveedor generado con exito");
 
                         //Agrego el rol del usuario tipo proveedor
                         con.ExecStoredProcedure(StoredProcedures.AgregarRolAlUsuario, parametrosUsuarioRol);
                         MessageBoxUtil.ShowInfo("Rol asignado con exito");
-                        NavigableFormUtil.BackwardTo(this, previousForm);
+
+                        // Logueo al usuario
+                        Session.Instance.OpenSession(id_usuario);
+
+                        NavigableFormUtil.BackwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(new Login.Login(), new RepositorioRoles().ObtenerRolesDeUsuario(id_usuario)));
                     }
                     catch (Exception ex)
                     {

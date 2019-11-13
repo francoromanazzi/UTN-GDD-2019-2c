@@ -29,7 +29,7 @@ namespace FrbaOfertas.Clases.Utils.Form
             {
                 if(!c.Text.All(char.IsDigit))
                 {
-                    MessageBox.Show("Revisar el campo: " + c.Name);
+                    MessageBox.Show("El campo: " + c.Name + " debe ser solo numerico");
                     return false;
                 }
             }
@@ -44,9 +44,9 @@ namespace FrbaOfertas.Clases.Utils.Form
 
             foreach (var c in campos.FindAll(camp => camp.Text != "")) // Campos que no esten vacios
             {
-                if (!c.Text.All(char.IsLetter))
+                if (!c.Text.All(chr => char.IsLetter(chr) || chr == ' '))
                 {
-                    MessageBox.Show("Revisar el campo: " + c.Name);
+                    MessageBox.Show("El campo: " + c.Name + " debe ser solo letras o espacios en blanco");
                     return false;
                 }
             }
