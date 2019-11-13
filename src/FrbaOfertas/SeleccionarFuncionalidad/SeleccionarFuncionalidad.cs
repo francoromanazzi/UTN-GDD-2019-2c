@@ -88,6 +88,8 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
                     return new Facturar.Facturar(this);
                 case 9:
                     return new ListadoEstadistico.ListadoEstadistico(this);
+                case 10:
+                    return new RegistroUsuario.ModificarPasswordUsuario(this);
                 default:
                     return this;
             }

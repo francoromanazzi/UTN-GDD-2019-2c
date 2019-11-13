@@ -42,6 +42,8 @@ namespace FrbaOfertas.Clases.Constantes
         public const string VerificarUsername = Schema + "SP_Validar_Usuario_Existente";
         public const string AgregarRolAlUsuario = Schema + "SP_Agregar_Rol_Al_Usuario";
 
+        public const string CambiarPasswordUsuario = Schema + "SP_Cambiar_Password_Usuario";
+
         #endregion
 
         #region ABM Proveedor
