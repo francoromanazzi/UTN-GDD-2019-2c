@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
@@ -34,31 +35,6 @@ namespace FrbaOfertas.Facturar
         private void volver_Click(object sender, EventArgs e)
         {
             NavigableFormUtil.BackwardTo(this, previousForm);
-        }
-
-        private void facturarProv_Click(object sender, EventArgs e)
-        {
-            fechaActual = ConfigurationManager.AppSettings["FechaSistema"];
-
-            try
-            {
-                StoredProcedureParameters facturasParametros = new StoredProcedureParameters()
-                        .AddParameter("@fecha_inicio", DateTime.Parse(fechaInicio.Text))
-                        .AddParameter("@fecha_fin", DateTime.Parse(fechaFin.Text))
-                        .AddParameter("@fecha", DateTime.Parse(fechaActual))
-                        .AddParameter("@id_proveedor", int.Parse(provElegido));
-
-                int id_factura = new Conexion().ExecSingleOutputStoredProcedure<int>(StoredProcedures.CargarFactura, facturasParametros, "@id_factura");
-
-                // Importe factura
-                int importe = new Conexion().ExecSingleOutputSqlQuery<int>("SELECT importe FROM LOS_BORBOTONES.Facturas WHERE id_factura = " + id_factura);
-                MessageBoxUtil.ShowInfo("Generada factura ID " + id_factura + "de importe: $" + importe);
-
-            }
-            catch(Exception ex)
-            {
-                MessageBoxUtil.ShowError(ex.Message);
-            }
         }
 
         // CARGAR PROVEEDORES

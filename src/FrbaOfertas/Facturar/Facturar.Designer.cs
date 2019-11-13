@@ -34,7 +34,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.proveedores = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
-            this.facturarProv = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,7 +51,6 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.proveedores);
             this.groupBox1.Controls.Add(this.volver);
-            this.groupBox1.Controls.Add(this.facturarProv);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
@@ -113,16 +111,6 @@
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
-            // 
-            // facturarProv
-            // 
-            this.facturarProv.Location = new System.Drawing.Point(331, 333);
-            this.facturarProv.Name = "facturarProv";
-            this.facturarProv.Size = new System.Drawing.Size(75, 23);
-            this.facturarProv.TabIndex = 5;
-            this.facturarProv.Text = "Facturar";
-            this.facturarProv.UseVisualStyleBackColor = true;
-            this.facturarProv.Click += new System.EventHandler(this.facturarProv_Click);
             // 
             // label3
             // 
@@ -190,7 +178,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView proveedores;
         private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.Button facturarProv;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

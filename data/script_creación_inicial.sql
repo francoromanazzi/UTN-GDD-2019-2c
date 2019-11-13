@@ -76,6 +76,10 @@ IF OBJECT_ID('LOS_BORBOTONES.FN_SemestreFecha', 'FN') IS NOT NULL
 DROP FUNCTION LOS_BORBOTONES.FN_SemestreFecha
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.FN_Obtener_Precio_Oferta', 'FN') IS NOT NULL
+DROP FUNCTION LOS_BORBOTONES.FN_Obtener_Precio_Oferta
+GO
+
 ------------------------------------------------
 --            DROP STORED PROCEDURES
 ------------------------------------------------
@@ -404,7 +408,7 @@ CREATE TABLE LOS_BORBOTONES.Compras (
 	id_compra INT IDENTITY(1,1) NOT NULL,
 	id_cliente_comprador INT NOT NULL,
 	codigo_oferta NVARCHAR(50) NOT NULL,
-	id_factura NUMERIC(18,0),
+	id_factura INT,
 	cant_unidades NUMERIC(18,0) NOT NULL,
 	fecha DATETIME NOT NULL
 	PRIMARY KEY (id_compra)
@@ -421,7 +425,7 @@ CREATE TABLE LOS_BORBOTONES.Canjes (
 GO
 
 CREATE TABLE LOS_BORBOTONES.Facturas (
-	id_factura NUMERIC(18,0) NOT NULL,
+	id_factura INT IDENTITY(1,1),
 	fecha DATETIME NOT NULL,
 	fecha_inicio DATETIME NOT NULL,
 	fecha_fin DATETIME NOT NULL,
@@ -1008,6 +1012,16 @@ GO
 --------------------- FACTURACION AL PROVEEDOR -------------
 ------------------------------------------------------------
 
+CREATE FUNCTION LOS_BORBOTONES.FN_Obtener_Precio_Oferta(@id_proveedor INT, @codigo_oferta NVARCHAR(50))
+RETURNS NUMERIC(18,2)
+AS
+BEGIN
+	DECLARE @resultado NUMERIC(18,2)
+	SET @resultado = (SELECT precio_en_oferta FROM LOS_BORBOTONES.Ofertas WHERE id_proveedor = @id_proveedor AND codigo_oferta = @codigo_oferta)
+	RETURN @resultado
+END
+GO
+
 CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Factura
 @fecha_inicio DATETIME,
 @fecha_fin DATETIME,
@@ -1018,35 +1032,26 @@ AS
 BEGIN
 	DECLARE @codigo_oferta NVARCHAR(50), @id_compra INT, @id_cliente INT, @cantidad_unidades INT, @idFactura INT, @importe NUMERIC(18,2) = 0
 	DECLARE C1 CURSOR FOR (SELECT Compras.codigo_oferta, Compras.id_compra, Compras.id_cliente_comprador, Compras.cant_unidades
-							FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta
-							WHERE id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fecha_inicio AND @fecha_fin AND id_factura IS NULL)
+						  FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta
+						  WHERE id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fecha_inicio AND @fecha_fin AND id_factura IS NULL);
 	OPEN C1
 	FETCH NEXT FROM C1 INTO @codigo_oferta, @id_compra, @id_cliente, @cantidad_unidades
 	WHILE @@FETCH_STATUS = 0
-		BEGIN TRY
-			SET @importe = @importe + ((SELECT precio_en_oferta FROM LOS_BORBOTONES.Ofertas WHERE id_proveedor = @id_proveedor AND codigo_oferta = @codigo_oferta) * @cantidad_unidades)
+			SET @importe = @importe + ((LOS_BORBOTONES.FN_Obtener_Precio_Oferta(@id_proveedor, @codigo_oferta)) * @cantidad_unidades)
 			FETCH NEXT FROM C1 INTO @codigo_oferta, @id_compra, @id_cliente, @cantidad_unidades 
-		END TRY
-		BEGIN CATCH
-			THROW 50001, 'No se pudo calcular el importe', 1
-		END CATCH
 	CLOSE C1
 	DEALLOCATE C1
-	
 
 	-- Inserto facturas
-	SET @id_factura = SCOPE_IDENTITY()
-	INSERT INTO LOS_BORBOTONES.Facturas VALUES (CONVERT(int,@id_factura) , @fecha, @fecha_inicio, @fecha_fin, @importe, @id_proveedor)
+	  SET IDENTITY_INSERT LOS_BORBOTONES.Facturas OFF
+	  INSERT INTO LOS_BORBOTONES.Facturas (fecha,fecha_inicio,fecha_fin,importe,id_proveedor) VALUES (@fecha, @fecha_inicio, @fecha_fin, @importe, @id_proveedor)
+	  SET IDENTITY_INSERT LOS_BORBOTONES.Facturas ON
 
 	-- Actualizo la compra
-	BEGIN TRY
-		UPDATE LOS_BORBOTONES.Compras
-		SET id_factura = CONVERT(int,@id_factura)
-		WHERE codigo_oferta = @codigo_oferta AND id_compra = @id_compra
-	END TRY
-	BEGIN CATCH
-		THROW 50003, 'No se pudo cargar el id factura correctamente', 1
-	END CATCH
+	--UPDATE LOS_BORBOTONES.Compras
+	--SET id_factura = @id_factura
+	--WHERE codigo_oferta = @codigo_oferta AND id_compra = @id_compra
+
 END
 GO
 
@@ -1061,7 +1066,6 @@ BEGIN
 	WHERE Ofertas.id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fechaInicio AND @fechaFin
 END
 GO
-
 
 ------------------------------------------------
 --            TRIGGERS
@@ -1216,6 +1220,8 @@ WHERE Oferta_Entregado_Fecha IS NOT NULL AND Oferta_Codigo IS NOT NULL
 GO
 
 -- Migración facturas
+SET IDENTITY_INSERT LOS_BORBOTONES.Facturas ON
+GO
 INSERT INTO LOS_BORBOTONES.Facturas (id_factura, fecha, fecha_inicio, fecha_fin, importe, id_proveedor)
 SELECT Factura_Nro, Factura_Fecha, MIN(Compras.fecha), MAX(Compras.fecha), SUM(Compras.cant_unidades * Ofertas.precio_en_oferta), id_proveedor
 FROM gd_esquema.Maestra
@@ -1225,6 +1231,10 @@ JOIN LOS_BORBOTONES.Ofertas ON Compras.codigo_oferta = Ofertas.codigo_oferta
 WHERE Factura_Nro IS NOT NULL 
 GROUP BY Factura_Nro, Factura_Fecha, id_proveedor
 GO
+SET IDENTITY_INSERT LOS_BORBOTONES.Facturas OFF
+GO
+
+
 
 UPDATE LOS_BORBOTONES.Compras
 SET id_factura = (
