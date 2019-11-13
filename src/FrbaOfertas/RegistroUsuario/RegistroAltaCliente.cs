@@ -61,14 +61,7 @@ namespace FrbaOfertas
                     StoredProcedureParameters parametrosUsuarioRol = new StoredProcedureParameters()
                         .AddParameter("@id_rol", ID_ROL_CLIENTE)
                         .AddParameter("@username", username);
-
-                    StoredProcedureParameters userParametros = new StoredProcedureParameters()
-                        .AddParameter("@username", username)
-                        .AddParameter("@password", password)
-                        .AddParameter("@cant_intentos_fallidos", 0);
-                    con.ExecDataTableStoredProcedure(StoredProcedures.AltaUsuario, userParametros);
-
-
+                    
                     // Armo el Store Procedure con los parametros REQUERIDOS
                     StoredProcedureParameters parametros = new StoredProcedureParameters()
                         .AddParameter("@nombre", Nombre.Text)
@@ -79,7 +72,8 @@ namespace FrbaOfertas
                         .AddParameter("@direccion", Direccion.Text)
                         .AddParameter("@fecha_nacimiento", DateTime.Parse(FechaDeNacimiento.Text))
                         .AddParameter("@username", username)
-                        .AddParameter("@password", password);
+                        .AddParameter("@password", password)
+                        .AddParameter("@cant_intentos_fallidos", 0);
                     // Ahora me fijo si completo los campos no requeridos y lo agrego en caso que si
                     // Piso
                     if (Piso.Text == "")
@@ -123,7 +117,7 @@ namespace FrbaOfertas
                     try
                     {
                         // Impacto en la base
-                        con.ExecDataTableStoredProcedure(StoredProcedures.AltaCliente, parametros);
+                        con.ExecDataTableStoredProcedure(StoredProcedures.AltaClienteDesdeRegistroUsuario, parametros);
                         MessageBoxUtil.ShowInfo("Cliente generado con exito");
                         con.ExecDataTableStoredProcedure(StoredProcedures.AgregarRolAlUsuario, parametrosUsuarioRol);
                         MessageBoxUtil.ShowInfo("Rol asignado con exito");
@@ -152,6 +146,8 @@ namespace FrbaOfertas
         }
 
         #endregion
+
+        
 
         
     }

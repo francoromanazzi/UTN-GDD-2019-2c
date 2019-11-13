@@ -44,11 +44,13 @@ namespace FrbaOfertas.RegistroUsuario
                 if (this.comboUserType.Text.Equals("Cliente"))
                 {
                     NavigableFormUtil.ForwardToDifferentWindow(this, new RegistroAltaCliente(this,txtUserName.Text, txtUserPass.Text));
+                    NavigableFormUtil.BackwardTo(this, previusForm);
                     
                 }
                 else if (this.comboUserType.Text.Equals("Proveedor"))
                 {
                     NavigableFormUtil.ForwardToDifferentWindow(this,new RegistroAltaProveedor(this,txtUserName.Text,txtUserPass.Text));
+                    NavigableFormUtil.BackwardTo(this, previusForm);
                 }
             }
         }

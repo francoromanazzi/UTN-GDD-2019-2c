@@ -31,6 +31,8 @@ namespace FrbaOfertas.Clases.Constantes
 
         public const string ActualizarCliente = Schema + "SP_Actualizar_Cliente";
 
+        public const string AltaClienteDesdeRegistroUsuario = Schema + "SP_Registro_Usuario_Cliente";
+
         #endregion
 
         #region ABM Usuario

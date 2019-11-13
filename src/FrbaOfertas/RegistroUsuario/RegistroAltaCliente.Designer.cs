@@ -387,6 +387,7 @@
             this.volver.TabIndex = 12;
             this.volver.Text = "<< Volver";
             this.volver.UseVisualStyleBackColor = true;
+            this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
             // limpiar
             // 

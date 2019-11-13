@@ -211,6 +211,10 @@ IF OBJECT_ID('LOS_BORBOTONES.SP_Cambiar_Password_Usuario', 'P') IS NOT NULL
 DROP PROCEDURE LOS_BORBOTONES.SP_Cambiar_Password_Usuario
 GO
 
+IF OBJECT_ID('LOS_BORBOTONES.SP_Registro_Usuario_Cliente', 'P') IS NOT NULL
+DROP PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Cliente
+GO
+
 ------------------------------------------------
 --            DROP TRIGGERS
 ------------------------------------------------
@@ -983,6 +987,55 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Cliente
+@nombre NVARCHAR(255),
+@apellido NVARCHAR(255),
+@dni NUMERIC(18,0),
+@mail NVARCHAR(255),
+@telefono NUMERIC(18,0),
+@direccion NVARCHAR(255),
+@piso NVARCHAR(15),
+@departamento NVARCHAR(15),
+@localidad NVARCHAR(255),
+@codigo_postal NVARCHAR(15),
+@fecha_nacimiento DATETIME,
+@username NVARCHAR(50),
+@password NVARCHAR(255),
+@cant_intentos_fallidos TINYINT
+as
+BEGIN
+	DECLARE @id INT
+
+	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+		BEGIN
+			IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
+				BEGIN
+					BEGIN TRANSACTION
+						INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
+						VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
+						SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = @username)
+							
+						SET IDENTITY_INSERT LOS_BORBOTONES.Clientes OFF
+						INSERT INTO LOS_BORBOTONES.Clientes(id_usuario, nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
+						VALUES (@id, @nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
+						SET IDENTITY_INSERT LOS_BORBOTONES.Clientes ON
+					COMMIT TRANSACTION
+				END
+			ELSE
+				BEGIN
+					RAISERROR('Ya existe un cliente registrado con ese DNI',16,1)
+				END	
+		END
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
+		END
+
+
+	
+	
+END
+GO
 -------------------------------------------------------
 --------------------- REGISTRO DE USUARIO -------------
 -------------------------------------------------------
