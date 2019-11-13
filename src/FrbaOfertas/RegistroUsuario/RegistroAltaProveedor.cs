@@ -60,17 +60,13 @@ namespace FrbaOfertas.RegistroUsuario
                     // Armo Procedimiento con los parametros de usuario y rol
                     StoredProcedureParameters parametrosUsuarioRol = new StoredProcedureParameters()
                         .AddParameter("@id_rol", ID_ROL_PROVEEDOR)
-                        .AddParameter("@username", username);
-
-                    // Armo procedimiento con los parametros para insertar usuario
-                    StoredProcedureParameters userParametros = new StoredProcedureParameters()
-                        .AddParameter("@username", username)
-                        .AddParameter("@password", password)
-                        .AddParameter("@cant_intentos_fallidos", 0);                   
+                        .AddParameter("@username", username);                               
 
                     // Armo el Store Procedure con los parametros REQUERIDOS
                     StoredProcedureParameters parametros = new StoredProcedureParameters()
                         .AddParameter("@username" , username)
+                        .AddParameter("@password", password)
+                        .AddParameter("@cant_intentos_fallidos", 0)
                         .AddParameter("@razon_social", inputRazonSocial.Text)
                         .AddParameter("@mail", inputMail.Text)
                         .AddParameter("@telefono", decimal.Parse(inputTelefono.Text))
@@ -122,15 +118,12 @@ namespace FrbaOfertas.RegistroUsuario
                     }
 
                     try
-                    {
-                        //Primero guardo el usuario
-                        con.ExecStoredProcedure(StoredProcedures.AltaUsuario, userParametros);
-
-                        //Segundo guardo los datos del usuario proveedor en la tabla proveedor
+                    {  
+                        //Aca se guarda el usuario y sus datos propios de proveedor en la tabla proveedor
                         con.ExecStoredProcedure(StoredProcedures.AltaProveedorDesdeRegistroUsuario, parametros);
                         MessageBoxUtil.ShowInfo("Proveedor generado con exito");
 
-                        //Tercer agrego el rol del usuario tipo proveedor
+                        //Agrego el rol del usuario tipo proveedor
                         con.ExecStoredProcedure(StoredProcedures.AgregarRolAlUsuario, parametrosUsuarioRol);
                         MessageBoxUtil.ShowInfo("Rol asignado con exito");
                         NavigableFormUtil.BackwardTo(this, previousForm);

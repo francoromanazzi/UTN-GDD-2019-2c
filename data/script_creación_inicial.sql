@@ -958,6 +958,8 @@ GO
 
 CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
 @username nvarchar(50),
+@password NVARCHAR(255),
+@cant_intentos_fallidos TINYINT,
 @razon_social NVARCHAR(100),
 @mail NVARCHAR(255),
 @telefono NUMERIC(18,0),
@@ -973,17 +975,26 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Registro_Usuario_Proveedor
 as
 BEGIN
 	DECLARE @id_usuario int
-	SELECT @id_usuario = id_usuario from Usuarios where username = @username
-	BEGIN TRY
+	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Usuarios WHERE username = @username))
+		BEGIN TRY
+			BEGIN TRANSACTION
+				INSERT INTO LOS_BORBOTONES.Usuarios(username, password, habilitado, cant_intentos_fallidos)
+				VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
 
-		INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario,razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
-		VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
-	END TRY
-	BEGIN CATCH
-		BEGIN;
-			THROW 50001, 'El Usuario/Razón social no es único', 1
-		END;
-	END CATCH
+				SELECT @id_usuario = id_usuario from Usuarios where username = @username
+				INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario,razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
+				VALUES (@id_usuario,@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+			COMMIT TRANSACTION
+		END TRY
+		BEGIN CATCH
+			BEGIN;
+				THROW 50001, 'El CUIT/Razón social no es único', 1
+			END;
+		END CATCH
+	ELSE
+		BEGIN
+			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
+		END
 END
 GO
 
