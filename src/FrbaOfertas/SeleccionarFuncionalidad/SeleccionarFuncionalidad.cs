@@ -76,7 +76,7 @@ namespace FrbaOfertas.SeleccionarFuncionalidad
                         int idProveedor = new RepositorioProveedores().ObtenerIdProveedorDeUsuario(Session.Instance.IdUsuario);
                         return new CrearOferta.CrearOferta(this, idProveedor);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         return new CrearOferta.SeleccionarProveedor(this);
                     }

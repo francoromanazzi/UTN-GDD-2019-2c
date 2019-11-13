@@ -1051,28 +1051,42 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Factura
 @id_factura INT OUTPUT
 AS
 BEGIN
-	DECLARE @codigo_oferta NVARCHAR(50), @id_compra INT, @id_cliente INT, @cantidad_unidades INT, @idFactura INT, @importe NUMERIC(18,2) = 0
+	DECLARE @codigo_oferta NVARCHAR(50), @id_compra INT, @id_cliente INT, @cantidad_unidades NUMERIC(18,0), @importe NUMERIC(18,2) = 0
 	DECLARE C1 CURSOR FOR (SELECT Compras.codigo_oferta, Compras.id_compra, Compras.id_cliente_comprador, Compras.cant_unidades
 						  FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta
 						  WHERE id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fecha_inicio AND @fecha_fin AND id_factura IS NULL);
 	OPEN C1
 	FETCH NEXT FROM C1 INTO @codigo_oferta, @id_compra, @id_cliente, @cantidad_unidades
 	WHILE @@FETCH_STATUS = 0
+		BEGIN
 			SET @importe = @importe + ((LOS_BORBOTONES.FN_Obtener_Precio_Oferta(@id_proveedor, @codigo_oferta)) * @cantidad_unidades)
 			FETCH NEXT FROM C1 INTO @codigo_oferta, @id_compra, @id_cliente, @cantidad_unidades 
+		END
 	CLOSE C1
 	DEALLOCATE C1
 
-	-- Inserto facturas
+	-- Inserto la factura
 	  SET IDENTITY_INSERT LOS_BORBOTONES.Facturas OFF
 	  INSERT INTO LOS_BORBOTONES.Facturas (fecha,fecha_inicio,fecha_fin,importe,id_proveedor) VALUES (@fecha, @fecha_inicio, @fecha_fin, @importe, @id_proveedor)
 	  SET IDENTITY_INSERT LOS_BORBOTONES.Facturas ON
+	  SET @id_factura = SCOPE_IDENTITY();
 
-	-- Actualizo la compra
-	--UPDATE LOS_BORBOTONES.Compras
-	--SET id_factura = @id_factura
-	--WHERE codigo_oferta = @codigo_oferta AND id_compra = @id_compra
+	-- Actualizo las compras
+	  DECLARE C2 CURSOR FOR (SELECT Compras.codigo_oferta, Compras.id_compra
+							 FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta
+							 WHERE id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fecha_inicio AND @fecha_fin AND id_factura IS NULL);
+	  OPEN C2
+	  FETCH NEXT FROM C2 INTO @codigo_oferta, @id_compra
+	  WHILE @@FETCH_STATUS = 0
+		BEGIN
+			UPDATE LOS_BORBOTONES.Compras
+			SET id_factura = @id_factura
+			WHERE codigo_oferta = @codigo_oferta AND id_compra = @id_compra
 
+			FETCH NEXT FROM C2 INTO @codigo_oferta, @id_compra
+		END
+	CLOSE C2
+	DEALLOCATE C2
 END
 GO
 
@@ -1084,7 +1098,7 @@ AS
 BEGIN
 	SELECT Compras.id_compra, Compras.codigo_oferta 
 	FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta 
-	WHERE Ofertas.id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fechaInicio AND @fechaFin
+	WHERE Ofertas.id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fechaInicio AND @fechaFin AND id_factura IS NULL
 END
 GO
 
@@ -1258,8 +1272,6 @@ GROUP BY Factura_Nro, Factura_Fecha, id_proveedor
 GO
 SET IDENTITY_INSERT LOS_BORBOTONES.Facturas OFF
 GO
-
-
 
 UPDATE LOS_BORBOTONES.Compras
 SET id_factura = (

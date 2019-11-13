@@ -73,10 +73,11 @@ namespace FrbaOfertas.Facturar
                             .AddParameter("@id_proveedor", int.Parse(proveedor));
 
                     int id_factura = new Conexion().ExecSingleOutputStoredProcedure<int>(StoredProcedures.CargarFactura, facturasParametros, "@id_factura");
+                    ListadoOfertas_Load(null, null); // Refresh ofertas 
 
-                    // Importe factura
-                    //int importe = new Conexion().ExecSingleOutputSqlQuery<int>("SELECT importe FROM LOS_BORBOTONES.Facturas WHERE id_factura = " + id_factura);
-                    MessageBoxUtil.ShowInfo("Generada factura ID " + id_factura);
+                    // Mostrar id_factura e importe
+                    string importe = new Conexion().ExecSingleOutputSqlQuery<string>("SELECT CONVERT(NVARCHAR,importe) FROM LOS_BORBOTONES.Facturas WHERE id_factura = " + id_factura);
+                    MessageBoxUtil.ShowInfo("Generada factura ID: " + id_factura + " de importe: $" + importe);
 
                 }
                 catch (SqlException ex)

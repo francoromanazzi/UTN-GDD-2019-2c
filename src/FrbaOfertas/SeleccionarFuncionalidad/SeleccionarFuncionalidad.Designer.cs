@@ -42,7 +42,7 @@
             this.grpFuncionalidad.Controls.Add(this.cmbFuncionalidades);
             this.grpFuncionalidad.Location = new System.Drawing.Point(12, 12);
             this.grpFuncionalidad.Name = "grpFuncionalidad";
-            this.grpFuncionalidad.Size = new System.Drawing.Size(260, 238);
+            this.grpFuncionalidad.Size = new System.Drawing.Size(260, 161);
             this.grpFuncionalidad.TabIndex = 0;
             this.grpFuncionalidad.TabStop = false;
             this.grpFuncionalidad.Text = "Seleccionar funcionalidad";
