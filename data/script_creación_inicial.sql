@@ -810,9 +810,9 @@ BEGIN
 			SET IDENTITY_INSERT LOS_BORBOTONES.Clientes ON
 		END
 	ELSE
-		BEGIN
-			RAISERROR('Ya existe un cliente registrado con ese DNI',16,1)
-		END
+		BEGIN;
+			THROW 50001, 'Ya existe un cliente registrado con ese DNI', 1
+		END;
 END
 GO
 
@@ -845,9 +845,9 @@ BEGIN
 			WHERE id_usuario = (SELECT id_usuario FROM LOS_BORBOTONES.Clientes WHERE dni = @dniOriginal)
 		END
 	ELSE
-		BEGIN
-			RAISERROR('No existe el cliente',16,1)
-		END
+		BEGIN;
+			THROW 50001, 'No existe el cliente', 1
+		END;
 END
 GO
 
@@ -933,9 +933,9 @@ BEGIN
 			VALUES (@username, LOS_BORBOTONES.FN_Hash_Password(@password), 1, @cant_intentos_fallidos)
 		END
 	ELSE
-		BEGIN
-			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
-		END
+		BEGIN;
+			THROW 50001, 'Ya existe un usuario registrado con ese username', 1
+		END;
 END
 GO
 
@@ -950,9 +950,9 @@ BEGIN
 			WHERE id_usuario = @idUsuario
 		END
 	ELSE
-		BEGIN
-			RAISERROR('No existe el usuario',16,1)
-		END
+		BEGIN;
+			THROW 50001, 'No existe el usuario', 1
+		END;
 END
 GO
 
@@ -988,13 +988,13 @@ BEGIN
 		END TRY
 		BEGIN CATCH
 			BEGIN;
-				THROW 50001, 'El CUIT/Razón social no es único', 1
+				THROW 50002, 'El CUIT/Razón social no es único', 1
 			END;
 		END CATCH
 	ELSE
-		BEGIN
-			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
-		END
+		BEGIN;
+			THROW 50001, 'Ya existe un usuario registrado con ese username' ,1
+		END;
 END
 GO
 
@@ -1033,17 +1033,14 @@ BEGIN
 					COMMIT TRANSACTION
 				END
 			ELSE
-				BEGIN
-					RAISERROR('Ya existe un cliente registrado con ese DNI',16,1)
-				END	
+				BEGIN;
+					THROW 50002, 'Ya existe un cliente registrado con ese DNI' ,1
+				END	;
 		END
 	ELSE
-		BEGIN
-			RAISERROR('Ya existe un usuario registrado con ese username',16,1)
-		END
-
-
-	
+		BEGIN;
+			THROW 50001, 'Ya existe un usuario registrado con ese username',1
+		END;
 	
 END
 GO
@@ -1057,7 +1054,7 @@ AS
 BEGIN
 	IF EXISTS (SELECT username FROM LOS_BORBOTONES.Usuarios WHERE username = @username)
 		BEGIN;
-			RAISERROR('El nombre de usuario ya existe',16,1)
+			THROW 50001, 'El nombre de usuario ya existe', 1
 		END;
 	
 	
