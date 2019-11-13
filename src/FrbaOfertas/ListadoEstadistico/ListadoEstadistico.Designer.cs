@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Titulo = new System.Windows.Forms.Label();
             this.nroSemestre = new System.Windows.Forms.ComboBox();
             this.textoSemestre = new System.Windows.Forms.Label();
             this.textAño = new System.Windows.Forms.Label();
@@ -37,16 +36,10 @@
             this.btnListMayorPorcentaje = new System.Windows.Forms.Button();
             this.btnListProvMayorFact = new System.Windows.Forms.Button();
             this.selectAño = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnVolver = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Titulo
-            // 
-            this.Titulo.AutoSize = true;
-            this.Titulo.Location = new System.Drawing.Point(190, 33);
-            this.Titulo.Name = "Titulo";
-            this.Titulo.Size = new System.Drawing.Size(82, 13);
-            this.Titulo.TabIndex = 0;
-            this.Titulo.Text = "Listado Estatico";
             // 
             // nroSemestre
             // 
@@ -54,7 +47,7 @@
             this.nroSemestre.Items.AddRange(new object[] {
             "1",
             "2"});
-            this.nroSemestre.Location = new System.Drawing.Point(71, 86);
+            this.nroSemestre.Location = new System.Drawing.Point(82, 44);
             this.nroSemestre.Name = "nroSemestre";
             this.nroSemestre.Size = new System.Drawing.Size(40, 21);
             this.nroSemestre.TabIndex = 1;
@@ -63,7 +56,7 @@
             // textoSemestre
             // 
             this.textoSemestre.AutoSize = true;
-            this.textoSemestre.Location = new System.Drawing.Point(12, 89);
+            this.textoSemestre.Location = new System.Drawing.Point(23, 47);
             this.textoSemestre.Name = "textoSemestre";
             this.textoSemestre.Size = new System.Drawing.Size(51, 13);
             this.textoSemestre.TabIndex = 2;
@@ -73,7 +66,7 @@
             // textAño
             // 
             this.textAño.AutoSize = true;
-            this.textAño.Location = new System.Drawing.Point(293, 89);
+            this.textAño.Location = new System.Drawing.Point(150, 47);
             this.textAño.Name = "textAño";
             this.textAño.Size = new System.Drawing.Size(26, 13);
             this.textAño.TabIndex = 3;
@@ -82,7 +75,7 @@
             // textlist1
             // 
             this.textlist1.AutoSize = true;
-            this.textlist1.Location = new System.Drawing.Point(12, 144);
+            this.textlist1.Location = new System.Drawing.Point(6, 82);
             this.textlist1.Name = "textlist1";
             this.textlist1.Size = new System.Drawing.Size(350, 13);
             this.textlist1.TabIndex = 4;
@@ -91,7 +84,7 @@
             // list2
             // 
             this.list2.AutoSize = true;
-            this.list2.Location = new System.Drawing.Point(13, 187);
+            this.list2.Location = new System.Drawing.Point(7, 125);
             this.list2.Name = "list2";
             this.list2.Size = new System.Drawing.Size(175, 13);
             this.list2.TabIndex = 5;
@@ -99,9 +92,9 @@
             // 
             // btnListMayorPorcentaje
             // 
-            this.btnListMayorPorcentaje.Location = new System.Drawing.Point(378, 141);
+            this.btnListMayorPorcentaje.Location = new System.Drawing.Point(362, 79);
             this.btnListMayorPorcentaje.Name = "btnListMayorPorcentaje";
-            this.btnListMayorPorcentaje.Size = new System.Drawing.Size(75, 23);
+            this.btnListMayorPorcentaje.Size = new System.Drawing.Size(85, 23);
             this.btnListMayorPorcentaje.TabIndex = 6;
             this.btnListMayorPorcentaje.Text = "Consultar";
             this.btnListMayorPorcentaje.UseVisualStyleBackColor = true;
@@ -109,9 +102,9 @@
             // 
             // btnListProvMayorFact
             // 
-            this.btnListProvMayorFact.Location = new System.Drawing.Point(378, 182);
+            this.btnListProvMayorFact.Location = new System.Drawing.Point(362, 120);
             this.btnListProvMayorFact.Name = "btnListProvMayorFact";
-            this.btnListProvMayorFact.Size = new System.Drawing.Size(75, 23);
+            this.btnListProvMayorFact.Size = new System.Drawing.Size(85, 23);
             this.btnListProvMayorFact.TabIndex = 7;
             this.btnListProvMayorFact.Text = "Consultar";
             this.btnListProvMayorFact.UseVisualStyleBackColor = true;
@@ -125,36 +118,56 @@
             "2019",
             "2018",
             "2017"});
-            this.selectAño.Location = new System.Drawing.Point(329, 86);
+            this.selectAño.Location = new System.Drawing.Point(186, 44);
             this.selectAño.Name = "selectAño";
             this.selectAño.Size = new System.Drawing.Size(50, 21);
             this.selectAño.TabIndex = 8;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnVolver);
+            this.groupBox1.Controls.Add(this.btnListProvMayorFact);
+            this.groupBox1.Controls.Add(this.selectAño);
+            this.groupBox1.Controls.Add(this.btnListMayorPorcentaje);
+            this.groupBox1.Controls.Add(this.list2);
+            this.groupBox1.Controls.Add(this.textoSemestre);
+            this.groupBox1.Controls.Add(this.textlist1);
+            this.groupBox1.Controls.Add(this.nroSemestre);
+            this.groupBox1.Controls.Add(this.textAño);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(453, 207);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Listado Estadistico";
+            // 
+            // btnVolver
+            // 
+            this.btnVolver.Location = new System.Drawing.Point(9, 168);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(75, 23);
+            this.btnVolver.TabIndex = 9;
+            this.btnVolver.Text = "<< Volver";
+            this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click_1);
             // 
             // ListadoEstadistico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 215);
-            this.Controls.Add(this.selectAño);
-            this.Controls.Add(this.btnListProvMayorFact);
-            this.Controls.Add(this.btnListMayorPorcentaje);
-            this.Controls.Add(this.list2);
-            this.Controls.Add(this.textlist1);
-            this.Controls.Add(this.textAño);
-            this.Controls.Add(this.textoSemestre);
-            this.Controls.Add(this.nroSemestre);
-            this.Controls.Add(this.Titulo);
+            this.ClientSize = new System.Drawing.Size(477, 228);
+            this.Controls.Add(this.groupBox1);
             this.Name = "ListadoEstadistico";
             this.Text = "ListadoEstadistico";
             this.Load += new System.EventHandler(this.ListadoEstadistico_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label Titulo;
         private System.Windows.Forms.ComboBox nroSemestre;
         private System.Windows.Forms.Label textoSemestre;
         private System.Windows.Forms.Label textAño;
@@ -163,5 +176,7 @@
         private System.Windows.Forms.Button btnListMayorPorcentaje;
         private System.Windows.Forms.Button btnListProvMayorFact;
         private System.Windows.Forms.ComboBox selectAño;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnVolver;
     }
 }

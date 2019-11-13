@@ -65,5 +65,10 @@ namespace FrbaOfertas.ListadoEstadistico
             ListadoProMayorFact form2 = new ListadoProMayorFact(semestre, año);
             form2.Show();//showdialog()
         }
+
+        private void btnVolver_Click_1(object sender, EventArgs e)
+        {
+            NavigableFormUtil.BackwardTo(this, previousForm);
+        }
     }
 }
