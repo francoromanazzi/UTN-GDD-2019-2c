@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.grpLogin = new System.Windows.Forms.GroupBox();
+            this.btnRegistrarse = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.inputPassword = new System.Windows.Forms.TextBox();
             this.lblPassword = new System.Windows.Forms.Label();
             this.inputUsername = new System.Windows.Forms.TextBox();
             this.lblUsername = new System.Windows.Forms.Label();
-            this.btnRegistrarse = new System.Windows.Forms.Button();
             this.grpLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,6 +53,16 @@
             this.grpLogin.TabStop = false;
             this.grpLogin.Text = "Bienvenido";
             // 
+            // btnRegistrarse
+            // 
+            this.btnRegistrarse.Location = new System.Drawing.Point(94, 192);
+            this.btnRegistrarse.Name = "btnRegistrarse";
+            this.btnRegistrarse.Size = new System.Drawing.Size(75, 23);
+            this.btnRegistrarse.TabIndex = 5;
+            this.btnRegistrarse.Text = "Registrarse";
+            this.btnRegistrarse.UseVisualStyleBackColor = true;
+            this.btnRegistrarse.Click += new System.EventHandler(this.btnRegistrarse_Click);
+            // 
             // btnLogin
             // 
             this.btnLogin.Location = new System.Drawing.Point(27, 143);
@@ -67,6 +77,7 @@
             // 
             this.inputPassword.Location = new System.Drawing.Point(27, 102);
             this.inputPassword.Name = "inputPassword";
+            this.inputPassword.PasswordChar = '*';
             this.inputPassword.Size = new System.Drawing.Size(206, 20);
             this.inputPassword.TabIndex = 3;
             // 
@@ -94,16 +105,6 @@
             this.lblUsername.Size = new System.Drawing.Size(96, 13);
             this.lblUsername.TabIndex = 0;
             this.lblUsername.Text = "Nombre de usuario";
-            // 
-            // btnRegistrarse
-            // 
-            this.btnRegistrarse.Location = new System.Drawing.Point(94, 192);
-            this.btnRegistrarse.Name = "btnRegistrarse";
-            this.btnRegistrarse.Size = new System.Drawing.Size(75, 23);
-            this.btnRegistrarse.TabIndex = 5;
-            this.btnRegistrarse.Text = "Registrarse";
-            this.btnRegistrarse.UseVisualStyleBackColor = true;
-            this.btnRegistrarse.Click += new System.EventHandler(this.btnRegistrarse_Click);
             // 
             // Login
             // 

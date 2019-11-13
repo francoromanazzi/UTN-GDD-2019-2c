@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.grpRegistroUsuario = new System.Windows.Forms.GroupBox();
+            this.btnAceptar = new System.Windows.Forms.Button();
             this.grpUserType = new System.Windows.Forms.GroupBox();
             this.comboUserType = new System.Windows.Forms.ComboBox();
             this.txtUserPass = new System.Windows.Forms.TextBox();
@@ -37,7 +38,6 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnVolver = new System.Windows.Forms.Button();
-            this.btnAceptar = new System.Windows.Forms.Button();
             this.grpRegistroUsuario.SuspendLayout();
             this.grpUserType.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +56,16 @@
             this.grpRegistroUsuario.TabIndex = 0;
             this.grpRegistroUsuario.TabStop = false;
             this.grpRegistroUsuario.Text = "Registro de Usuario";
+            // 
+            // btnAceptar
+            // 
+            this.btnAceptar.Location = new System.Drawing.Point(147, 282);
+            this.btnAceptar.Name = "btnAceptar";
+            this.btnAceptar.Size = new System.Drawing.Size(75, 23);
+            this.btnAceptar.TabIndex = 12;
+            this.btnAceptar.Text = "Aceptar";
+            this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // grpUserType
             // 
@@ -82,6 +92,7 @@
             // 
             this.txtUserPass.Location = new System.Drawing.Point(23, 143);
             this.txtUserPass.Name = "txtUserPass";
+            this.txtUserPass.PasswordChar = '*';
             this.txtUserPass.Size = new System.Drawing.Size(188, 20);
             this.txtUserPass.TabIndex = 3;
             // 
@@ -129,16 +140,6 @@
             this.btnVolver.Text = "<<Volver";
             this.btnVolver.UseVisualStyleBackColor = true;
             this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
-            // 
-            // btnAceptar
-            // 
-            this.btnAceptar.Location = new System.Drawing.Point(147, 282);
-            this.btnAceptar.Name = "btnAceptar";
-            this.btnAceptar.Size = new System.Drawing.Size(75, 23);
-            this.btnAceptar.TabIndex = 12;
-            this.btnAceptar.Text = "Aceptar";
-            this.btnAceptar.UseVisualStyleBackColor = true;
-            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // RegistroDeUsuario
             // 
