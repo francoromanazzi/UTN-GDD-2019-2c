@@ -1154,9 +1154,10 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Mostrar_Listado
 @fechaFin DATETIME
 AS
 BEGIN
-	SELECT Compras.id_compra, Compras.codigo_oferta 
-	FROM LOS_BORBOTONES.Ofertas JOIN LOS_BORBOTONES.Compras ON Ofertas.codigo_oferta = Compras.codigo_oferta 
-	WHERE Ofertas.id_proveedor = @id_proveedor AND Compras.fecha BETWEEN @fechaInicio AND @fechaFin AND id_factura IS NULL
+	SELECT c.id_compra, c.codigo_oferta, c.cant_unidades * o.precio_en_oferta 'Total importe' 
+	FROM LOS_BORBOTONES.Ofertas o
+	JOIN LOS_BORBOTONES.Compras c ON o.codigo_oferta = c.codigo_oferta
+	WHERE o.id_proveedor = @id_proveedor AND c.fecha BETWEEN @fechaInicio AND @fechaFin AND id_factura IS NULL
 END
 GO
 
