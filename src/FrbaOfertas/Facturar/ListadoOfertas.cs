@@ -73,7 +73,6 @@ namespace FrbaOfertas.Facturar
                             .AddParameter("@id_proveedor", int.Parse(proveedor));
 
                     int id_factura = new Conexion().ExecSingleOutputStoredProcedure<int>(StoredProcedures.CargarFactura, facturasParametros, "@id_factura");
-                    ListadoOfertas_Load(null, null); // Refresh ofertas 
 
                     // Mostrar id_factura e importe
                     string importe = new Conexion().ExecSingleOutputSqlQuery<string>("SELECT CONVERT(NVARCHAR,importe) FROM LOS_BORBOTONES.Facturas WHERE id_factura = " + id_factura);
@@ -89,6 +88,7 @@ namespace FrbaOfertas.Facturar
             {
 
             }
+            ListadoOfertas_Load(null, null); // Refresh ofertas 
         }
 
         private void volver_Click(object sender, EventArgs e)
