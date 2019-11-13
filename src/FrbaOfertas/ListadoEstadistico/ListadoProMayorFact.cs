@@ -16,11 +16,15 @@ namespace FrbaOfertas.ListadoEstadistico
 {
     public partial class ListadoProMayorFact : Form
     {
-        public ListadoProMayorFact(int sem, int anio)
+        private readonly Form previousForm;
+
+        public ListadoProMayorFact(Form previousForm, int sem, int anio)
         {
+            this.previousForm = previousForm;
             InitializeComponent();
             año.Text = anio.ToString();
             semestre.Text = sem.ToString();
+
         }
 
         private void ListadoProMayorFact_Load(object sender, EventArgs e)
@@ -38,6 +42,11 @@ namespace FrbaOfertas.ListadoEstadistico
             {
                 MessageBoxUtil.ShowError(ex.Message);
             }
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            NavigableFormUtil.BackwardToDifferentWindow(this, previousForm);
         }
     }
 }

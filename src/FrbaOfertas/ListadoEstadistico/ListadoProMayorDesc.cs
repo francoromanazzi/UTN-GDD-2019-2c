@@ -16,8 +16,11 @@ namespace FrbaOfertas.ListadoEstadistico
 {
     public partial class ListadoProMayorDesc : Form
     {
-        public ListadoProMayorDesc(int sem, int anio)
+        private readonly Form previousForm;
+
+        public ListadoProMayorDesc(Form previousForm, int sem, int anio)
         {
+            this.previousForm = previousForm;
             InitializeComponent();
             año.Text = anio.ToString();
             semestre.Text = sem.ToString();
@@ -41,9 +44,9 @@ namespace FrbaOfertas.ListadoEstadistico
 
         }
 
-        private void tabla_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void btnVolver_Click(object sender, EventArgs e)
         {
-
+            NavigableFormUtil.BackwardToDifferentWindow(this, previousForm);
         }
     }
 }

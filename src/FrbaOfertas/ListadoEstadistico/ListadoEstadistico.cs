@@ -45,25 +45,54 @@ namespace FrbaOfertas.ListadoEstadistico
         private void btnListMayorPorcentaje_Click(object sender, EventArgs e)
         {
             int indiceSemestre = nroSemestre.SelectedIndex;//indice seleccionado
-            int semestre = Convert.ToInt32(nroSemestre.Items[indiceSemestre].ToString());
 
-            int indiceAño =  selectAño.SelectedIndex;
-            int año = Convert.ToInt32(selectAño.Items[indiceAño].ToString());
-            
-            ListadoProMayorDesc form1 = new ListadoProMayorDesc(semestre, año);
-            form1.Show();//showdialog()
+            if (indiceSemestre != -1)
+            {
+                int semestre = Convert.ToInt32(nroSemestre.Items[indiceSemestre].ToString());
+
+                int indiceAño = selectAño.SelectedIndex;
+
+                if (indiceAño != -1)
+                {
+                    int año = Convert.ToInt32(selectAño.Items[indiceAño].ToString());
+
+                    NavigableFormUtil.ForwardToDifferentWindow(this, new ListadoProMayorDesc(this, semestre, año));
+                }
+                else
+                {
+                    MessageBoxUtil.ShowError("Seleccione un año");
+                }
+            }
+            else
+            {
+                MessageBoxUtil.ShowError("Seleccione un semestre");
+            }
         }
 
         private void btnListProvMayorFact_Click(object sender, EventArgs e)
         {
             int indiceSemestre = nroSemestre.SelectedIndex;//indice seleccionado
-            int semestre = Convert.ToInt32(nroSemestre.Items[indiceSemestre].ToString());
+            if (indiceSemestre != -1)
+            {
+                int semestre = Convert.ToInt32(nroSemestre.Items[indiceSemestre].ToString());
 
-            int indiceAño = selectAño.SelectedIndex;
-            int año = Convert.ToInt32(selectAño.Items[indiceAño].ToString());
+                int indiceAño = selectAño.SelectedIndex;
 
-            ListadoProMayorFact form2 = new ListadoProMayorFact(semestre, año);
-            form2.Show();//showdialog()
+                if (indiceAño != -1)
+                {
+                    int año = Convert.ToInt32(selectAño.Items[indiceAño].ToString());
+
+                    NavigableFormUtil.ForwardToDifferentWindow(this, new ListadoProMayorFact(this, semestre, año));
+                }
+                else
+                {
+                    MessageBoxUtil.ShowError("Seleccione un año");
+                }
+            }
+            else
+            {
+                MessageBoxUtil.ShowError("Seleccione un año");
+            }
         }
 
         private void btnVolver_Click_1(object sender, EventArgs e)

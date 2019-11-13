@@ -33,7 +33,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabla = new System.Windows.Forms.DataGridView();
+            this.btnVolver = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.tabla)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // año
@@ -77,27 +80,48 @@
             this.tabla.AllowUserToAddRows = false;
             this.tabla.AllowUserToDeleteRows = false;
             this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabla.Location = new System.Drawing.Point(118, 93);
+            this.tabla.Location = new System.Drawing.Point(25, 66);
             this.tabla.Name = "tabla";
             this.tabla.ReadOnly = true;
-            this.tabla.Size = new System.Drawing.Size(245, 167);
+            this.tabla.Size = new System.Drawing.Size(372, 167);
             this.tabla.TabIndex = 4;
-            this.tabla.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tabla_CellContentClick);
+            // 
+            // btnVolver
+            // 
+            this.btnVolver.Location = new System.Drawing.Point(24, 272);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(75, 23);
+            this.btnVolver.TabIndex = 10;
+            this.btnVolver.Text = "<< Volver";
+            this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tabla);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(420, 311);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
             // 
             // ListadoProMayorDesc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(505, 287);
-            this.Controls.Add(this.tabla);
+            this.ClientSize = new System.Drawing.Size(443, 328);
+            this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.semestre);
             this.Controls.Add(this.año);
+            this.Controls.Add(this.groupBox1);
             this.Name = "ListadoProMayorDesc";
             this.Text = "ListadoProMayorDesc";
             this.Load += new System.EventHandler(this.ListadoProMayorDesc_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tabla)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,5 +134,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView tabla;
+        private System.Windows.Forms.Button btnVolver;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
