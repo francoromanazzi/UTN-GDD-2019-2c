@@ -736,7 +736,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		BEGIN;
-			THROW 50001, 'El DNI/Razón social no es único', 1
+			THROW 50001, 'El CUIT/Razón social no es único', 1
 		END;
 	END CATCH
 END
