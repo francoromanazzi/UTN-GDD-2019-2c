@@ -804,10 +804,8 @@ BEGIN
 	SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = CONVERT(VARCHAR, @dni))
 	IF(NOT EXISTS (SELECT * FROM LOS_BORBOTONES.Clientes WHERE dni = @dni)) -- Usuarios gemelos.
 		BEGIN
-			SET IDENTITY_INSERT LOS_BORBOTONES.Clientes OFF
 			INSERT INTO LOS_BORBOTONES.Clientes(id_usuario, nombre, apellido, dni, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, fecha_nacimiento)
 			VALUES (@id, @nombre, @apellido, @dni, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @fecha_nacimiento)
-			SET IDENTITY_INSERT LOS_BORBOTONES.Clientes ON
 		END
 	ELSE
 		BEGIN;
