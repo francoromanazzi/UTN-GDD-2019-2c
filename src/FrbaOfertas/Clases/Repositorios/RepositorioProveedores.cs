@@ -65,6 +65,16 @@ namespace FrbaOfertas.Clases.Repositorios
                 string inputNombreDeContacto
             )
         {
+            Conexion con = new Conexion();
+            // Crear el usuario
+            string username = inputCuit;
+            string password = inputCuit;
+            StoredProcedureParameters userParametros = new StoredProcedureParameters()
+                .AddParameter("@username", username)
+                .AddParameter("@password", password)
+                .AddParameter("@cant_intentos_fallidos", 0);
+            con.ExecDataTableStoredProcedure(StoredProcedures.AltaUsuario, userParametros);
+
             // Armo el Store Procedure con los parametros REQUERIDOS
             StoredProcedureParameters parametros = new StoredProcedureParameters()
                 .AddParameter("@razon_social", inputRazonSocial)

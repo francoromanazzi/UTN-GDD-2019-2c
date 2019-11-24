@@ -10,7 +10,7 @@ namespace FrbaOfertas.Clases.Utils.Form
     class ComboBoxFiller<TItem, TItemValue>
     {
         private ComboBox comboBox;
-        private IList<TItem> items;
+        //private IList<TItem> items;
         private Func<TItem, string> displayValueFunction;
         private Func<TItem, TItemValue> itemValueFunction;
 

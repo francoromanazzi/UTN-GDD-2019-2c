@@ -22,7 +22,6 @@ namespace FrbaOfertas.Facturar
     {
         private readonly Form previousForm;
         string provElegido;
-        string fechaActual;
 
         public Facturar(Form previousForm)
         {

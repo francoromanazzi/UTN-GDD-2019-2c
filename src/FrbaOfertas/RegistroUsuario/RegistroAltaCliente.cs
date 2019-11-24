@@ -126,7 +126,7 @@ namespace FrbaOfertas
                         // Logueo al usuario
                         Session.Instance.OpenSession(id_usuario);
 
-                        NavigableFormUtil.BackwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(new Login.Login(), new RepositorioRoles().ObtenerRolesDeUsuario(id_usuario)));
+                        NavigableFormUtil.BackwardTo(this, new SeleccionarFuncionalidad.SeleccionarFuncionalidad(previousForm, new RepositorioRoles().ObtenerRolesDeUsuario(id_usuario)));
                     }
                     catch (Exception ex)
                     {

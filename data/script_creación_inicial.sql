@@ -731,8 +731,10 @@ CREATE PROCEDURE LOS_BORBOTONES.SP_Cargar_Proveedor
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO LOS_BORBOTONES.Proveedores (razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
-		VALUES (@razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
+		DECLARE @id INT
+		SET @id = (SELECT id_usuario FROM LOS_BORBOTONES.Usuarios WHERE username = @cuit)
+		INSERT INTO LOS_BORBOTONES.Proveedores (id_usuario, razon_social, mail, telefono, direccion, piso, departamento, localidad, codigo_postal, ciudad, cuit, rubro, nombre_contacto)
+		VALUES (@id, @razon_social, @mail, @telefono, @direccion, @piso, @departamento, @localidad, @codigo_postal, @ciudad, @cuit, @rubro, @nombre_contacto)
 	END TRY
 	BEGIN CATCH
 		BEGIN;
